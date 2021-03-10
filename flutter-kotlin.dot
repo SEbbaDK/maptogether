@@ -1,0 +1,63 @@
+digraph A {
+graph [label="Flutter Basic"]
+"Flutter" -> "iOS App"
+"Flutter" -> "Android App"
+}
+
+digraph Aalt {
+graph [label="Flutter as Component"]
+"iOS Logic" -> "iOS App"
+"Flutter" -> "iOS UI" -> "iOS App"
+"Flutter" -> "Android UI" -> "Android App"
+"Android Logic" -> "Android App"
+}
+
+digraph B {
+graph [label="Kotlin Basic"]
+"Kotlin Logic" -> "iOS App"
+"iOS UI" -> "iOS App"
+"Kotlin Logic" -> "Android App"
+"Android UI" -> "Android App"
+}
+
+digraph C {
+graph[label="Possible Coupling"]
+f [label="Flutter UI"]
+f -> fios
+fios [label="iOS\nUI\nComponent"]
+f -> fand
+fand [label="Android\nUI\nComponent"]
+
+k [label="Kotlin Logic"]
+k -> kios
+kios [label="iOS\nLogic\nComponent"]
+k -> kand
+kand [label="Android\nLogic\nComponent"]
+
+fios -> cios
+kios -> cios
+cios [label="Combined iOS App"]
+
+fand -> cand
+kand -> cand
+cand [label="Combined Android App"]
+}
+
+digraph Calt {
+graph[label="Possible Coupling"]
+f [label="Flutter"]
+f -> fios
+fios [label="iOS UI"]
+f -> fand
+fand [label="Android UI"]
+
+k [label="Kotlin Logic"]
+
+fios -> cios
+k -> cios
+cios [label="iOS App"]
+
+fand -> cand
+k -> cand
+cand [label="Android App"]
+}
