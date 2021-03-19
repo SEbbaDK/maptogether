@@ -10,7 +10,11 @@ in
 pkgs.stdenv.mkDerivation
 {
 	name = "maptogether-client";
-	buildInputs = with pkgs; [ gradle kotlin flutter ];
+    buildInputs = with pkgs; [
+      kotlin
+      gradle
+      flutter
+    ];
     ANDROID_SDK_ROOT = "${sdk}/libexec/android-sdk";
     GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${sdk}/libexec/android-sdk/build-tools/${btv}/aapt2";
 }

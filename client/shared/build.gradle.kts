@@ -3,9 +3,8 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
-    id("kotlin-android-extensions")
 }
-group = "org.openstreetmap.maptogether"
+group = "org.maptogether"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -22,35 +21,46 @@ kotlin {
             }
         }
     }
+
+    val ktorVersion = "1.4.1"
+    val serializationVersion = "1.0.0-RC"
+    val coroutinesVersion = "1.4.2-native-mt"
+    val onPhone = System.getenv("SDK_NAME")?.startsWith("iphoneos") ?: false
+    if (onPhone) {
+        iosArm64("ios")
+    } else {
+        iosX64("ios")
+    }
+
+
     sourceSets {
-        val commonMain by getting
-        val commonTest by getting {
+        val commonMain by getting {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2-native-mt"){
+                    version {
+                        strictly("1.4.2-native-mt")
+                    }
+                }
             }
         }
         val androidMain by getting {
             dependencies {
-                implementation("com.google.android.material:material:1.2.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
             }
         }
-        val androidTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("junit:junit:4.12")
+        val iosMain by getting{
+            dependencies{
             }
         }
-        val iosMain by getting
-        val iosTest by getting
     }
 }
+
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(29)
+        minSdkVersion(16)
+        targetSdkVersion(30)
         versionCode = 1
         versionName = "1.0"
     }
@@ -60,6 +70,7 @@ android {
         }
     }
 }
+
 val packForXcode by tasks.creating(Sync::class) {
     group = "build"
     val mode = System.getenv("CONFIGURATION") ?: "DEBUG"
