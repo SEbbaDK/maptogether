@@ -1,4 +1,4 @@
-# maptogetherclient
+# client
 
 A new Flutter project.
 

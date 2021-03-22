@@ -1,6 +1,4 @@
 include ':app'
-include ':shared'
-project(':shared').projectDir = file('../shared')
 
 def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
 def properties = new Properties()

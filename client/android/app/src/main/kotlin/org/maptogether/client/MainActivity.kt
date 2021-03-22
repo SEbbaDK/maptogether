@@ -1,4 +1,4 @@
-package org.maptogether.maptogetherclient
+package org.maptogether.client
 
 import io.flutter.embedding.android.FlutterActivity
 
