@@ -2,7 +2,7 @@
 let
   btv = "28.0.3";
   android = pkgs.androidenv.composeAndroidPackages {
-    buildToolsVersions = [ btv ];
+    buildToolsVersions = [ btv "29.0.2" ];
     platformVersions = [ "29" ];
   };
   sdk = "${android.androidsdk}";
