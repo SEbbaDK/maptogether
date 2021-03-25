@@ -1,4 +1,4 @@
-import 'package:client/page1.dart';
+import 'package:client/screens/map_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Page1(),
+      home: MapScreen(),
     );
   }
 }
