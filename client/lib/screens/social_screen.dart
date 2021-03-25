@@ -1,4 +1,8 @@
 import 'package:client/widgets/app_bar.dart';
+import 'package:client/widgets/social_menu_widgets/friends.dart';
+import 'package:client/widgets/social_menu_widgets/groups.dart';
+import 'package:client/widgets/social_menu_widgets/history.dart';
+import 'package:client/widgets/social_menu_widgets/leaderboards.dart';
 import 'package:flutter/material.dart';
 
 class SocialScreen extends StatefulWidget {
@@ -10,10 +14,10 @@ class _SocialScreenState extends State<SocialScreen> {
   int menuIndex = 0;
 
   List<Widget> menuItems = [
-    Text('1'),
-    Text('2'),
-    Text('3'),
-    Text('4'),
+    Leaderboards(),
+    Friends(),
+    Groups(),
+    History(),
   ];
 
   @override
@@ -22,10 +26,13 @@ class _SocialScreenState extends State<SocialScreen> {
       appBar: MapTogetherAppBar(
         title: 'Social menu',
       ),
-      body: Container(
-        child: Center(
-          child: menuItems[menuIndex],
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Center(
+            child: menuItems[menuIndex],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: true,
