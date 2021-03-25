@@ -33,14 +33,14 @@ class _SocialScreenState extends State<SocialScreen> {
           Expanded(
             flex: 3,
             child: Container(
-              //color: Colors.blue,
+              //color: Colors.green,
                 child: UserOverView(),
             ),
           ),
           Expanded(
             flex: 7,
             child: Container(
-              //color: Colors.red,
+              //color: Colors.grey,
               child: Center(
                 child: menuItems[menuIndex],
               ),

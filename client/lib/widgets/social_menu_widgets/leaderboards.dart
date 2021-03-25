@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 class Leaderboards extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Text('leaderboards'),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text('leaderboards'),
+        Text('leaderboards'),
+        Text('leaderboards'),
+        Text('leaderboards'),
+      ],
     );
   }
 }
+
