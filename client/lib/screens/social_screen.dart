@@ -3,6 +3,7 @@ import 'package:client/widgets/social_menu_widgets/friends.dart';
 import 'package:client/widgets/social_menu_widgets/groups.dart';
 import 'package:client/widgets/social_menu_widgets/history.dart';
 import 'package:client/widgets/social_menu_widgets/leaderboards.dart';
+import 'package:client/widgets/social_menu_widgets/user_overview.dart';
 import 'package:flutter/material.dart';
 
 class SocialScreen extends StatefulWidget {
@@ -29,8 +30,21 @@ class _SocialScreenState extends State<SocialScreen> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Center(
-            child: menuItems[menuIndex],
+          Expanded(
+            flex: 3,
+            child: Container(
+              //color: Colors.blue,
+                child: UserOverView(),
+            ),
+          ),
+          Expanded(
+            flex: 7,
+            child: Container(
+              //color: Colors.red,
+              child: Center(
+                child: menuItems[menuIndex],
+              ),
+            ),
           ),
         ],
       ),
