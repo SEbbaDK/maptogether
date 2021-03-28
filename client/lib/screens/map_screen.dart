@@ -2,6 +2,8 @@ import 'package:client/screens/page2.dart';
 import 'package:client/screens/social_screen.dart';
 import 'package:client/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong/latlong.dart';
 
 import 'settings.dart';
 
@@ -20,12 +22,12 @@ class MapScreen extends StatelessWidget {
             },
           ),
           IconButton(
-              icon: Icon(Icons.settings),
-              onPressed: () async {
-                await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Settings()));
-              },
-              ),
+            icon: Icon(Icons.settings),
+            onPressed: () async {
+              await Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => Settings()));
+            },
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -43,9 +45,20 @@ class MapScreen extends StatelessWidget {
       ),
       body: Container(
         child: Center(
-          child: Text(
-            'MAP',
-            style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold),
+          child: FlutterMap(
+            options: MapOptions(
+              center: LatLng(57.04, 9.92),
+              zoom: 12.0,
+            ),
+            layers: [
+              TileLayerOptions(
+                urlTemplate:
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: ['a', 'b', 'c'],
+                tileProvider: NetworkTileProvider(),
+              ),
+              //MarkerLayerOptions(markers: markers)
+            ],
           ),
         ),
       ),
