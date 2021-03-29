@@ -3,33 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 
-import 'settings.dart';
-
 class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /* appBar: MapTogetherAppBar(
-        title: 'MapTogether',
-        actionButtons: [
-          IconButton(
-            icon: Icon(Icons.person_rounded),
-            onPressed: () async {
-              await Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SocialScreen()));
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.settings),
-            onPressed: () async {
-              await Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => Settings()));
-            },
-          ),
-        ],
-      ),
-
-       */
       body: Stack(
         children: [
           Container(
@@ -52,63 +29,29 @@ class MapScreen extends StatelessWidget {
             ),
           ),
 
-
           // Positioned button container dims ...
-          Row(
-            children: [
-
-            ],
-          ),
-
           Positioned(
-            right: 5,
             bottom: 5,
             child: SafeArea(
-              // avoids rounded screen problem
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.lightGreen,
-                  //shape: BoxShape.circle,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.person,
-                    color: Colors.black,
+              child: ButtonRow(
+                buttons: [
+                  MapScreenButton(
+                    icon: Icons.person,
+                    onPressed: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SocialScreen()));
+                    },
                   ),
-                  onPressed: () async {
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SocialScreen()));
-                  },
-                  focusColor: Colors.lightGreen,
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            right: 60,
-            bottom: 5,
-            child: SafeArea(
-              // avoids rounded screen problem
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.lightGreen,
-                  //shape: BoxShape.circle,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.settings,
-                    color: Colors.black,
-                  ),
-                  onPressed: () async {
-                    await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Settings()));
-                  },
-                  focusColor: Colors.lightGreen,
-                ),
+                  MapScreenButton(icon: Icons.settings,),
+                  MapScreenButton(icon: Icons.compass_calibration),
+                  MapScreenButton(icon: Icons.update),
+                  MapScreenButton(icon: Icons.chat_outlined),
+                  MapScreenButton(icon: Icons.leaderboard),
+                  MapScreenButton(icon: Icons.widgets),
+                  MapScreenButton(icon: Icons.face),
+                ],
               ),
             ),
           ),
@@ -118,19 +61,58 @@ class MapScreen extends StatelessWidget {
   }
 }
 
-/*
-      floatingActionButton: FloatingActionButton.extended(
-        label: Text('Menu'),
-        onPressed: () async {
-          var navigationResult = await Navigator.push(
-              context, new MaterialPageRoute(builder: (context) => Page2()));
-          if (navigationResult == true) {
-            showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                      title: Text('Navigation result success'),
-                    ));
-          }
-        },
+class ButtonRow extends StatelessWidget {
+  const ButtonRow({Key key, this.buttons}) : super(key: key);
+
+  final List<MapScreenButton> buttons;
+
+  @override
+  Widget build(BuildContext context) {
+    List<Widget> widgets = <Widget>[];
+    widgets.add(SizedBox(width: 5));
+    for (int i = 0; i < buttons.length; i++) {
+      widgets.add(buttons[i]);
+      widgets.add(SizedBox(width: 5));
+    }
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: widgets,
       ),
- */
+    );
+  }
+}
+
+class MapScreenButton extends StatelessWidget {
+  const MapScreenButton(
+      {Key key, @required this.icon, @required this.onPressed})
+      : super(key: key);
+
+  final IconData icon;
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.lightGreen,
+        //shape: BoxShape.circle,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: IconButton(
+        icon: Icon(
+          icon,
+          color: Colors.black,
+        ),
+        onPressed: onPressed,
+
+        /* ()  {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => goToScreen));
+          }
+
+               */
+      ),
+    );
+  }
+}
