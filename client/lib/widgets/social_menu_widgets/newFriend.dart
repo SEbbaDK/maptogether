@@ -3,26 +3,54 @@ import 'package:client/widgets/app_bar.dart';
 import 'friends.dart';
 
 class NewFriend extends StatelessWidget {
+  TextEditingController nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: MapTogetherAppBar(
-          title: 'Add Friend',
+          title: 'Add friend',
           actionButtons: [],
         ),
         body: Center(child: Column(children: <Widget>[
           Container(
-            margin: EdgeInsets.all(25),
             child: Column(
               children: <Widget>[
-                Expanded(child: Text("Add Friend Menu")),
-                Expanded(child: FlatButton(
-                  padding: const EdgeInsets.all(10),
-                  child: Text("Add Friend", style: TextStyle(fontSize: 20.0),),
-                  color: Colors.lightGreen,
-                  textColor: Colors.white,
-                  onPressed: (){}
-                ))
+                Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(top: 50),
+                    child: Text(
+                      'Find via Username',
+                      style: TextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 30),
+                    )),
+                Container(
+                  padding: EdgeInsets.all(10),
+                  child: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'User Name',
+                    ),
+                  ),
+                ),
+
+                Container(
+                    height: 50,
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
+                    child: RaisedButton(
+                      textColor: Colors.white,
+                      color: Colors.green,
+                      child: Text('Add User'),
+                      onPressed: () {
+                        //Add friend to backend for user here
+                        print(nameController.text);
+
+                      },
+                    )),
+
               ],
             ),
           ),
