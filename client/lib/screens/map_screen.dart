@@ -15,15 +15,16 @@ class MapScreen extends StatelessWidget {
                 options: MapOptions(
                   center: LatLng(57.04, 9.92),
                   zoom: 12.0,
-                  maxZoom: 18.0,
-                  minZoom: 0,
+                  maxZoom: 22.0,
                 ),
                 layers: [
                   TileLayerOptions(
+                    tileSize: 256,
                     urlTemplate:
                         'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                     subdomains: ['a', 'b', 'c'],
                     tileProvider: NetworkTileProvider(),
+                   maxNativeZoom: 18,
                   ),
                   //MarkerLayerOptions(markers: markers)
                 ],
