@@ -15,6 +15,8 @@ class MapScreen extends StatelessWidget {
                 options: MapOptions(
                   center: LatLng(57.04, 9.92),
                   zoom: 12.0,
+                  maxZoom: 18.0,
+                  minZoom: 0,
                 ),
                 layers: [
                   TileLayerOptions(
