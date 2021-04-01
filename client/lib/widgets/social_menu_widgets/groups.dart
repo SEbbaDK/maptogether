@@ -10,23 +10,26 @@ class Groups extends StatelessWidget {
 
         children: <Widget>[
           Expanded(
-            flex: 8,
+            flex: 10,
             child: Text("Groups")
           ),
 
           Expanded(
-            flex: 2,
-            child: FlatButton(
-              child: Text('Create Group', style: TextStyle(fontSize: 20.0),),
+            flex: 1,
+            child: Container(
               color: Colors.lightGreen,
-              textColor: Colors.white,
-              onPressed: () async {
-                await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NewGroup()));
-              },
+              child: TextButton(
+                child: Text(
+                  'Create Group',
+                  style: TextStyle(fontSize: 20.0, color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => NewGroup()));
+                },
+              ),
             ),
           ),
-
         ],
       ),
     );
