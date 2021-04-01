@@ -2,7 +2,7 @@ import 'package:client/widgets/app_bar.dart';
 import 'package:client/widgets/social_menu_widgets/friends.dart';
 import 'package:client/widgets/social_menu_widgets/groups.dart';
 import 'package:client/widgets/social_menu_widgets/history.dart';
-import 'package:client/widgets/social_menu_widgets/leaderboards.dart';
+import 'package:client/widgets/social_menu_widgets/overview.dart';
 import 'package:client/widgets/social_menu_widgets/newFriend.dart';
 import 'package:client/widgets/social_menu_widgets/user_overview.dart';
 import 'package:flutter/material.dart';

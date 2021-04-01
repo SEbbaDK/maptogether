@@ -2,7 +2,7 @@ import 'package:client/widgets/app_bar.dart';
 import 'package:client/widgets/social_menu_widgets/friends.dart';
 import 'package:client/widgets/social_menu_widgets/groups.dart';
 import 'package:client/widgets/social_menu_widgets/history.dart';
-import 'package:client/widgets/social_menu_widgets/leaderboards.dart';
+import 'package:client/widgets/social_menu_widgets/overview.dart';
 import 'package:client/widgets/social_menu_widgets/user_overview.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +15,7 @@ class _SocialScreenState extends State<SocialScreen> {
   int menuIndex = 0;
 
   List<Widget> menuItems = [
-    Leaderboards(),
+    Overview(),
     Friends(),
     Groups(),
     History(),
@@ -27,33 +27,18 @@ class _SocialScreenState extends State<SocialScreen> {
       appBar: MapTogetherAppBar(
         title: 'Social menu',
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Container(
-              //color: Colors.green,
-                child: UserOverView(),
-            ),
-          ),
-          Expanded(
-            flex: 7,
-            child: Container(
-              //color: Colors.grey,
-              child: Center(
-                child: menuItems[menuIndex],
-              ),
-            ),
-          ),
-        ],
+      body: Container(
+        //color: Colors.grey,
+        child: Center(
+          child: menuItems[menuIndex],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: true,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.leaderboard),
-            label: 'Leaderboards',
+            label: 'Overview',
             backgroundColor: Colors.lightGreen,
           ),
           BottomNavigationBarItem(
