@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 
 class InteractiveMap extends StatefulWidget {
@@ -24,17 +25,15 @@ class _InteractiveMapState extends State<InteractiveMap> {
         width: 100.0,
         height: 100.0,
         point: latlng,
-        builder: (ctx) => Container(
-          child: FittedBox(
-            child: TextButton(
-              child: Icon(
-                Icons.edit_location_rounded,
-                color: Colors.black,
-              ),
-              onPressed: () {
-                print('Du trykkede på en opgave');
-              },
+        builder: (ctx) => FittedBox(
+          child: TextButton(
+            child: Icon(
+              Icons.edit_location_rounded,
+              color: Colors.black,
             ),
+            onPressed: () {
+              print('This is a quest!');
+            },
           ),
         ),
       );
@@ -119,7 +118,27 @@ class _InteractiveMapState extends State<InteractiveMap> {
     return Stack(
       children: [
         FlutterMap(
+          children: [
+            TileLayerWidget(
+              options: TileLayerOptions(
+                tileSize: 256,
+                urlTemplate:
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                subdomains: ['a', 'b', 'c'],
+                tileProvider: NetworkTileProvider(),
+                maxNativeZoom: 18,
+              ),
+            ),
+            MarkerLayerWidget(
+              options: MarkerLayerOptions(
+                markers: [popUpMarker],
+              ),
+            )
+          ],
           options: MapOptions(
+            plugins: [
+              MarkerClusterPlugin(),
+            ],
             onLongPress: (latLng) {
               _handleLongPress(latLng);
             },
@@ -134,18 +153,24 @@ class _InteractiveMapState extends State<InteractiveMap> {
             maxZoom: 22.0,
           ),
           layers: [
-            TileLayerOptions(
-              tileSize: 256,
-              urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: ['a', 'b', 'c'],
-              tileProvider: NetworkTileProvider(),
-              maxNativeZoom: 18,
+            MarkerClusterLayerOptions(
+              maxClusterRadius: 100,
+              size: Size(40, 40),
+              fitBoundsOptions: FitBoundsOptions(
+                padding: EdgeInsets.all(50),
+              ),
+              markers: taskMarkers,
+              polygonOptions: PolygonOptions(
+                  borderColor: Colors.blueAccent,
+                  color: Colors.black12,
+                  borderStrokeWidth: 3),
+              builder: (context, markers) {
+                return FloatingActionButton(
+                  child: Text(markers.length.toString()),
+                  onPressed: null,
+                );
+              },
             ),
-
-            MarkerLayerOptions(
-              markers: taskMarkers + [popUpMarker],
-            ),
-
             //MarkerLayerOptions(markers: markers)
           ],
         ),

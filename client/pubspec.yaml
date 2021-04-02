@@ -32,6 +32,9 @@ dependencies:
   # This is used for the map
   flutter_map: ^0.12.0
 
+  # Used to cluster the markers on the map
+  flutter_map_marker_cluster: ^0.3.4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
