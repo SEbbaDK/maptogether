@@ -1,4 +1,3 @@
-import 'package:client/widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -20,13 +19,23 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   @override
   Widget build(BuildContext context) {
-    var markers = taskPoints.map((latlng) {
+    var taskMarkers = taskPoints.map((latlng) {
       return Marker(
-        width: 40.0,
-        height: 40.0,
+        width: 100.0,
+        height: 100.0,
         point: latlng,
         builder: (ctx) => Container(
-          child: FlutterLogo(),
+          child: FittedBox(
+            child: TextButton(
+              child: Icon(
+                Icons.edit_location_rounded,
+                color: Colors.black,
+              ),
+              onPressed: () {
+                print('Du trykkede på en opgave');
+              },
+            ),
+          ),
         ),
       );
     }).toList();
@@ -41,15 +50,31 @@ class _InteractiveMapState extends State<InteractiveMap> {
           child: Row(
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MapScreenButton(
-                  child: Text('Tilføj POI'),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: MapScreenButton(
-                  child: Text('Luk'),
+                padding: const EdgeInsets.all(2.0),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(5),
+                      color: Colors.lightGreen,
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        taskPoints.add(
+                            popUpPositionOnMap); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
+                        setState(() {
+                          showPopUp = false;
+                        });
+                      },
+                      child: Text(
+                        'Add Point of Interest',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -88,7 +113,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
       setState(() {
         popUpPositionOnMap = latLng;
         showPopUp = true;
-        //taskPoints.add(latLng);
       });
     }
 
@@ -104,8 +128,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
                 showPopUp = false;
               });
             },
-            center: LatLng(57.04, 9.92),
             // Aalborg
+            center: LatLng(57.04, 9.92),
             zoom: 12.0,
             maxZoom: 22.0,
           ),
@@ -119,21 +143,12 @@ class _InteractiveMapState extends State<InteractiveMap> {
             ),
 
             MarkerLayerOptions(
-              markers: markers + [popUpMarker],
+              markers: taskMarkers + [popUpMarker],
             ),
 
             //MarkerLayerOptions(markers: markers)
           ],
         ),
-
-        /*
-        Positioned(
-          child: SafeArea(child: selector),
-          left: 5,
-          bottom: 5,
-        ),
-
-         */
       ],
     );
   }
