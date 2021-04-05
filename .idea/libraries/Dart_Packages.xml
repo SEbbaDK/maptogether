@@ -93,6 +93,20 @@
             </list>
           </value>
         </entry>
+        <entry key="flutter_map_marker_cluster">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map_marker_cluster-0.3.4/lib" />
+            </list>
+          </value>
+        </entry>
+        <entry key="flutter_map_marker_popup">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map_marker_popup-0.2.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="flutter_test">
           <value>
             <list>
@@ -290,6 +304,8 @@
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/fake_async-1.2.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_image-3.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map-0.12.0/lib" />
+      <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map_marker_cluster-0.3.4/lib" />
+      <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_map_marker_popup-0.2.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/intl-0.17.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/latlong-0.6.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/lists-0.1.6/lib" />

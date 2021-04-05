@@ -84,9 +84,9 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
     Marker popUpMarker = Marker(
         height: 250,
-        width: 1000,
-        point: popUpPositionOnMap,
-        builder: (context) => Visibility(
+            width: 1000,
+            point: popUpPositionOnMap,
+            builder: (context) => Visibility(
               visible: showPopUp,
               child: FittedBox(
                 child: Stack(
@@ -129,11 +129,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
                 maxNativeZoom: 18,
               ),
             ),
-            MarkerLayerWidget(
-              options: MarkerLayerOptions(
-                markers: [popUpMarker],
-              ),
-            )
           ],
           options: MapOptions(
             plugins: [
@@ -172,6 +167,9 @@ class _InteractiveMapState extends State<InteractiveMap> {
               },
             ),
             //MarkerLayerOptions(markers: markers)
+            MarkerLayerOptions(
+                markers: [popUpMarker],
+              ),
           ],
         ),
       ],
