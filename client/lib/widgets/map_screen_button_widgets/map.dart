@@ -34,7 +34,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
   String name = "";
   LatLng popUpPositionOnMap = LatLng(0, 0);
   bool showPopUp = false;
-  String selectedValue = "Shop";
+  String selectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -92,25 +92,23 @@ class _InteractiveMapState extends State<InteractiveMap> {
                                     children: <Widget>[
                                       const Text('Point of Interest'),
 
-                                      DropdownButton(
-                                          value: selectedValue,
-                                          items: <String>[
-                                            'Shop', 'Bar', 'Other']
-                                          .map<DropdownMenuItem<String>>((String value){
-                                            return DropdownMenuItem<String>(
-                                              value: value,
-                                              child: Text(value),
-                                            );
-                                          }).toList(),
-
-                                        onChanged: (String newValue) {
+                                      new DropdownButton<String>(
+                                          hint: Text('Choose'),
+                                          onChanged: (String changedValue) {
+                                            selectedValue=changedValue;
                                             setState(() {
-                                              print("Changed value from " + selectedValue.toString() + " to " + newValue);
-                                              selectedValue = newValue;
+                                              selectedValue;
+                                              print(selectedValue);
                                             });
-                                        },
-                                        hint: Text("Select item")
-                                      ),
+                                          },
+                                          value: selectedValue,
+                                          items: <String>['Shop', 'Bar', 'Restaurent', 'Other']
+                                              .map((String value) {
+                                            return new DropdownMenuItem<String>(
+                                              value: value,
+                                              child: new Text(value),
+                                            );
+                                          }).toList()),
 
                                       TextButton(
                                           child: Text(
@@ -141,7 +139,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
                               );
                             }
                         );
-
                       },
                       child: Text(
                         'Add Point of Interest',

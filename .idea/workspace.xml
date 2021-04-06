@@ -20,11 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f8ca82f5-3415-4104-85ea-9b1d22660693" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/lib/widgets/map_screen_button_widgets/map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/client/lib/widgets/map_screen_button_widgets/map.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/client/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
