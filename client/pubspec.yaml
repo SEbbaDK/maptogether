@@ -29,6 +29,9 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
 
+
+  time_range_picker: any
+
   # This is used for the map
   flutter_map: ^0.12.0
 
@@ -38,6 +41,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

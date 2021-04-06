@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
+import 'package:time_range_picker/time_range_picker.dart';
 
 class InteractiveMap extends StatefulWidget {
   const InteractiveMap({
@@ -12,19 +13,36 @@ class InteractiveMap extends StatefulWidget {
   _InteractiveMapState createState() => _InteractiveMapState();
 }
 
-class _InteractiveMapState extends State<InteractiveMap> {
-  List<LatLng> taskPoints = [];
+class PointOfInterest{
+  String name;
+  LatLng location;
+  TimeOfDay openingTime;
+  TimeOfDay closingTime;
 
+  PointOfInterest(String _name, LatLng _location, TimeRange timeRange){
+    name = _name;
+    location = _location;
+    //openingTime = timeRange.startTime;
+    //closingTime = timeRange.endTime;
+  }
+}
+
+class _InteractiveMapState extends State<InteractiveMap> {
+  List<PointOfInterest> taskPoints = [];
+
+  TimeRange result;
+  String name = "";
   LatLng popUpPositionOnMap = LatLng(0, 0);
   bool showPopUp = false;
+  String selectedValue = "Shop";
 
   @override
   Widget build(BuildContext context) {
-    var taskMarkers = taskPoints.map((latlng) {
+    var taskMarkers = taskPoints.map((poi) {
       return Marker(
         width: 100.0,
         height: 100.0,
-        point: latlng,
+        point: poi.location,
         builder: (ctx) => FittedBox(
           child: TextButton(
             child: Icon(
@@ -32,7 +50,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
               color: Colors.black,
             ),
             onPressed: () {
-              print('This is a quest!');
+              print('This is ' + poi.name);
             },
           ),
         ),
@@ -58,13 +76,72 @@ class _InteractiveMapState extends State<InteractiveMap> {
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.lightGreen,
                     ),
+
                     child: TextButton(
                       onPressed: () {
-                        taskPoints.add(
-                            popUpPositionOnMap); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
-                        setState(() {
-                          showPopUp = false;
-                        });
+                        showModalBottomSheet<void>(
+                            context: context,
+                            builder: (BuildContext context){
+                              return Container(
+                                height: 300,
+                                color: Colors.green,
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
+                                      const Text('Point of Interest'),
+
+                                      DropdownButton(
+                                          value: selectedValue,
+                                          items: <String>[
+                                            'Shop', 'Bar', 'Other']
+                                          .map<DropdownMenuItem<String>>((String value){
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
+
+                                        onChanged: (String newValue) {
+                                            setState(() {
+                                              print("Changed value from " + selectedValue.toString() + " to " + newValue);
+                                              selectedValue = newValue;
+                                            });
+                                        },
+                                        hint: Text("Select item")
+                                      ),
+
+                                      TextButton(
+                                          child: Text(
+                                            'Choose time'
+                                          ),
+                                          onPressed: () async{
+                                            result = await showTimeRangePicker(
+                                                context: context,
+                                            );
+                                          }
+                                        ),
+
+                                      ElevatedButton(
+                                          child: const Text('Close BottomSheet'),
+                                          onPressed: () {
+                                            taskPoints.add(
+                                                PointOfInterest(
+                                                    name, popUpPositionOnMap, result)); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
+                                            setState(() {
+                                              showPopUp = false;
+                                              Navigator.pop(context);
+                                            });
+                                          }
+                                      )
+                                    ],
+                                  )
+                                )
+                              );
+                            }
+                        );
+
                       },
                       child: Text(
                         'Add Point of Interest',

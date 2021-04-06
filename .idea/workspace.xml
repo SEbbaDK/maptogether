@@ -23,6 +23,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/lib/widgets/map_screen_button_widgets/map.dart" beforeDir="false" afterPath="$PROJECT_DIR$/client/lib/widgets/map_screen_button_widgets/map.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/client/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +52,7 @@
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -116,11 +118,11 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1029" y="536" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617089846805" />
-    <state x="205" y="241" width="1600" height="1012" key="AVDManager" timestamp="1617623578105">
+    <state x="205" y="241" width="1600" height="1012" key="AVDManager" timestamp="1617693788651">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="-1559" y="170" width="1200" height="780" key="AVDManager/0.0.2560.1400/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1616502582480" />
-    <state x="205" y="241" width="1600" height="1012" key="AVDManager/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617623578105" />
+    <state x="205" y="241" width="1600" height="1012" key="AVDManager/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617693788651" />
     <state x="1099" y="446" width="362" height="505" key="AndroidProcessChooserDialog" timestamp="1616579168525">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
@@ -129,27 +131,27 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1060" y="455" key="FileChooserDialogImpl/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617089999218" />
-    <state width="1398" height="364" key="GridCell.Tab.0.bottom" timestamp="1617611700235">
+    <state width="1258" height="364" key="GridCell.Tab.0.bottom" timestamp="1617716464929">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1398" height="364" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617611700235" />
-    <state width="1398" height="364" key="GridCell.Tab.0.center" timestamp="1617611700235">
+    <state width="1258" height="364" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617716464929" />
+    <state width="1258" height="364" key="GridCell.Tab.0.center" timestamp="1617716464929">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1398" height="364" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617611700235" />
-    <state width="1398" height="364" key="GridCell.Tab.0.left" timestamp="1617611700235">
+    <state width="1258" height="364" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617716464928" />
+    <state width="1258" height="364" key="GridCell.Tab.0.left" timestamp="1617716464928">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1398" height="364" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617611700235" />
-    <state width="1398" height="364" key="GridCell.Tab.0.right" timestamp="1617611700235">
+    <state width="1258" height="364" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617716464928" />
+    <state width="1258" height="364" key="GridCell.Tab.0.right" timestamp="1617716464929">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1398" height="364" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617611700235" />
-    <state x="616" y="266" key="SettingsEditor" timestamp="1617090669909">
+    <state width="1258" height="364" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617716464929" />
+    <state x="616" y="266" key="SettingsEditor" timestamp="1617693650482">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="-1458" y="205" key="SettingsEditor/0.0.2560.1400/-1920.0.1920.1080@-1920.0.1920.1080" timestamp="1616502668060" />
-    <state x="616" y="266" key="SettingsEditor/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617090669909" />
+    <state x="616" y="266" key="SettingsEditor/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617693650482" />
     <state x="0" y="0" width="2250" height="994" key="dock-window-1" timestamp="1617625505749">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>

@@ -240,6 +240,13 @@
             </list>
           </value>
         </entry>
+        <entry key="time_range_picker">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/time_range_picker-2.0.1/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="transparent_image">
           <value>
             <list>
@@ -323,6 +330,7 @@
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/string_scanner-1.1.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/term_glyph-1.2.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.2.19/lib" />
+      <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/time_range_picker-2.0.1/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/transparent_image-1.0.0/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/tuple-1.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../Downloads/flutter/.pub-cache/hosted/pub.dartlang.org/typed_data-1.3.0/lib" />
