@@ -50,7 +50,6 @@ class NewFriend extends StatelessWidget {
                       onPressed: () {
                         //Add friend to backend for user here
                         print(nameController.text);
-
                       },
                     )),
 

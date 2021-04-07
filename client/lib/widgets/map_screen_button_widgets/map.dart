@@ -94,58 +94,42 @@ class _InteractiveMapState extends State<InteractiveMap> {
                                         children: <Widget>[
                                       const Text('Add Point of Interest'),
 
-                                      TextField(
-                                        controller: poiNameController,
-                                        decoration: InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'Name of PoI',
-                                        ),
-                                      ),
-
-                                      new DropdownButton<String>(
-                                          hint: Text('Choose'),
-                                          onChanged: (String changedValue) {
-                                            selectedValue=changedValue;
-                                            setState(() {
-                                              selectedValue;
-                                              print(selectedValue);
-                                            });
-                                          },
-                                          value: selectedValue,
-                                          items: <String>['Shop', 'Bar', 'Restaurent', 'Other']
-                                              .map((String value) {
-                                            return new DropdownMenuItem<String>(
-                                              value: value,
-                                              child: new Text(value),
-                                            );
-                                          }).toList()),
-
-                                          TextButton(
-                                              child: Text(
-                                                  'Choose time'
-                                              ),
-                                              onPressed: () async {
-                                                result =
-                                                await showTimeRangePicker(
-                                                  context: context,
-                                                );
-                                              }
+                                        TextField(
+                                          controller: poiNameController,
+                                          decoration: InputDecoration(
+                                            border: OutlineInputBorder(),
+                                            labelText: 'Name of PoI',
                                           ),
+                                        ),
 
-                                          ElevatedButton(
-                                              child: const Text(
-                                                  'Close BottomSheet'),
-                                              onPressed: () {
-                                                taskPoints.add(
-                                                    PointOfInterest(
-                                                        name,
-                                                        popUpPositionOnMap,
-                                                        result)); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
-                                                setState(() {
-                                                  showPopUp = false;
-                                                  Navigator.pop(context);
-                                                });
-                                              }
+                                        DropDown(),
+
+                                        TextButton(
+                                            child: Text(
+                                                'Choose time'
+                                            ),
+                                            onPressed: () async {
+                                              result =
+                                              await showTimeRangePicker(
+                                                context: context,
+                                              );
+                                            }
+                                        ),
+
+                                        ElevatedButton(
+                                            child: const Text(
+                                                'Close BottomSheet'),
+                                            onPressed: () {
+                                              taskPoints.add(
+                                                  PointOfInterest(
+                                                      poiNameController.text,
+                                                      popUpPositionOnMap,
+                                                      result)); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
+                                              setState(() {
+                                                showPopUp = false;
+                                                Navigator.pop(context);
+                                              });
+                                            }
                                           )
                                         ],
                                       )
@@ -265,7 +249,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
     );
   }
 }
-
 
 class DropDown extends StatefulWidget {
   @override

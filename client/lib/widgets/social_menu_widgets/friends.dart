@@ -44,7 +44,33 @@ class _FriendsState extends State<Friends> {
                   itemBuilder: (context, index) {
                     return Card(
                       child: ListTile(
-                        onTap: () {},
+                        onLongPress: () {
+                          showModalBottomSheet <void>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Container(
+                                  height: 100,
+                                  color: Colors.orange,
+                                  child: Center(
+                                    child: TextButton(
+                                      child: Text("Remove Friend"),
+                                      style: TextButton.styleFrom(
+                                        primary: Colors.white,
+                                        backgroundColor: Colors.red
+                                      ),
+                                      onPressed: (){
+                                        print(friends.removeAt(index));
+
+                                        setState(() {
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                );
+                              }
+                          );
+                        },
                         title: Text(friends[index].name),
                         leading: CircleAvatar(
                           backgroundImage:
