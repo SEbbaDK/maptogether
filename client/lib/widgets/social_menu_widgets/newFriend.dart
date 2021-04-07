@@ -4,6 +4,7 @@ import 'friends.dart';
 
 class NewFriend extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +26,9 @@ class NewFriend extends StatelessWidget {
                           color: Colors.green,
                           fontWeight: FontWeight.w500,
                           fontSize: 30),
-                    )),
+                    ),
+                ),
+
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextField(

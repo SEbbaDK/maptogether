@@ -34,6 +34,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
   String name = "";
   LatLng popUpPositionOnMap = LatLng(0, 0);
   bool showPopUp = false;
+  TextEditingController poiNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -91,10 +92,33 @@ class _InteractiveMapState extends State<InteractiveMap> {
                                             .center,
                                         mainAxisSize: MainAxisSize.min,
                                         children: <Widget>[
-                                          const Text('Point of Interest'),
+                                      const Text('Add Point of Interest'),
 
-                                          // her
-                                          DropDown(),
+                                      TextField(
+                                        controller: poiNameController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Name of PoI',
+                                        ),
+                                      ),
+
+                                      new DropdownButton<String>(
+                                          hint: Text('Choose'),
+                                          onChanged: (String changedValue) {
+                                            selectedValue=changedValue;
+                                            setState(() {
+                                              selectedValue;
+                                              print(selectedValue);
+                                            });
+                                          },
+                                          value: selectedValue,
+                                          items: <String>['Shop', 'Bar', 'Restaurent', 'Other']
+                                              .map((String value) {
+                                            return new DropdownMenuItem<String>(
+                                              value: value,
+                                              child: new Text(value),
+                                            );
+                                          }).toList()),
 
                                           TextButton(
                                               child: Text(
