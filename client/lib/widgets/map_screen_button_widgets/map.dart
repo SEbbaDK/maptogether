@@ -13,13 +13,13 @@ class InteractiveMap extends StatefulWidget {
   _InteractiveMapState createState() => _InteractiveMapState();
 }
 
-class PointOfInterest{
+class PointOfInterest {
   String name;
   LatLng location;
   TimeOfDay openingTime;
   TimeOfDay closingTime;
 
-  PointOfInterest(String _name, LatLng _location, TimeRange timeRange){
+  PointOfInterest(String _name, LatLng _location, TimeRange timeRange) {
     name = _name;
     location = _location;
     //openingTime = timeRange.startTime;
@@ -34,7 +34,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
   String name = "";
   LatLng popUpPositionOnMap = LatLng(0, 0);
   bool showPopUp = false;
-  String selectedValue;
 
   @override
   Widget build(BuildContext context) {
@@ -43,17 +42,18 @@ class _InteractiveMapState extends State<InteractiveMap> {
         width: 100.0,
         height: 100.0,
         point: poi.location,
-        builder: (ctx) => FittedBox(
-          child: TextButton(
-            child: Icon(
-              Icons.edit_location_rounded,
-              color: Colors.black,
+        builder: (ctx) =>
+            FittedBox(
+              child: TextButton(
+                child: Icon(
+                  Icons.edit_location_rounded,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  print('This is ' + poi.name);
+                },
+              ),
             ),
-            onPressed: () {
-              print('This is ' + poi.name);
-            },
-          ),
-        ),
       );
     }).toList();
 
@@ -81,61 +81,51 @@ class _InteractiveMapState extends State<InteractiveMap> {
                       onPressed: () {
                         showModalBottomSheet<void>(
                             context: context,
-                            builder: (BuildContext context){
+                            builder: (BuildContext context) {
                               return Container(
-                                height: 300,
-                                color: Colors.green,
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      const Text('Point of Interest'),
+                                  height: 300,
+                                  color: Colors.green,
+                                  child: Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: <Widget>[
+                                          const Text('Point of Interest'),
 
-                                      new DropdownButton<String>(
-                                          hint: Text('Choose'),
-                                          onChanged: (String changedValue) {
-                                            selectedValue=changedValue;
-                                            setState(() {
-                                              selectedValue;
-                                              print(selectedValue);
-                                            });
-                                          },
-                                          value: selectedValue,
-                                          items: <String>['Shop', 'Bar', 'Restaurent', 'Other']
-                                              .map((String value) {
-                                            return new DropdownMenuItem<String>(
-                                              value: value,
-                                              child: new Text(value),
-                                            );
-                                          }).toList()),
+                                          // her
+                                          DropDown(),
 
-                                      TextButton(
-                                          child: Text(
-                                            'Choose time'
+                                          TextButton(
+                                              child: Text(
+                                                  'Choose time'
+                                              ),
+                                              onPressed: () async {
+                                                result =
+                                                await showTimeRangePicker(
+                                                  context: context,
+                                                );
+                                              }
                                           ),
-                                          onPressed: () async{
-                                            result = await showTimeRangePicker(
-                                                context: context,
-                                            );
-                                          }
-                                        ),
 
-                                      ElevatedButton(
-                                          child: const Text('Close BottomSheet'),
-                                          onPressed: () {
-                                            taskPoints.add(
-                                                PointOfInterest(
-                                                    name, popUpPositionOnMap, result)); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
-                                            setState(() {
-                                              showPopUp = false;
-                                              Navigator.pop(context);
-                                            });
-                                          }
+                                          ElevatedButton(
+                                              child: const Text(
+                                                  'Close BottomSheet'),
+                                              onPressed: () {
+                                                taskPoints.add(
+                                                    PointOfInterest(
+                                                        name,
+                                                        popUpPositionOnMap,
+                                                        result)); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
+                                                setState(() {
+                                                  showPopUp = false;
+                                                  Navigator.pop(context);
+                                                });
+                                              }
+                                          )
+                                        ],
                                       )
-                                    ],
                                   )
-                                )
                               );
                             }
                         );
@@ -158,9 +148,10 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
     Marker popUpMarker = Marker(
         height: 250,
-            width: 1000,
-            point: popUpPositionOnMap,
-            builder: (context) => Visibility(
+        width: 1000,
+        point: popUpPositionOnMap,
+        builder: (context) =>
+            Visibility(
               visible: showPopUp,
               child: FittedBox(
                 child: Stack(
@@ -197,7 +188,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
               options: TileLayerOptions(
                 tileSize: 256,
                 urlTemplate:
-                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c'],
                 tileProvider: NetworkTileProvider(),
                 maxNativeZoom: 18,
@@ -242,11 +233,45 @@ class _InteractiveMapState extends State<InteractiveMap> {
             ),
             //MarkerLayerOptions(markers: markers)
             MarkerLayerOptions(
-                markers: [popUpMarker],
-              ),
+              markers: [popUpMarker],
+            ),
           ],
         ),
       ],
     );
   }
 }
+
+
+class DropDown extends StatefulWidget {
+  @override
+  _DropDownState createState() => _DropDownState();
+}
+
+class _DropDownState extends State<DropDown> {
+
+  String selectedValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton<String>(
+        hint: Text('Choose'),
+        value: selectedValue,
+
+        onChanged: (String changedValue) {
+          setState(() {
+            selectedValue = changedValue;
+            print(selectedValue);
+          });
+        },
+
+        items: <String>['Shop', 'Bar', 'Restaurent', 'Other']
+            .map((String value) {
+          return new DropdownMenuItem<String>(
+            value: value,
+            child: new Text(value),
+          );
+        }).toList());
+  }
+}
+
