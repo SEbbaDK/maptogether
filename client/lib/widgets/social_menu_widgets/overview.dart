@@ -14,17 +14,17 @@ class _OverviewState extends State<Overview> {
 
 
   LeaderBoard dk = new LeaderBoard("DK", [
-    User("Thomas", 50),
-    User("Sebba", 250),
-    User("Simon", 15),
-    User("Phillip", 85)
+    User("Thomas", 50, "kid.png"),
+    User("Sebba", 250, "clean.png"),
+    User("Simon", 15, "business.png"),
+    User("Phillip", 85, "arthas.png")
   ]);
 
   LeaderBoard world = new LeaderBoard("World", [
-      User("Thomass", 10),
-      User("Sebbass", 20),
-      User("Simon", 40),
-      User("Phillipina", 30)
+      User("Hartvig", 10, "anime.png"),
+      User("Fjeldsø", 20, "wolf.png"),
+      User("Simon", 40, "business.png"),
+      User("Thomass", 30, "kid.png")
   ]);
 
   List<LeaderBoard> leaderboards;

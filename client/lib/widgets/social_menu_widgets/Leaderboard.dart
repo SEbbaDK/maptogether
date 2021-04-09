@@ -42,6 +42,10 @@ class LeaderBoardView extends StatelessWidget{
                       + " : "
                       + leaderBoard.users[index].total.toString()
                       + " points"),
+                  leading: CircleAvatar(
+                    backgroundImage:
+                      AssetImage('assets/${leaderBoard.users[index].pfp}'),
+                  ),
                 ),
               );
             }),

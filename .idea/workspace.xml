@@ -21,8 +21,12 @@
   <component name="ChangeListManager">
     <list default="true" id="f8ca82f5-3415-4104-85ea-9b1d22660693" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/assets/arthas.jpg" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/client/lib/widgets/social_menu_widgets/Leaderboard.dart" beforeDir="false" afterPath="$PROJECT_DIR$/client/lib/widgets/social_menu_widgets/Leaderboard.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/lib/widgets/social_menu_widgets/User.dart" beforeDir="false" afterPath="$PROJECT_DIR$/client/lib/widgets/social_menu_widgets/User.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/lib/widgets/social_menu_widgets/friends.dart" beforeDir="false" afterPath="$PROJECT_DIR$/client/lib/widgets/social_menu_widgets/friends.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/lib/widgets/social_menu_widgets/overview.dart" beforeDir="false" afterPath="$PROJECT_DIR$/client/lib/widgets/social_menu_widgets/overview.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/client/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,22 +133,22 @@
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
     <state x="1060" y="455" key="FileChooserDialogImpl/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617089999218" />
-    <state width="1092" height="332" key="GridCell.Tab.0.bottom" timestamp="1617953906422">
+    <state width="1092" height="332" key="GridCell.Tab.0.bottom" timestamp="1617955966334">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1092" height="332" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617953906422" />
-    <state width="1092" height="332" key="GridCell.Tab.0.center" timestamp="1617953906422">
+    <state width="1092" height="332" key="GridCell.Tab.0.bottom/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617955966334" />
+    <state width="1092" height="332" key="GridCell.Tab.0.center" timestamp="1617955966334">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1092" height="332" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617953906422" />
-    <state width="1092" height="332" key="GridCell.Tab.0.left" timestamp="1617953906422">
+    <state width="1092" height="332" key="GridCell.Tab.0.center/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617955966334" />
+    <state width="1092" height="332" key="GridCell.Tab.0.left" timestamp="1617955966334">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1092" height="332" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617953906422" />
-    <state width="1092" height="332" key="GridCell.Tab.0.right" timestamp="1617953906422">
+    <state width="1092" height="332" key="GridCell.Tab.0.left/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617955966334" />
+    <state width="1092" height="332" key="GridCell.Tab.0.right" timestamp="1617955966334">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>
-    <state width="1092" height="332" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617953906422" />
+    <state width="1092" height="332" key="GridCell.Tab.0.right/0.0.2560.1400/-1920.0.1920.1080@0.0.2560.1400" timestamp="1617955966334" />
     <state x="616" y="266" key="SettingsEditor" timestamp="1617953213616">
       <screen x="0" y="0" width="2560" height="1400" />
     </state>

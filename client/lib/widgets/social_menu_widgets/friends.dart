@@ -1,19 +1,6 @@
 import 'package:client/widgets/social_menu_widgets/newFriend.dart';
 import 'package:flutter/material.dart';
-
-class Friend {
-  String name; //name of user
-  int score; //users score
-  double cockLength; //users penile length
-  String pfp; //profile picture of user
-
-  Friend(String n, int s, double c, String p) {
-    name = n;
-    score = s;
-    cockLength = c;
-    pfp = p;
-  }
-}
+import 'User.dart';
 
 class Friends extends StatefulWidget {
   @override
@@ -22,13 +9,13 @@ class Friends extends StatefulWidget {
 
 //TODO: move friends list to a seperate file or server
 class _FriendsState extends State<Friends> {
-  List<Friend> friends = [
-    Friend("Thomas", 24, 28.0, "kid.png"),
-    Friend("Hartvig", 23, 34.0, "anime.png"),
-    Friend("Simon", 24, 26.0, "business.png"),
-    Friend("Sebastian", 24, 40.0, "clean.png"),
-    Friend("Phillip", 23, 1800.0, "arthas.jpg"),
-    Friend("Fjeldsø", 23, 3.0, "wolf.png"),
+  List<User> friends = [
+    User("Thomas", 24, "kid.png"),
+    User("Hartvig", 23,  "anime.png"),
+    User("Simon", 24, "business.png"),
+    User("Sebastian", 24, "clean.png"),
+    User("Phillip", 23, "arthas.png"),
+    User("Fjeldsø", 23, "wolf.png"),
   ];
 
   @override
