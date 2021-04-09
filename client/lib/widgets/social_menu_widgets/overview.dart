@@ -75,7 +75,9 @@ class _OverviewState extends State<Overview> {
                             + (leaderboards[index].users.length).toString()),
                         leading: Text(leaderboards[index].name),
                         onTap: (){
-
+                            Navigator.push(context,
+                                MaterialPageRoute(
+                                    builder: (context) => LeaderBoardView(leaderBoard: leaderboards[index]),));
                         },
 
                       )
