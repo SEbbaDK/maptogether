@@ -43,9 +43,11 @@ class NewFriend extends StatelessWidget {
                 Container(
                     height: 50,
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                    child: RaisedButton(
-                      textColor: Colors.white,
-                      color: Colors.green,
+                    child: ElevatedButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.white,
+                        backgroundColor: Colors.green
+                      ),
                       child: Text('Add User'),
                       onPressed: () {
                         //Add friend to backend for user here

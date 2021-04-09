@@ -20,6 +20,7 @@ class Friends extends StatefulWidget {
   _FriendsState createState() => _FriendsState();
 }
 
+//TODO: move friends list to a seperate file or server
 class _FriendsState extends State<Friends> {
   List<Friend> friends = [
     Friend("Thomas", 24, 28.0, "kid.png"),

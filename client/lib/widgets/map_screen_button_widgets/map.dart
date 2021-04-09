@@ -127,6 +127,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
                                                       result)); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
                                               setState(() {
                                                 showPopUp = false;
+                                                poiNameController.text = "";
                                                 Navigator.pop(context);
                                               });
                                             }
