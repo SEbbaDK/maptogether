@@ -1,4 +1,4 @@
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/45a014f4796a0b3051652ae23d7bcb72823cb742.tar.gz") { config.android_sdk.accept_license = true; } }:
+{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/05aa8598e5acfe234162c0af90667e81cb1eb009.tar.gz") { config.android_sdk.accept_license = true; } }:
 let
   btv = "30.0.3";
   android = pkgs.androidenv.composeAndroidPackages {
@@ -11,6 +11,7 @@ pkgs.stdenv.mkDerivation
 {
 	name = "maptogether-client";
     buildInputs = with pkgs; [
+      jdk11
       kotlin
       gradle
       flutter
