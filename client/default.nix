@@ -1,5 +1,7 @@
 {
-    pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/abf3a8af7c387f8392c92501c81080655c21166e.tar.gz") { config.android_sdk.accept_license = true; }
+    pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/abf3a8af7c387f8392c92501c81080655c21166e.tar.gz") { config.android_sdk.accept_license = true; },
+    includeAndroid ? true,
+    ...
 }:
 let
   btv = "29.0.2";
@@ -19,7 +21,7 @@ pkgs.stdenv.mkDerivation
     jdk11
     flutter
   ];
-  ANDROID_SDK_ROOT = "${sdk}/libexec/android-sdk";
+  ANDROID_SDK_ROOT = (if includeAndroid then "${sdk}/libexec/android-sdk" else "");
 
   # This used to be be necessary, but now it seems to break builds
   # GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${sdk}/libexec/android-sdk/build-tools/${btv}/aapt2";

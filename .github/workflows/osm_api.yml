@@ -1,0 +1,19 @@
+name: "test osm_api"
+
+on:
+  push:
+    paths:
+      - "osm_api/**"
+      - .github/workflows/osm_api.yml
+  pull_request:
+    paths:
+      - "osm_api/**"
+      - .github/workflows/osm_api.yml
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nixbuild/nix-quick-install-action@v5
+      - run: nix-shell osm_api --run "cd osm_api && dart test"

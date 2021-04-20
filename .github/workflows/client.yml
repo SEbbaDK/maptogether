@@ -1,0 +1,19 @@
+name: "test client"
+
+on:
+  push:
+    paths:
+      - "client/**"
+      - .github/workflows/client.yml
+  pull_request:
+    paths:
+      - "client/**"
+      - .github/workflows/client.yml
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nixbuild/nix-quick-install-action@v5
+      - run: nix-shell client --arg includeAndroid false --run "cd client && flutter test"
