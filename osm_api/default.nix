@@ -1,5 +1,5 @@
 {
-  pkgs ? import <nixpkgs> {},
+  pkgs ? import ../nixpkgs.nix {},
   mkDerivation ? pkgs.stdenv.mkDerivation,
   dart ? pkgs.dart,
   ...

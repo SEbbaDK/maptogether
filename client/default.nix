@@ -1,5 +1,5 @@
 {
-    pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/abf3a8af7c387f8392c92501c81080655c21166e.tar.gz") { config.android_sdk.accept_license = true; },
+    pkgs ? import ../nixpkgs.nix { config.android_sdk.accept_license = true; },
     includeAndroid ? true,
     ...
 }:
