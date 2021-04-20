@@ -1,20 +1,23 @@
-{ pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/45a014f4796a0b3051652ae23d7bcb72823cb742.tar.gz") { config.android_sdk.accept_license = true; } }:
+{
+    pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/abf3a8af7c387f8392c92501c81080655c21166e.tar.gz") { config.android_sdk.accept_license = true; }
+}:
 let
-  btv = "28.0.3";
+  btv = "29.0.2";
   android = pkgs.androidenv.composeAndroidPackages {
     buildToolsVersions = [ btv ];
-    platformVersions = [ "29" ];
+    platformVersions = [ "30" ];
   };
   sdk = "${android.androidsdk}";
 in
 pkgs.stdenv.mkDerivation
 {
-	name = "maptogether-client";
-    buildInputs = with pkgs; [
-      kotlin
-      gradle
-      flutter
-    ];
-    ANDROID_SDK_ROOT = "${sdk}/libexec/android-sdk";
-    GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${sdk}/libexec/android-sdk/build-tools/${btv}/aapt2";
+  name = "maptogether-client";
+  buildInputs = with pkgs; [
+    jdk11
+    flutter
+  ];
+  ANDROID_SDK_ROOT = "${sdk}/libexec/android-sdk";
+
+  # This used to be be necessary, but now it seems to break builds
+  # GRADLE_OPTS = "-Dorg.gradle.project.android.aapt2FromMavenOverride=${sdk}/libexec/android-sdk/build-tools/${btv}/aapt2";
 }
