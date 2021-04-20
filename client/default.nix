@@ -8,10 +8,13 @@ let
     platformVersions = [ "30" ];
   };
   sdk = "${android.androidsdk}";
+  pubspec = builtins.readFile ./pubspec.yaml;
+  version = builtins.head (builtins.match ".*version: ([0-9.]+).*" pubspec);
 in
 pkgs.stdenv.mkDerivation
 {
   name = "maptogether-client";
+  inherit version;
   buildInputs = with pkgs; [
     jdk11
     flutter

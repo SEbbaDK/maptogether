@@ -1,0 +1,13 @@
+name: maptogether-server
+version: 0.1.0
+
+authors:
+  - SEbbaDK <sebbadk@gmail.com>
+
+targets:
+  maptogether-server:
+    main: src/maptogether-server.cr
+
+crystal: 1.0.0
+
+license: MIT
