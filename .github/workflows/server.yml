@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: nixbuild/nix-quick-install-action@v5
-      - run: nix-shell server --run "cd server && crystal test"
+      - run: nix-shell server --quiet --run "cd server && crystal test"
