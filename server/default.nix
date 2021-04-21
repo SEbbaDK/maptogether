@@ -3,7 +3,7 @@
   mkDerivation ? pkgs.stdenv.mkDerivation,
 
   # Dependencies
-  crystal ? pkgs.crystal,
+  crystal ? pkgs.crystal_0_36,
   shards ? pkgs.shards,
   pkg-config ? pkgs.pkg-config,
   openssl ? pkgs.openssl,

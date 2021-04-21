@@ -1,7 +1,12 @@
 require "kemal"
 
-get "/" do
-    "hi"
+module MapTogether::Server
+    
+    get "/" do
+        "hi"
+    end
+
+    Kemal.run   
+
 end
 
-Kemal.run

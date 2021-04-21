@@ -7,11 +7,13 @@ authors:
 dependencies:
     kemal:
         github: kemalcr/kemal
+    spec-kemal:
+        github: kemalcr/spec-kemal
 
 targets:
   maptogether-server:
     main: src/maptogether-server.cr
 
-crystal: 1.0.0
+crystal: ">= 0.36.0, < 1.0.0"
 
 license: MIT
