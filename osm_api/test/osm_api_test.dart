@@ -2,15 +2,14 @@ import 'package:osm_api/osm_api.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
-    Awesome awesome;
+  group('bbox', () {
+    OsmApi api = OsmApi();
 
-    setUp(() {
-      awesome = Awesome();
-    });
+    setUp(() {});
 
-    test('First Test', () {
-      expect(awesome.isAwesome, isTrue);
+    test('Fetching is not null', () async {
+      var result = (await api.mapByBox(9.5, 56.5, 10, 57)).elements;
+      expect(result.length, 50);
     });
   });
 }
