@@ -20,12 +20,67 @@ class MapData {
 
 @JsonSerializable()
 class Node {
-  final int id;
+  final int id, version, changeset, uid;
   final double lat, lon;
+  final String timestamp, user;
+  final Map<String, String> tags;
 
-  Node({required this.id, required this.lat, required this.lon});
+  Node(
+      {required this.id,
+      required this.lat,
+      required this.lon,
+      required this.timestamp,
+      required this.version,
+      required this.changeset,
+      required this.user,
+      required this.uid,
+      required this.tags});
+
   factory Node.fromJson(Map<String, dynamic> json) => _$NodeFromJson(json);
   Map<String, dynamic> toJson() => _$NodeToJson(this);
+}
+
+@JsonSerializable()
+class Way {
+  final int id, version, changeset, uid;
+  final String timestamp, user;
+  final List<int> nodes;
+  final Map<String, String> tags;
+
+  Way(
+      {required this.id,
+      required this.timestamp,
+      required this.version,
+      required this.changeset,
+      required this.user,
+      required this.uid,
+      required this.nodes,
+      required this.tags});
+
+  factory Way.fromJson(Map<String, dynamic> json) => _$WayFromJson(json);
+  Map<String, dynamic> toJson() => _$WayToJson(this);
+}
+
+@JsonSerializable()
+class Relation {
+  final int id, version, changeset, uid;
+  final String timestamp, user;
+  final List<Map<String, String>> members;
+  final Map<String, String> tags;
+
+  Relation(
+      {required this.id,
+      required this.timestamp,
+      required this.version,
+      required this.changeset,
+      required this.user,
+      required this.uid,
+      required this.members,
+      required this.tags});
+
+  factory Relation.fromJson(Map<String, dynamic> json) =>
+      _$RelationFromJson(json);
+  Map<String, dynamic> toJson() => _$RelationToJson(this);
 }
 
 class OsmApi {
@@ -38,8 +93,7 @@ class OsmApi {
   Future<MapData> mapByBox(
       double left, double bottom, double right, double top) async {
     var response = await _get("map?bbox=${left},${bottom},${right},${top}");
-    if (response.statusCode != 200)
-        throw response.body;
+    if (response.statusCode != 200) throw response.body;
     var json = jsonDecode(response.body);
     return MapData.fromJson(json);
   }
