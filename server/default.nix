@@ -1,7 +1,12 @@
 {
   pkgs ? import ../nixpkgs.nix {},
   mkDerivation ? pkgs.stdenv.mkDerivation,
+
+  # Dependencies
   crystal ? pkgs.crystal,
+  shards ? pkgs.shards,
+  pkg-config ? pkgs.pkg-config,
+  openssl ? pkgs.openssl,
   ...
 }:
 let
@@ -11,5 +16,5 @@ in
 mkDerivation {
   name = "maptogether-server";
   inherit version;
-  buildInputs = [ crystal ];
+  buildInputs = [ shards pkg-config crystal openssl ];
 }

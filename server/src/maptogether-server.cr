@@ -1,6 +1,7 @@
-# TODO: Write documentation for `Maptogether::Server`
-module Maptogether::Server
-  VERSION = "0.1.0"
+require "kemal"
 
-  # TODO: Put your code here
+get "/" do
+    "hi"
 end
+
+Kemal.run

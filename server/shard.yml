@@ -4,6 +4,10 @@ version: 0.1.0
 authors:
   - SEbbaDK <sebbadk@gmail.com>
 
+dependencies:
+    kemal:
+        github: kemalcr/kemal
+
 targets:
   maptogether-server:
     main: src/maptogether-server.cr
