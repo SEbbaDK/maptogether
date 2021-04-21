@@ -1,7 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.batterylevel">
+
     <!-- Flutter needs it to communicate with the running application
          to allow setting breakpoints, to provide hot reload, etc.
     -->
     <uses-permission android:name="android.permission.INTERNET"/>
+
+    <meta-data
+        android:name="com.google.android.nearby.messages.API_KEY"
+        android:value="AIzaSyDObO16oV5k-lU-giY2_hCwyt0N4QWBB8Q" />
+
 </manifest>

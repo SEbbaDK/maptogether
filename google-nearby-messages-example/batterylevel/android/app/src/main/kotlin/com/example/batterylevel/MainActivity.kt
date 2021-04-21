@@ -8,7 +8,10 @@ import android.content.IntentFilter
 import android.os.BatteryManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
+import android.os.Bundle
 import androidx.annotation.NonNull
+import com.google.android.gms.nearby.Nearby
+import com.google.android.gms.nearby.messages.MessageListener
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -30,19 +33,15 @@ class MainActivity : FlutterActivity() {
                 } else {
                     result.error("UNAVAILABLE", "Battery level not available.", null)
                 }
-            }
-
-            else if (call.method == "returnHej") {
+            } else if (call.method == "returnHej") {
                 val returnVal = returnHej();
+                
                 if (returnVal != null) {
                     result.success(returnVal)
                 } else {
                     result.error("UNAVAILABLE", "Battery level not available.", null)
                 }
-            }
-
-
-            else {
+            } else {
                 result.notImplemented()
             }
         }
@@ -62,12 +61,8 @@ class MainActivity : FlutterActivity() {
     }
 
 
-    fun returnHej() : String {
+    fun returnHej(): String {
         val myString = "hej";
         return myString;
     }
-
-
-
-
 }
