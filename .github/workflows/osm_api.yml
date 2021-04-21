@@ -1,4 +1,4 @@
-name: "test osm_api"
+name: "osm_api"
 
 on:
   push:
