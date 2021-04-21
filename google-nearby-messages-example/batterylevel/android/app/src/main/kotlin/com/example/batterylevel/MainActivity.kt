@@ -1,16 +1,15 @@
 package com.example.batterylevel
 
 // android imports
-import android.content.Context
-import android.content.ContextWrapper
-import android.content.Intent
-import android.content.IntentFilter
+import android.content.*
 import android.os.BatteryManager
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.NonNull
 import com.google.android.gms.nearby.Nearby
+import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -65,4 +64,45 @@ class MainActivity : FlutterActivity() {
         val myString = "hej";
         return myString;
     }
+
+
+    /// Nearby messages...
+
+    private var mMessage: Message? = null
+    var mMessageListener: MessageListener? = null
+
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        
+        print("Hej med dig!! ");
+        
+        super.onCreate(savedInstanceState)
+        val mMessageListener: MessageListener = object : MessageListener() {
+            override fun onFound(message: Message) {
+                Log.d(ContentValues.TAG, "Found message: " + String(message.content))
+            }
+
+            override fun onLost(message: Message) {
+                Log.d(ContentValues.TAG, "Lost sight of message: " + String(message.content))
+            }
+        }
+        mMessage = Message("Hello World".toByteArray())
+    }
+
+    public override fun onStart() {
+        super.onStart()
+
+        // ...
+        Nearby.getMessagesClient(this).publish(mMessage!!)
+        Nearby.getMessagesClient(this).subscribe(mMessageListener!!)
+    }
+
+    public override fun onStop() {
+        Nearby.getMessagesClient(this).unpublish(mMessage!!)
+        Nearby.getMessagesClient(this).unsubscribe(mMessageListener!!)
+
+        // ...
+        super.onStop()
+    }
+
+
 }
