@@ -17,6 +17,8 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
 
+
+
     private val CHANNEL = "samples.flutter.dev/battery"
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -40,7 +42,9 @@ class MainActivity : FlutterActivity() {
                 } else {
                     result.error("UNAVAILABLE", "Battery level not available.", null)
                 }
-            } else {
+            }
+
+            else {
                 result.notImplemented()
             }
         }
@@ -72,10 +76,10 @@ class MainActivity : FlutterActivity() {
     var mMessageListener: MessageListener? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
-        
-        print("Hej med dig!! ");
+
         
         super.onCreate(savedInstanceState)
+
         val mMessageListener: MessageListener = object : MessageListener() {
             override fun onFound(message: Message) {
                 Log.d(ContentValues.TAG, "Found message: " + String(message.content))
@@ -87,6 +91,8 @@ class MainActivity : FlutterActivity() {
         }
         mMessage = Message("Hello World".toByteArray())
     }
+
+
 
     public override fun onStart() {
         super.onStart()
