@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'api_data.g.dart';
+part 'data.g.dart';
 
 @JsonSerializable()
 class MapData {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'api_data.dart' as data;
+import 'data.dart' as data;
 
 class OsmApi {
   static final String _url =
