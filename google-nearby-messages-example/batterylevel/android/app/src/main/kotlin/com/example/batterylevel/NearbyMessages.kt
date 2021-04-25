@@ -8,6 +8,9 @@ import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
 import io.flutter.embedding.android.FlutterActivity
 
+/* This is the java example converted to Kotlin
+
+
 class NearbyMessages : FlutterActivity() {
     private var mMessage: Message? = null
     var mMessageListener: MessageListener? = null
@@ -42,3 +45,5 @@ class NearbyMessages : FlutterActivity() {
         super.onStop()
     }
 }
+
+ */

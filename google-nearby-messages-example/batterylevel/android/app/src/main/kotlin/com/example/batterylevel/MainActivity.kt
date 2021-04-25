@@ -1,6 +1,7 @@
 package com.example.batterylevel
 
 // android imports
+import NearbyMessageHandler
 import android.content.*
 import android.os.BatteryManager
 import android.os.Build.VERSION
@@ -15,9 +16,8 @@ import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
+
 class MainActivity : FlutterActivity() {
-
-
 
     private val CHANNEL = "samples.flutter.dev/battery"
 
@@ -42,6 +42,22 @@ class MainActivity : FlutterActivity() {
                 } else {
                     result.error("UNAVAILABLE", "Battery level not available.", null)
                 }
+            }
+
+            else if (call.method == "publish") {
+                NearbyMessageHandler.publish(this, Message("Det virker!".toByteArray()))
+                result.success(null)
+            }
+
+            else if (call.method == "unPublish") {
+                NearbyMessageHandler.unPublish(this, Message("Det virker!".toByteArray()))
+                result.success(null)
+            }
+
+
+            else if (call.method == "subscribe") {
+                val a = NearbyMessageHandler.subscribe(this)
+                result.success(String(NearbyMessageHandler.message!!.content))
             }
 
             else {
@@ -72,6 +88,8 @@ class MainActivity : FlutterActivity() {
 
     /// Nearby messages...
 
+    /*
+
     private var mMessage: Message? = null
     var mMessageListener: MessageListener? = null
 
@@ -93,7 +111,6 @@ class MainActivity : FlutterActivity() {
     }
 
 
-
     public override fun onStart() {
         super.onStart()
 
@@ -109,6 +126,5 @@ class MainActivity : FlutterActivity() {
         // ...
         super.onStop()
     }
-
-
+*/
 }

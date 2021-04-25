@@ -6,7 +6,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,6 +45,33 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> _pub() async {
+    await platform.invokeMethod('publish');
+    setState(() {
+      _batteryLevel = 'Publish';
+    });
+  }
+
+  Future<void> _sub() async {
+    String message;
+
+    try {
+      message = await platform.invokeMethod('subscribe');
+    } on PlatformException catch (e) {
+      message = "Failed: '${e.message}'.";
+    }
+
+    setState(() {
+      _batteryLevel = message;
+    });
+  }
+
+  Future<void> _hej() async {
+    await platform.invokeMethod('returnHej');
+    setState(() {
+      _batteryLevel = 'test';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +83,32 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               child: Text('Get Battery Level'),
               onPressed: _getBatteryLevel,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  child: Text('Publish'),
+                  onPressed: _pub,
+                ),
+                ElevatedButton(
+                  child: Text('UnPublish'),
+                  onPressed: _pub,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  child: Text('Subscribe'),
+                  onPressed: _sub,
+                ),
+                ElevatedButton(
+                  child: Text('UnSubscribe'),
+                  onPressed: _sub,
+                ),
+              ],
             ),
             Text(_batteryLevel),
           ],

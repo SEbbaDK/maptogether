@@ -6,12 +6,8 @@
     -->
     <uses-permission android:name="android.permission.INTERNET" />
 
-
-    <application>
-        <meta-data
-            android:name="com.google.android.nearby.messages.API_KEY"
-            android:value="AIzaSyDObO16oV5k-lU-giY2_hCwyt0N4QWBB8Q" />
-    </application>
-
+    <meta-data
+        android:name="com.google.android.nearby.messages.API_KEY"
+        android:value="AIzaSyDObO16oV5k-lU-giY2_hCwyt0N4QWBB8Q" />
 
 </manifest>
