@@ -80,7 +80,11 @@ class MainActivity : FlutterActivity() {
                 } else if (pupTask!!.exception == null) {
                     res = "no exception"
                 } else {
-                    res = pupTask!!.exception!!.message!!
+                    var trace : String = ""
+                    for (e in pupTask!!.exception!!.stackTrace) {
+                        trace += e.className + "." + e.methodName + e.lineNumber + "\n"
+                    }
+                    res = trace
                 }
                 result.success(res)
             }
