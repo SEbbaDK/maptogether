@@ -14,6 +14,19 @@ class MapData {
 
 enum ElementType { node, way, relation }
 
+
+@JsonSerializable()
+class Member {
+  final String type, role;
+  final int ref;
+
+  Member({required this.type, required this.ref, required this.role});
+
+  factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
+  Map<String, dynamic> toJson() => _$MemberToJson(this);
+}
+
+
 @JsonSerializable()
 class Element {
   final ElementType type;
@@ -29,6 +42,11 @@ class Element {
   @JsonKey(name: "lon", defaultValue: 0)
   final double raw_lon;
 
+  @JsonKey(name: "nodes", defaultValue: [])
+  final List<int> raw_nodes;
+      @JsonKey(name: "members", defaultValue: [])
+  final List<Member> raw_members;
+
   double get lat {
     if (type != ElementType.node)
       throw Exception("Lattitude only available on node elements");
@@ -41,6 +59,20 @@ class Element {
       throw Exception("Lontitude only available on node elements");
     else
       return raw_lon;
+  }
+
+  List<int> get nodes {
+    if (type != ElementType.way)
+      throw Exception("Nodes only available for way elements");
+    else
+      return raw_nodes;
+  }
+
+  List<Member> get members {
+    if (type != ElementType.relation)
+      throw Exception("Member only available for relation elements");
+    else
+      return raw_members;
   }
 
   bool get isNode => type == ElementType.node;
@@ -58,6 +90,8 @@ class Element {
     required this.tags,
     required this.raw_lat,
     required this.raw_lon,
+    required this.raw_members,
+    required this.raw_nodes,
   });
 
   factory Element.fromJson(Map<String, dynamic> json) =>
