@@ -36,25 +36,43 @@ class _LeaderBoardState extends State<LeaderBoardView>{
       body: Center(
         child: Container(
         margin: EdgeInsets.all(40.0),
-        child: ListView.builder(
-            itemCount: widget.leaderBoard.users.length,
-            itemBuilder: (context, index){
-              return Card(
-                child: ListTile(
-                  title: Text("#"
-                      + (index+1).toString()
-                      + " "
-                      + widget.leaderBoard.users[index].name
-                      + " : "
-                      + widget.leaderBoard.users[index].total.toString()
-                      + " points"),
-                  leading: CircleAvatar(
-                    backgroundImage:
-                      AssetImage('assets/${widget.leaderBoard.users[index].pfp}'),
+        child: Column(
+          children: <Widget>[
+          Expanded(
+          child: ListView.builder(
+              itemCount: widget.leaderBoard.users.length,
+              itemBuilder: (context, index){
+                return Card(
+                  child: ListTile(
+                    title: Text("#"
+                        + (index+1).toString()
+                        + " "
+                        + widget.leaderBoard.users[index].name
+                        + " : "
+                        + widget.leaderBoard.users[index].total.toString()
+                        + " points"),
+                    leading: CircleAvatar(
+                      backgroundImage:
+                        AssetImage('assets/${widget.leaderBoard.users[index].pfp}'),
+                    ),
                   ),
-                ),
-              );
-            }),
+                );
+              }),
+          ),
+            TextButton(
+                onPressed: (){
+                  for(int x = 0; x < widget.leaderBoard.users.length; x++)
+                    if(widget.leaderBoard.users[x].name == "Simon")
+                      widget.leaderBoard.users[x].total += 10;
+                  widget.leaderBoard.users.sort((a, b) => b.total.compareTo(a.total));
+                  setState(() {
+
+                  });
+                },
+                child: Text("+++++")
+            )
+          ]
+        )
         )
       )
     );
