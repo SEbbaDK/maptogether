@@ -15,6 +15,8 @@ void main() {
       tags: {},
       raw_lat: 10.4,
       raw_lon: 4.5,
+      raw_members: [],
+      raw_nodes : [],
     );
 
     test('has lat', () => expect(e.lat, 10.4));
@@ -33,6 +35,11 @@ void main() {
       tags: {},
       raw_lat: 10.4,
       raw_lon: 4.5,
+      raw_nodes: [
+        35352060,
+        35352061
+      ],
+      raw_members: [],
     );
 
     test('does not have lat', () => expect(() => e.lat, throwsException));
@@ -51,6 +58,14 @@ void main() {
       tags: {},
       raw_lat: 10.4,
       raw_lon: 4.5,
+      raw_nodes: [],
+      raw_members: [
+       Member(
+          type: "node",
+          ref: 6772305769,
+          role: "sign",
+        )
+      ],
     );
 
     test('does not have lat', () => expect(() => e.lat, throwsException));

@@ -44,7 +44,8 @@ class Element {
 
   @JsonKey(name: "nodes", defaultValue: [])
   final List<int> raw_nodes;
-      @JsonKey(name: "members", defaultValue: [])
+
+  @JsonKey(name: "members", defaultValue: [])
   final List<Member> raw_members;
 
   double get lat {
