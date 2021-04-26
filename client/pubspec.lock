@@ -164,7 +164,7 @@ packages:
       path: "../osm_api"
       relative: true
     source: path
-    version: "0.0.0"
+    version: "0.1.0"
   path:
     dependency: transitive
     description:

@@ -54,3 +54,29 @@ class LeaderBoardView extends StatelessWidget{
     );
   }
 }
+
+/*class Participants extends StatefulWidget{
+  @override
+  _ParticipantsState createState() => _ParticipantsState();
+}
+
+class _ParticipantsState extends State<Participants>{
+  @override
+  Widget build(BuildContext context){
+    return Card(
+      child: ListTile(
+        title: Text("#"
+            + (index+1).toString()
+            + " "
+            + leaderBoard.users[index].name
+            + " : "
+            + leaderBoard.users[index].total.toString()
+            + " points"),
+        leading: CircleAvatar(
+          backgroundImage:
+          AssetImage('assets/${leaderBoard.users[index].pfp}'),
+        ),
+      ),
+    );
+  }
+}*/
