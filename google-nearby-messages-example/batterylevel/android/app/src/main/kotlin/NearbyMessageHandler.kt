@@ -4,8 +4,9 @@ import android.util.Log
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
+import com.google.android.gms.tasks.Task
 
-object NearbyMessageHandler {
+class NearbyMessageHandler {
 
     var message: Message? = Message("...".toByteArray());
 
@@ -25,9 +26,9 @@ object NearbyMessageHandler {
         }
     }
 
-    public fun publish(activity: Activity, message: Message) : Boolean {
-        Nearby.getMessagesClient(activity).publish(message);
-        return true;
+    public fun publish(activity: Activity, message: Message) : Task<Void> {
+        val task = Nearby.getMessagesClient(activity).publish(message);
+        return task
     }
 
     public fun unPublish(activity: Activity, message: Message) : Boolean {
@@ -37,11 +38,15 @@ object NearbyMessageHandler {
 
     public fun subscribe(activity: Activity) : String {
         Nearby.getMessagesClient(activity).subscribe(messageListener);
-        return String(message!!.content);
+        return "subscribed!"
     }
 
     public fun unSubscribe(activity: Activity) : String {
         Nearby.getMessagesClient(activity).unsubscribe(messageListener);
+        return "unsubscribed"
+    }
+
+    public fun getLatestMessage() : String {
         return String(message!!.content);
     }
 

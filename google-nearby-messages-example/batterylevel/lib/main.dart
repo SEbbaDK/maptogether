@@ -48,7 +48,14 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _pub() async {
     await platform.invokeMethod('publish');
     setState(() {
-      _batteryLevel = 'Publish';
+      _batteryLevel = "publishing";
+    });
+  }
+
+  Future<void> _getExceptionMessage() async {
+    String exceptionMessage = await platform.invokeMethod("getExceptionMessage");
+    setState(() {
+      _batteryLevel = exceptionMessage;
     });
   }
 
@@ -90,6 +97,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ElevatedButton(
                   child: Text('Publish'),
                   onPressed: _pub,
+                ),
+                ElevatedButton(
+                    onPressed: _getExceptionMessage,
+                    child: Text('Exception M')
                 ),
                 ElevatedButton(
                   child: Text('UnPublish'),

@@ -12,6 +12,7 @@ import androidx.annotation.NonNull
 import com.google.android.gms.nearby.Nearby
 import com.google.android.gms.nearby.messages.Message
 import com.google.android.gms.nearby.messages.MessageListener
+import com.google.android.gms.tasks.Task
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -20,6 +21,9 @@ import io.flutter.plugin.common.MethodChannel
 class MainActivity : FlutterActivity() {
 
     private val CHANNEL = "samples.flutter.dev/battery"
+
+    private val nearbyMessageHandler = NearbyMessageHandler()
+    private var pupTask : Task<Void>? = null
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -45,19 +49,40 @@ class MainActivity : FlutterActivity() {
             }
 
             else if (call.method == "publish") {
-                NearbyMessageHandler.publish(this, Message("Det virker!".toByteArray()))
+                val pupTask = nearbyMessageHandler.publish(this, Message("Det virker!".toByteArray()))
                 result.success(null)
             }
 
             else if (call.method == "unPublish") {
-                NearbyMessageHandler.unPublish(this, Message("Det virker!".toByteArray()))
+                nearbyMessageHandler.unPublish(this, Message("Det virker!".toByteArray()))
                 result.success(null)
             }
 
 
             else if (call.method == "subscribe") {
-                val a = NearbyMessageHandler.subscribe(this)
-                result.success(String(NearbyMessageHandler.message!!.content))
+                val a = nearbyMessageHandler.subscribe(this)
+                result.success(a)
+            }
+
+            else if (call.method == "unsubscribe") {
+                val a = nearbyMessageHandler.unSubscribe(this)
+                result.success(a)
+            }
+
+            else if (call.method == "getMessage") {
+                result.success(nearbyMessageHandler.getLatestMessage())
+            }
+
+            else if (call.method == "getExceptionMessage") {
+                val res : String
+                if (pupTask == null) {
+                    res = "pupTask is null"
+                } else if (pupTask!!.exception == null) {
+                    res = "no exception"
+                } else {
+                    res = pupTask!!.exception!!.message!!
+                }
+                result.success(res)
             }
 
             else {
