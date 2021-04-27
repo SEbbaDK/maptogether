@@ -26,6 +26,7 @@ class MainActivity : FlutterActivity() {
     private var pupTask : Task<Void>? = null
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+        Log.d(ContentValues.TAG, "Start")
         super.configureFlutterEngine(flutterEngine)
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler {
             // Note: this method is invoked on the main thread.
@@ -49,7 +50,7 @@ class MainActivity : FlutterActivity() {
             }
 
             else if (call.method == "publish") {
-                val pupTask = nearbyMessageHandler.publish(this, Message("Det virker!".toByteArray()))
+                pupTask = nearbyMessageHandler.publish(this, Message("Det virker!".toByteArray()))
                 result.success(null)
             }
 

@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,6 +18,12 @@ class MyApp extends StatelessWidget {
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
+}
+
+void askForPermissions() {
+
+
+
 }
 
 class MyHomePage extends StatefulWidget {
@@ -46,10 +54,26 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _pub() async {
-    await platform.invokeMethod('publish');
-    setState(() {
-      _batteryLevel = "publishing";
-    });
+    print(defaultTargetPlatform);
+    //bool isShown = await Permission.location.shouldShowRequestRationale.then((value) => value);
+    //bool isShown2 = await Permission.microphone.shouldShowRequestRationale.then((value) => value);
+
+
+    String s = await Permission.location.request().toString();
+    String s2 = await Permission.microphone.request().toString();
+
+
+    if (await Permission.location.request().isGranted && await Permission.microphone.request().isGranted ) {
+
+      await platform.invokeMethod('publish');
+      setState(() {
+        _batteryLevel = s;
+      });
+    } else {
+      setState(() {
+        _batteryLevel = 'Did not get permission';
+      });
+    }
   }
 
   Future<void> _getExceptionMessage() async {
@@ -90,6 +114,25 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               child: Text('Get Battery Level'),
               onPressed: _getBatteryLevel,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  child: Text('Mic'),
+                  onPressed: () async {
+                    String s = await Permission.microphone.request().toString();
+                    //await Permission.microphone.shouldShowRequestRationale;
+                  },
+                ),
+                ElevatedButton(
+                  child: Text('Location'),
+                  onPressed: () async {
+                    String s = await Permission.location.request().toString();
+                    // await Permission.location.shouldShowRequestRationale;
+                  },
+                ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
