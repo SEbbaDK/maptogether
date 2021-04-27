@@ -2,15 +2,21 @@ import 'package:client/widgets/app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:client/database.dart';
 
 import 'User.dart';
 
-class LeaderBoard{
+class LeaderBoard extends ChangeNotifier{
   String name;
   List<User> users;
 
   LeaderBoard(this.name, this.users){
     users.sort((a, b) => b.total.compareTo(a.total));
+  }
+
+  void reSort(){
+    users.sort((a, b) => b.total.compareTo(a.total));
+    notifyListeners();
   }
 }
 
@@ -62,7 +68,7 @@ class _LeaderBoardState extends State<LeaderBoardView>{
             TextButton(
                 onPressed: (){
                   for(int x = 0; x < widget.leaderBoard.users.length; x++)
-                    if(widget.leaderBoard.users[x].name == "Simon")
+                    if(widget.leaderBoard.users[x].name == currentUserName)
                       widget.leaderBoard.users[x].total += 10;
                   widget.leaderBoard.users.sort((a, b) => b.total.compareTo(a.total));
                   setState(() {

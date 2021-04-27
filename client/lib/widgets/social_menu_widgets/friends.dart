@@ -1,6 +1,7 @@
 import 'package:client/widgets/social_menu_widgets/newFriend.dart';
 import 'package:flutter/material.dart';
 import 'User.dart';
+import 'package:client/database.dart';
 
 class Friends extends StatefulWidget {
   @override
@@ -9,14 +10,6 @@ class Friends extends StatefulWidget {
 
 //TODO: move friends list to a seperate file or server
 class _FriendsState extends State<Friends> {
-  List<User> friends = [
-    User("Thomas", 24, "kid.png"),
-    User("Hartvig", 23,  "anime.png"),
-    User("Simon", 24, "business.png"),
-    User("Sebastian", 24, "clean.png"),
-    User("Phillip", 23, "arthas.png"),
-    User("Fjeldsø", 23, "wolf.png"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +21,7 @@ class _FriendsState extends State<Friends> {
           Expanded(
               flex: 7,
               child: ListView.builder(
-                  itemCount: friends.length,
+                  itemCount: following.length,
                   itemBuilder: (context, index) {
                     return Card(
                       child: ListTile(
@@ -47,7 +40,7 @@ class _FriendsState extends State<Friends> {
                                         backgroundColor: Colors.red
                                       ),
                                       onPressed: (){
-                                        print(friends.removeAt(index));
+                                        print(following.removeAt(index));
 
                                         setState(() {
                                           Navigator.pop(context);
@@ -59,10 +52,10 @@ class _FriendsState extends State<Friends> {
                               }
                           );
                         },
-                        title: Text(friends[index].name),
+                        title: Text(following[index].name),
                         leading: CircleAvatar(
                           backgroundImage:
-                              AssetImage('assets/${friends[index].pfp}'),
+                              AssetImage('assets/${following[index].pfp}'),
                         ),
                       ),
                     );
