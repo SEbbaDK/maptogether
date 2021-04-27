@@ -31,7 +31,6 @@ class LeaderBoardView extends StatefulWidget{
 }
 
 class _LeaderBoardState extends State<LeaderBoardView>{
-
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -57,9 +56,11 @@ class _LeaderBoardState extends State<LeaderBoardView>{
                         + " : "
                         + widget.leaderBoard.users[index].total.toString()
                         + " points"),
+
                     leading: CircleAvatar(
                       backgroundImage:
                         AssetImage('assets/${widget.leaderBoard.users[index].pfp}'),
+
                     ),
                   ),
                 );
