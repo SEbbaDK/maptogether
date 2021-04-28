@@ -20,11 +20,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
-void askForPermissions() {
-
-
-
-}
+void askForPermissions() {}
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -58,12 +54,12 @@ class _MyHomePageState extends State<MyHomePage> {
     //bool isShown = await Permission.location.shouldShowRequestRationale.then((value) => value);
     //bool isShown2 = await Permission.microphone.shouldShowRequestRationale.then((value) => value);
 
-
     String s = await Permission.location.request().toString();
     String s2 = await Permission.microphone.request().toString();
 
-
-    if (await Permission.location.request().isGranted && await Permission.microphone.request().isGranted ) {
+    if (await Permission.location.request().isGranted &&
+        await Permission.microphone.request().isGranted &&
+        await Permission.bluetooth.request().isGranted) {
 
       await platform.invokeMethod('publish');
       setState(() {
@@ -77,7 +73,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> _getExceptionMessage() async {
-    String exceptionMessage = await platform.invokeMethod("getExceptionMessage");
+    String exceptionMessage =
+        await platform.invokeMethod("getExceptionMessage");
     setState(() {
       _batteryLevel = exceptionMessage;
     });
@@ -132,6 +129,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     // await Permission.location.shouldShowRequestRationale;
                   },
                 ),
+                ElevatedButton(
+                  child: Text('Blue'),
+                  onPressed: () async {
+                    String s = await Permission.bluetooth.request().toString();
+                    // await Permission.location.shouldShowRequestRationale;
+                  },
+                ),
               ],
             ),
             Row(
@@ -143,8 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ElevatedButton(
                     onPressed: _getExceptionMessage,
-                    child: Text('Exception M')
-                ),
+                    child: Text('Exception M')),
                 ElevatedButton(
                   child: Text('UnPublish'),
                   onPressed: _pub,
