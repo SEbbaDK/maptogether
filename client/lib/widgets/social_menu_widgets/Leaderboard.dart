@@ -69,7 +69,7 @@ class LeaderBoardView extends StatelessWidget{
             TextButton(
                 onPressed: (){
                   for(int x = 0; x < leaderBoard.users.length; x++)
-                    if(leaderBoard.users[x].name == currentUserName)
+                    if(leaderBoard.users[x].name == context.watch<DummyDatabase>().currentUserName)
                       leaderBoard.users[x].total += 10;
                   leaderBoard.users.sort((a, b) => b.total.compareTo(a.total));
                 },

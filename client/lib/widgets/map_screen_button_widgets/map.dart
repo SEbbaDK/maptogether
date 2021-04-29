@@ -1,5 +1,3 @@
-import 'dart:js';
-
 import 'package:client/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';

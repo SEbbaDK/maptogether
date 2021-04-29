@@ -4,17 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'database.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+              MultiProvider(
+                providers: [
+                  ChangeNotifierProvider(create: (_) => DummyDatabase()),
+                ],
+                  child:MyApp()
+              ),
+        );
 
 class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-        ChangeNotifierProvider(create: (_) => DummyDatabase()),
-    ],
-    child: MaterialApp(
+    return MaterialApp(
       title: '${context.watch<DummyDatabase>().currentUserName}',
       theme: ThemeData(
         primaryColor: Colors.green,

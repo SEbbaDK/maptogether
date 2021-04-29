@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'Leaderboard.dart';
 import 'User.dart';
 import 'package:client/database.dart';
+import 'package:provider/provider.dart';
 
 
 
@@ -29,19 +30,19 @@ class _OverviewState extends State<Overview> {
             children: [
               Expanded(
                   child: ListView.builder(
-                    itemCount: leaderboards.length,
+                    itemCount: context.watch<DummyDatabase>().leaderboards.length,
                     itemBuilder: (context, index){
                     return Card(
                       child: ListTile(
                         title: Text("#"
-                            + ((leaderboards[index].users.indexOf(currentUser)+1).toString())
+                            + ((context.watch<DummyDatabase>().leaderboards[index].users.indexOf(context.watch<DummyDatabase>().currentUser)+1).toString())
                             + "/"
-                            + (leaderboards[index].users.length).toString()),
-                        leading: Text(leaderboards[index].name),
+                            + (context.watch<DummyDatabase>().leaderboards[index].users.length).toString()),
+                        leading: Text(context.watch<DummyDatabase>().leaderboards[index].name),
                         onTap: (){
                             Navigator.push(context,
                                 MaterialPageRoute(
-                                    builder: (context) => LeaderBoardView(leaderBoard: leaderboards[index]),));
+                                    builder: (context) => LeaderBoardView(leaderBoard: context.watch<DummyDatabase>().leaderboards[index]),));
                         },
 
                       )

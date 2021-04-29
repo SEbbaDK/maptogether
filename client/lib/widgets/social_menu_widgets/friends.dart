@@ -2,6 +2,7 @@ import 'package:client/widgets/social_menu_widgets/newFriend.dart';
 import 'package:flutter/material.dart';
 import 'User.dart';
 import 'package:client/database.dart';
+import 'package:provider/provider.dart';
 
 class Friends extends StatefulWidget {
   @override
@@ -21,7 +22,7 @@ class _FriendsState extends State<Friends> {
           Expanded(
               flex: 7,
               child: ListView.builder(
-                  itemCount: following.length,
+                  itemCount: context.watch<DummyDatabase>().following.length,
                   itemBuilder: (context, index) {
                     return Card(
                       child: ListTile(
@@ -40,7 +41,7 @@ class _FriendsState extends State<Friends> {
                                         backgroundColor: Colors.red
                                       ),
                                       onPressed: (){
-                                        print(following.removeAt(index));
+                                        print(context.watch<DummyDatabase>().following.removeAt(index));
 
                                         setState(() {
                                           Navigator.pop(context);
@@ -52,10 +53,10 @@ class _FriendsState extends State<Friends> {
                               }
                           );
                         },
-                        title: Text(following[index].name),
+                        title: Text(context.watch<DummyDatabase>().following[index].name),
                         leading: CircleAvatar(
                           backgroundImage:
-                              AssetImage('assets/${following[index].pfp}'),
+                              AssetImage('assets/${context.watch<DummyDatabase>().following[index].pfp}'),
                         ),
                       ),
                     );
