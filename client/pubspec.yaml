@@ -25,6 +25,7 @@ dependencies:
     path: ../osm_api
   flutter:
     sdk: flutter
+
   provider: ^5.0.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -38,6 +39,9 @@ dependencies:
 
   # Used to cluster the markers on the map
   flutter_map_marker_cluster: ^0.3.4
+
+  # Used to get the location
+  location: ^4.1.1
 
 dev_dependencies:
   flutter_test:

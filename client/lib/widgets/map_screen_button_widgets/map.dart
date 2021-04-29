@@ -1,12 +1,16 @@
-import 'package:client/database.dart';
+import 'package:client/location_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
+import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class InteractiveMap extends StatefulWidget {
-  const InteractiveMap({Key key,}) : super(key: key);
+  const InteractiveMap({
+    Key key,
+  }) : super(key: key);
+
   @override
   _InteractiveMapState createState() => _InteractiveMapState();
 }
@@ -36,23 +40,25 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   @override
   Widget build(BuildContext context) {
+
+    LocationHandler locationHandler = context.read<LocationHandler>();
+
     var taskMarkers = taskPoints.map((poi) {
       return Marker(
         width: 100.0,
         height: 100.0,
         point: poi.location,
-        builder: (ctx) =>
-            FittedBox(
-              child: TextButton(
-                child: Icon(
-                  Icons.edit_location_rounded,
-                  color: Colors.black,
-                ),
-                onPressed: () {
-                  print('This is ' + poi.name);
-                },
-              ),
+        builder: (ctx) => FittedBox(
+          child: TextButton(
+            child: Icon(
+              Icons.edit_location_rounded,
+              color: Colors.black,
             ),
+            onPressed: () {
+              print('This is ' + poi.name);
+            },
+          ),
+        ),
       );
     }).toList();
 
@@ -75,7 +81,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
                       borderRadius: BorderRadius.circular(5),
                       color: Colors.lightGreen,
                     ),
-
                     child: TextButton(
                       onPressed: () {
                         showModalBottomSheet<void>(
@@ -86,56 +91,42 @@ class _InteractiveMapState extends State<InteractiveMap> {
                                   color: Colors.green,
                                   child: Center(
                                       child: Column(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: <Widget>[
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: <Widget>[
                                       const Text('Add Point of Interest'),
-
-                                        TextField(
-                                          controller: poiNameController,
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(),
-                                            labelText: 'Name of PoI',
-                                          ),
+                                      TextField(
+                                        controller: poiNameController,
+                                        decoration: InputDecoration(
+                                          border: OutlineInputBorder(),
+                                          labelText: 'Name of PoI',
                                         ),
-
-                                        DropDown(),
-
-                                        TextButton(
-                                            child: Text(
-                                                'Choose time'
-                                            ),
-                                            onPressed: () async {
-                                              result =
-                                              await showTimeRangePicker(
-                                                context: context,
-                                              );
-                                            }
-                                        ),
-
-                                        ElevatedButton(
-                                            child: const Text(
-                                                'Close BottomSheet'),
-                                            onPressed: () {
-                                              taskPoints.add(
-                                                  PointOfInterest(
-                                                      poiNameController.text,
-                                                      popUpPositionOnMap,
-                                                      result)); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
-                                              setState(() {
-                                                showPopUp = false;
-                                                poiNameController.text = "";
-                                                Navigator.pop(context);
-                                              });
-                                            }
-                                          )
-                                        ],
-                                      )
-                                  )
-                              );
-                            }
-                        );
+                                      ),
+                                      DropDown(),
+                                      TextButton(
+                                          child: Text('Choose time'),
+                                          onPressed: () async {
+                                            result = await showTimeRangePicker(
+                                              context: context,
+                                            );
+                                          }),
+                                      ElevatedButton(
+                                          child:
+                                              const Text('Close BottomSheet'),
+                                          onPressed: () {
+                                            taskPoints.add(PointOfInterest(
+                                                poiNameController.text,
+                                                popUpPositionOnMap,
+                                                result)); // TODO: Det er nok meningen at der skal åbnes en ny POI screen eller lignende
+                                            setState(() {
+                                              showPopUp = false;
+                                              poiNameController.text = "";
+                                              Navigator.pop(context);
+                                            });
+                                          })
+                                    ],
+                                  )));
+                            });
                       },
                       child: Text(
                         'Add Point of Interest',
@@ -157,8 +148,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
         height: 250,
         width: 1000,
         point: popUpPositionOnMap,
-        builder: (context) =>
-            Visibility(
+        builder: (context) => Visibility(
               visible: showPopUp,
               child: FittedBox(
                 child: Stack(
@@ -187,6 +177,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
       });
     }
 
+    LatLng currentLatLng = locationHandler.getLocation();
+
     return Stack(
       children: [
         FlutterMap(
@@ -195,7 +187,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
               options: TileLayerOptions(
                 tileSize: 256,
                 urlTemplate:
-                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 subdomains: ['a', 'b', 'c'],
                 tileProvider: NetworkTileProvider(),
                 maxNativeZoom: 18,
@@ -215,7 +207,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
               });
             },
             // Aalborg
-            center: LatLng(57.04, 9.92),
+            //center: LatLng(57.04, 9.92),
+            center: currentLatLng,
             zoom: 12.0,
             maxZoom: 22.0,
           ),
@@ -244,6 +237,19 @@ class _InteractiveMapState extends State<InteractiveMap> {
             ),
           ],
         ),
+
+        ////////////////////////////////////////////////////////////////////////
+        Center(
+          child: ElevatedButton(
+            onPressed: () {
+              setState(() {
+                context.read<LocationHandler>().getLocation();
+              });
+            },
+          ),
+        ),
+
+
       ],
     );
   }
@@ -255,7 +261,6 @@ class DropDown extends StatefulWidget {
 }
 
 class _DropDownState extends State<DropDown> {
-
   String selectedValue;
 
   @override
@@ -263,16 +268,14 @@ class _DropDownState extends State<DropDown> {
     return DropdownButton<String>(
         hint: Text('Choose'),
         value: selectedValue,
-
         onChanged: (String changedValue) {
           setState(() {
             selectedValue = changedValue;
             print(selectedValue);
           });
         },
-
-        items: <String>['Shop', 'Bar', 'Restaurent', 'Other']
-            .map((String value) {
+        items:
+            <String>['Shop', 'Bar', 'Restaurent', 'Other'].map((String value) {
           return new DropdownMenuItem<String>(
             value: value,
             child: new Text(value),
@@ -280,4 +283,3 @@ class _DropDownState extends State<DropDown> {
         }).toList());
   }
 }
-
