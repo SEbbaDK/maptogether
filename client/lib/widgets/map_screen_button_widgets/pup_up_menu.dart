@@ -24,7 +24,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
   Widget build(BuildContext context) {
     List<Widget> menuButtons = [
       MapScreenButton(
-          child: Icon(Icons.settings),
+          child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Settings())
@@ -33,7 +33,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
           }),
 
       MapScreenButton(
-          child: Icon(Icons.settings),
+          child: Icon(Icons.location_history),
           onPressed: () {
             Navigator.push(
                 context, MaterialPageRoute(builder: (context) => Settings()));
