@@ -3,10 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:client/database.dart';
+import 'package:provider/provider.dart';
 
 import 'User.dart';
 
-class LeaderBoard extends ChangeNotifier{
+class LeaderBoard with ChangeNotifier{
   String name;
   List<User> users;
 
@@ -14,28 +15,27 @@ class LeaderBoard extends ChangeNotifier{
     users.sort((a, b) => b.total.compareTo(a.total));
   }
 
+
   void reSort(){
     users.sort((a, b) => b.total.compareTo(a.total));
     notifyListeners();
   }
 }
 
-class LeaderBoardView extends StatefulWidget{
+
+class LeaderBoardView extends StatelessWidget{
   LeaderBoard leaderBoard;
 
   LeaderBoardView({Key key, @required this.leaderBoard}) : super(key: key);
 
-  @override
-  _LeaderBoardState createState() => _LeaderBoardState();
-
-}
-
-class _LeaderBoardState extends State<LeaderBoardView>{
+  void _reSort(BuildContext context){
+    Provider.of<LeaderBoard>(context, listen: false).reSort();
+  }
   @override
   Widget build(BuildContext context){
     return Scaffold(
       appBar: MapTogetherAppBar(
-        title: "Leaderboard for " + widget.leaderBoard.name,
+        title: "Leaderboard for " + leaderBoard.name,
         actionButtons: [],
       ),
       body: Center(
@@ -45,21 +45,21 @@ class _LeaderBoardState extends State<LeaderBoardView>{
           children: <Widget>[
           Expanded(
           child: ListView.builder(
-              itemCount: widget.leaderBoard.users.length,
+              itemCount: leaderBoard.users.length,
               itemBuilder: (context, index){
                 return Card(
                   child: ListTile(
                     title: Text("#"
                         + (index+1).toString()
                         + " "
-                        + widget.leaderBoard.users[index].name
+                        + leaderBoard.users[index].name
                         + " : "
-                        + widget.leaderBoard.users[index].total.toString()
+                        + leaderBoard.users[index].total.toString()
                         + " points"),
 
                     leading: CircleAvatar(
                       backgroundImage:
-                        AssetImage('assets/${widget.leaderBoard.users[index].pfp}'),
+                        AssetImage('assets/${leaderBoard.users[index].pfp}'),
 
                     ),
                   ),
@@ -68,13 +68,10 @@ class _LeaderBoardState extends State<LeaderBoardView>{
           ),
             TextButton(
                 onPressed: (){
-                  for(int x = 0; x < widget.leaderBoard.users.length; x++)
-                    if(widget.leaderBoard.users[x].name == currentUserName)
-                      widget.leaderBoard.users[x].total += 10;
-                  widget.leaderBoard.users.sort((a, b) => b.total.compareTo(a.total));
-                  setState(() {
-
-                  });
+                  for(int x = 0; x < leaderBoard.users.length; x++)
+                    if(leaderBoard.users[x].name == currentUserName)
+                      leaderBoard.users[x].total += 10;
+                  leaderBoard.users.sort((a, b) => b.total.compareTo(a.total));
                 },
                 child: Text("+++++")
             )

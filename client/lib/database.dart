@@ -1,33 +1,64 @@
 import 'package:client/widgets/social_menu_widgets/Leaderboard.dart';
 import 'package:client/widgets/social_menu_widgets/User.dart';
+import 'package:flutter/foundation.dart';
+import 'package:provider/provider.dart';
 
 //We get the current user through their username, usernames are unique,
 //for the purpose of testing we are Simon
-String currentUserName = "Simon";
-User currentUser = globalUsers.firstWhere((user) => user.name == currentUserName);
 
-//This is the list of all users,
-List<User> globalUsers = [
-  User("Thomas", 50, "kid.png", "UK"),
-  User("Sebba", 250, "clean.png", "DK"),
-  User("Simon", 25, "business.png", "DK"),
-  User("Phillip", 85, "arthas.png", "DK"),
-  User("Hartvig", 10, "anime.png", "JP"),
-  User("Fjeldsø", 20, "wolf.png", "DK"),
-];
+class DummyDatabase with ChangeNotifier{
 
-LeaderBoard national = new LeaderBoard(currentUser.nationality, globalUsers.where((user) => user.nationality == currentUser.nationality).toList());
+  String currentUserName;
+  User currentUser;
 
-LeaderBoard world = new LeaderBoard("World", globalUsers);
+  List<User> globalUsers;
+  List<LeaderBoard> leaderboards;
+  List<String> followingNames;
+  List<User> following;
 
-List<LeaderBoard> leaderboards = [world, national];
+  DummyDatabase() {
+    currentUserName = "Simon";
 
-List<String> followingNames = [
-  "Thomas",
-  "Hartvig",
-  "Sebba",
-  "Fjeldsø",
-  "Phillip",
-];
+  //This is the list of all users to ever use the app, it makes up the global leaderboard.
+    globalUsers = [
+      User("Thomas", 50, "kid.png", "UK"),
+      User("Sebba", 250, "clean.png", "DK"),
+      User("Simon", 25, "business.png", "DK"),
+      User("Phillip", 85, "arthas.png", "DK"),
+      User("Hartvig", 10, "anime.png", "JP"),
+      User("Fjeldsø", 20, "wolf.png", "DK"),
+    ];
 
-List<User> following = globalUsers.where((user) => followingNames.contains(user.name)).toList();
+    //currentUser found in the global list through
+    currentUser = globalUsers.firstWhere((user) =>
+    user.name == currentUserName);
+
+    //Setting up Leaderboards
+    LeaderBoard national = new LeaderBoard(currentUser.nationality,
+        globalUsers.where((user) => user.nationality == currentUser.nationality)
+            .toList());
+
+    LeaderBoard world = new LeaderBoard("World", globalUsers);
+
+    leaderboards = [world, national];
+
+    followingNames = [
+      "Thomas",
+      "Hartvig",
+      "Sebba",
+      "Fjeldsø",
+      "Phillip",
+    ];
+
+    following = globalUsers.where((user) =>
+        followingNames.contains(user.name)).toList();
+
+
+  }
+
+  void increment(){
+    currentUser.total += 10;
+    notifyListeners();
+  }
+
+}

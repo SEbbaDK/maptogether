@@ -1,3 +1,6 @@
+import 'dart:js';
+
+import 'package:client/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -5,10 +8,7 @@ import 'package:latlong/latlong.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
 class InteractiveMap extends StatefulWidget {
-  const InteractiveMap({
-    Key key,
-  }) : super(key: key);
-
+  const InteractiveMap({Key key,}) : super(key: key);
   @override
   _InteractiveMapState createState() => _InteractiveMapState();
 }
