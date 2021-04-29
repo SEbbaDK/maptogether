@@ -1,3 +1,4 @@
+import 'package:client/screens/new_activity_screen.dart';
 import 'package:client/screens/settings.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
           child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Settings())
+                context, MaterialPageRoute(builder: (context) => NewActivityScreen())
             );
             closeMenu();
           }),
