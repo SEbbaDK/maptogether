@@ -1,4 +1,4 @@
-INSERT INTO contributionType (type)
+INSERT INTO contributionTypes (type)
 VALUES
 	("Road Name"),
 	("Shop Name"),
