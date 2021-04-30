@@ -13,10 +13,13 @@ class MapData {
 }
 
 enum ElementType { node, way, relation }
+String elementTypeString(ElementType t) =>
+    t.toString().toLowerCase().split(".").last;
 
 @JsonSerializable()
 class Member {
-  final String type, role;
+  final ElementType type;
+  final String role;
   final int ref;
 
   Member({required this.type, required this.ref, required this.role});
@@ -31,7 +34,8 @@ class Element {
   final int id, version, changeset, uid;
   final DateTime timestamp;
   final String user;
-
+  @JsonKey(defaultValue: false)
+  final bool visible;
   @JsonKey(defaultValue: {})
   Map<String, String> tags;
 
@@ -86,6 +90,7 @@ class Element {
     required this.changeset,
     required this.user,
     required this.uid,
+    required this.visible,
     required this.tags,
     required this.raw_lat,
     required this.raw_lon,
