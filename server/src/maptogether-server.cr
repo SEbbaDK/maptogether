@@ -2,6 +2,7 @@ require "kemal"
 require "db"
 require "pg"
 require "json"
+require "../dbmock/*"
 
 
 module MapTogether::Server
@@ -15,6 +16,7 @@ module MapTogether::Server
       score integer)"
       puts typeof(cnn)
       cnn.exec "insert into users values (DEFAULT, $1, $2)", "Hanne", 69420
+      DbMock.mockUsers(cnn)
       cnn.query "select userID, name, score from users order by userID asc" do |ra|
         ra.each do
           id = ra.read(Int32)
@@ -49,7 +51,7 @@ module MapTogether::Server
             json.object do
                 id = env.params.url["id"]
                 DB.connect "postgres://maptogether:maptogether@localhost:5432/maptogether?retry_attempts=100" do |cnn|
-                    cnn.query "select userID, name, score from users where userID = #{id}" do |rs|
+                    cnn.query "select userID, name, score from users where userID = $1", id do |rs|
                         rs.each do
                             userid = rs.read(Int32)
                             name = rs.read(String)
