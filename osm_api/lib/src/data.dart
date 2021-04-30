@@ -14,7 +14,6 @@ class MapData {
 
 enum ElementType { node, way, relation }
 
-
 @JsonSerializable()
 class Member {
   final String type, role;
@@ -25,7 +24,6 @@ class Member {
   factory Member.fromJson(Map<String, dynamic> json) => _$MemberFromJson(json);
   Map<String, dynamic> toJson() => _$MemberToJson(this);
 }
-
 
 @JsonSerializable()
 class Element {

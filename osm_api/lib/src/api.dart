@@ -18,9 +18,8 @@ class Auth {
       _requestUrl, _authorizeUrl, _accessUrl, SignatureMethods.hmacSha1);
 
   final ClientCredentials _clientCreds;
-  Auth(String clientToken, String clientSecret) :
-      _clientCreds = ClientCredentials(clientToken, clientSecret);
-  
+  Auth(String clientToken, String clientSecret)
+      : _clientCreds = ClientCredentials(clientToken, clientSecret);
 
   Future<AuthorizationResponse> getTemporaryToken() {
     final auth = Authorization(_clientCreds, platform);
@@ -36,13 +35,16 @@ class Auth {
     return auth.requestTokenCredentials(tempToken, verifier);
   }
 
-  Client getClient(Credentials token) =>
-      Client(platform.signatureMethod, _clientCreds, token);
+  http.BaseClient getClient(Credentials token) =>
+      Client(platform.signatureMethod, _clientCreds, token) as http.BaseClient;
+
+  static http.BaseClient getUnauthorizedClient() =>
+      http.Client() as http.BaseClient;
 }
 
 class Api {
   final String _programId;
-  final Client _client;
+  final http.BaseClient _client;
 
   Api(this._programId, this._client);
 
@@ -52,7 +54,13 @@ class Api {
   Future<http.Response> _put(String path, Object data) =>
       _client.put(Uri.parse(_apiUrl + path), body: data);
 
-  Future<String> userDetails() => _get('user/details').then((res) => res.body);
+  Future<String> userDetails() => _get('user/details').then((res) {
+        if (res.statusCode != 200)
+          throw Exception(
+              'Getting user details failed with ${res.statusCode}: ${res.body}');
+        else
+          return res.body;
+      });
 
   Future<data.MapData> mapByBox(
       double left, double bottom, double right, double top) async {

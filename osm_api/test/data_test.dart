@@ -16,7 +16,7 @@ void main() {
       raw_lat: 10.4,
       raw_lon: 4.5,
       raw_members: [],
-      raw_nodes : [],
+      raw_nodes: [],
     );
 
     test('has lat', () => expect(e.lat, 10.4));
@@ -35,10 +35,7 @@ void main() {
       tags: {},
       raw_lat: 10.4,
       raw_lon: 4.5,
-      raw_nodes: [
-        35352060,
-        35352061
-      ],
+      raw_nodes: [35352060, 35352061],
       raw_members: [],
     );
 
@@ -60,7 +57,7 @@ void main() {
       raw_lon: 4.5,
       raw_nodes: [],
       raw_members: [
-       Member(
+        Member(
           type: "node",
           ref: 6772305769,
           role: "sign",

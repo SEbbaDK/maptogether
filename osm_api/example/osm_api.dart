@@ -7,7 +7,9 @@ void main() async {
   final creds = (await auth.getTemporaryToken()).credentials;
   print('Visit ${auth.authorisationUrl(creds)}');
   String verifier = stdin.readLineSync() ?? '';
-  final client = await auth.getAccessToken(creds, verifier).then((res) => auth.getClient(res.credentials));
+  final client = await auth
+      .getAccessToken(creds, verifier)
+      .then((res) => auth.getClient(res.credentials));
 
   final api = osm.Api('AnIdToIdentifyYourClientWith v0.1.0', client);
   await api.userDetails().then(print);
