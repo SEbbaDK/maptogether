@@ -5,29 +5,37 @@ import 'package:oauth1/oauth1.dart';
 
 import 'data.dart' as data;
 
-final String
-    //_baseUrl = 'https://www.openstreetmap.org',
-    _baseUrl = 'https://master.apis.dev.openstreetmap.org',
-    _requestUrl = _baseUrl + '/oauth/request_token',
-    _authorizeUrl = _baseUrl + '/oauth/authorize',
-    _accessUrl = _baseUrl + '/oauth/access_token',
-    _apiUrl = _baseUrl + '/api/0.6/';
+class ApiEnv {
+    final String _baseUrl;
+
+    String get requestUrl => _baseUrl + '/oauth/request_token';
+    String get authorizeUrl => _baseUrl + '/oauth/authorize';
+    String get accessUrl => _baseUrl + '/oauth/access_token';
+    String get apiUrl => _baseUrl + '/api/0.6/';
+
+    ApiEnv.production() : _baseUrl ='https://www.openstreetmap.org';
+
+    /// Construct environment from available apis (check https://apis.dev.openstreetmap.org/)
+    ApiEnv.dev(String devenv) : _baseUrl = 'https://$devenv.apis.dev.openstreetmap.org';
+}
 
 class Auth {
-  static final platform = Platform(
-      _requestUrl, _authorizeUrl, _accessUrl, SignatureMethods.hmacSha1);
-
+  final platform;
   final ClientCredentials _clientCreds;
-  Auth(String clientToken, String clientSecret)
-      : _clientCreds = ClientCredentials(clientToken, clientSecret);
+  final String _auth;
+
+  Auth(String clientToken, String clientSecret, ApiEnv env)
+      : _clientCreds = ClientCredentials(clientToken, clientSecret),
+      platform = Platform(env.requestUrl, env.authorizeUrl, env.accessUrl, SignatureMethods.hmacSha1),
+      _auth = env.authorizeUrl;
 
   Future<AuthorizationResponse> getTemporaryToken() {
     final auth = Authorization(_clientCreds, platform);
     return auth.requestTemporaryCredentials();
   }
 
-  String authorisationUrl(Credentials creds) =>
-      '$_authorizeUrl?oauth_token=${creds.token}&oauth_token_secret=${creds.tokenSecret}';
+  String authorizationUrl(Credentials creds) =>
+      '$_auth?oauth_token=${creds.token}&oauth_token_secret=${creds.tokenSecret}';
 
   Future<AuthorizationResponse> getAccessToken(
       Credentials tempToken, String verifier) {
@@ -43,16 +51,17 @@ class Auth {
 }
 
 class Api {
+  final ApiEnv environment;
   final String _programId;
   final http.BaseClient _client;
 
-  Api(this._programId, this._client);
+  Api(this._programId, this._client, this.environment);
 
   Future<http.Response> _get(String path) => _client
-      .get(Uri.parse(_apiUrl + path), headers: {'Accept': 'application/json'});
+      .get(Uri.parse(environment.apiUrl + path), headers: {'Accept': 'application/json'});
 
   Future<http.Response> _put(String path, Object data) =>
-      _client.put(Uri.parse(_apiUrl + path), body: data);
+      _client.put(Uri.parse(environment.apiUrl + path), body: data);
 
   Future<String> userDetails() => _get('user/details').then((res) {
         if (res.statusCode != 200)

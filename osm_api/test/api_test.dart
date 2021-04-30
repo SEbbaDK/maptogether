@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 
 void main() {
   group('unauthorized api', () {
-    final api = Api('osm_api testing', Auth.getUnauthorizedClient());
+    final api = Api('osm_api testing', Auth.getUnauthorizedClient(), ApiEnv.dev('master'));
 
     // setUp(() {});
 
