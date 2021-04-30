@@ -1,43 +1,43 @@
-CREATE TABLE user (
+CREATE TABLE users (
 	userID	integer PRIMARY KEY,
 	name	varchar(20)
 );
 
-CREATE TABLE contribution (
+CREATE TABLE contributions (
 	contributionID	SERIAL PRIMARY KEY,
-	userID			integer REFERENCES user(userID),
-	type			varchar(30) REFERENCES contributionType(type),
+	userID			integer REFERENCES users(userID),
+	type			varchar(30) REFERENCES contributionTypes(type),
 	changeSet		integer,
 	score			integer
 );
 
-CREATE TABLE contributionType (
+CREATE TABLE contributionTypes (
 	type varchar(30) PRIMARY KEY
 );
 
-CREATE TABLE achievement (
+CREATE TABLE achievements (
 	name	varchar(50)	PRIMARY KEY
 );
 
 CREATE TABLE unlocked (
-	userID 		integer REFERENCES user(userID),
-	achievement	varchar(50) REFERENCES achievement(name),
+	userID 		integer REFERENCES users(userID),
+	achievement	varchar(50) REFERENCES achievements(name),
 	PRIMARY KEY	(userID, achievement)
 
 );
 
 CREATE TABLE follows (
-	follower	integer REFERENCES user(userID),
-	followee	integer REFERENCES user(userID),
+	follower	integer REFERENCES users(userID),
+	followee	integer REFERENCES users(userID),
 	PRIMARY KEY (follower, followee)
 );
 
-CREATE TABLE group (
+CREATE TABLE groups (
 	groupID SERIAL PRIMARY KEY
-)
+);
 
 CREATE TABLE hasMember (
-	groupID	integer REFERENCES group(groupID),
-	userID	integer REFERENCES user(userID),
+	groupID	integer REFERENCES groups(groupID),
+	userID	integer REFERENCES users(userID),
 	PRIMARY KEY (groupID, userID)
-)
+);
