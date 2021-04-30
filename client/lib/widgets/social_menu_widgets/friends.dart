@@ -18,7 +18,7 @@ class _FriendsState extends State<Friends> {
       margin: EdgeInsets.all(40.0),
       child: Column(
         children: <Widget>[
-          Expanded(flex: 1, child: Text("Friends")),
+          Expanded(flex: 1, child: Text("Following")),
           Expanded(
               flex: 7,
               child: ListView.builder(
@@ -35,13 +35,14 @@ class _FriendsState extends State<Friends> {
                                   color: Colors.orange,
                                   child: Center(
                                     child: TextButton(
-                                      child: Text("Remove Friend"),
+                                      child: Text("Unfollow"),
                                       style: TextButton.styleFrom(
                                         primary: Colors.white,
                                         backgroundColor: Colors.red
                                       ),
                                       onPressed: (){
-                                        print(context.watch<DummyDatabase>().following.removeAt(index));
+                                        context.read<DummyDatabase>().followingNames.remove(context.read<DummyDatabase>().following[index].name);
+                                        context.read<DummyDatabase>().following.removeAt(index);
 
                                         setState(() {
                                           Navigator.pop(context);
@@ -69,7 +70,7 @@ class _FriendsState extends State<Friends> {
                 color: Colors.lightGreen,
                 child: TextButton(
                   child: Text(
-                    'Add New Friend',
+                    'Follow New',
                     style: TextStyle(fontSize: 20.0, color: Colors.white),
                   ),
                   onPressed: () {

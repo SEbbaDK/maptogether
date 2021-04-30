@@ -21,12 +21,20 @@ class DummyDatabase with ChangeNotifier{
 
   //This is the list of all users to ever use the app, it makes up the global leaderboard.
     globalUsers = [
-      User("Thomas", 50, "kid.png", "UK"),
-      User("Sebba", 250, "clean.png", "DK"),
-      User("Simon", 25, "business.png", "DK"),
-      User("Phillip", 85, "arthas.png", "DK"),
-      User("Hartvig", 10, "anime.png", "JP"),
-      User("Fjeldsø", 20, "wolf.png", "DK"),
+      User("Thomas", 40, 25, 15, "kid.png", "UK"),
+      User("Sebba", 250, 150, 55, "clean.png", "DK"),
+      User("Simon", 5, 5, 5, "business.png", "DK"),
+      User("Phillip", 55, 35, 15, "arthas.png", "DK"),
+      User("Hartvig", 10, 10, 0, "anime.png", "JP"),
+      User("Fjeldsø", 20, 20, 10, "wolf.png", "DK"),
+    ];
+
+    followingNames = [
+      "Thomas",
+      "Hartvig",
+      "Sebba",
+      "Fjeldsø",
+      "Phillip",
     ];
 
     //currentUser found in the global list through
@@ -38,26 +46,36 @@ class DummyDatabase with ChangeNotifier{
         globalUsers.where((user) => user.nationality == currentUser.nationality)
             .toList());
 
-    LeaderBoard world = new LeaderBoard("World", globalUsers);
-
-    leaderboards = [world, national];
-
-    followingNames = [
-      "Thomas",
-      "Hartvig",
-      "Sebba",
-      "Fjeldsø",
-      "Phillip",
-    ];
-
     following = globalUsers.where((user) =>
         followingNames.contains(user.name)).toList();
+
+    LeaderBoard world = new LeaderBoard("World", globalUsers);
+
+    LeaderBoard followLB = new LeaderBoard("Follow", following);
+
+    leaderboards = [world, national, followLB];
 
 
   }
 
-  void increment(){
-    currentUser.total += 10;
+  void givePoints(int x){
+    currentUser.total += x;
+    notifyListeners();
+  }
+
+  void followNew(String toFollow){
+    User userToFollow = globalUsers.firstWhere((user) => user.name == toFollow, orElse: () => null);
+    if(userToFollow == null)
+      print("User does not exist");
+
+    else if(followingNames.contains(toFollow))
+      print("Already following");
+
+    else {
+      followingNames.add(toFollow);
+      following.add(userToFollow);
+    }
+
     notifyListeners();
   }
 

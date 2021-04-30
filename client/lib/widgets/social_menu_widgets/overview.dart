@@ -6,13 +6,14 @@ import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 
 
-
 class Overview extends StatefulWidget {
   @override
-  _OverviewState createState() => _OverviewState();
+  _OverviewView createState() => _OverviewView();
 }
 
-class _OverviewState extends State<Overview> {
+class _OverviewView extends State<Overview>{
+  //Modes are All, Weekly and Daily, changes depending on which leaderboards we are interested in
+  String mode = "All";
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,43 @@ class _OverviewState extends State<Overview> {
         Expanded(
           flex: 2,
             child: UserOverView()
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            TextButton(
+              onPressed: (){
+                mode = "Daily";
+              },
+              child: Text("Daily", textAlign: TextAlign.center),
+              style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.lightGreen
+              ),
+            ),
+
+            TextButton(
+              onPressed: (){
+                mode = "Weekly";
+              },
+              child: Text("Weekly", textAlign: TextAlign.center),
+              style: TextButton.styleFrom(
+                primary: Colors.white,
+                backgroundColor: Colors.lightGreen
+              ),
+            ),
+
+            TextButton(
+              onPressed: (){
+                mode = "All";
+              },
+              child: Text("All Time", textAlign: TextAlign.center),
+              style: TextButton.styleFrom(
+                  primary: Colors.white,
+                  backgroundColor: Colors.lightGreen
+              ),
+          )
+          ],
         ),
         Expanded(
           flex: 7,
@@ -42,7 +80,7 @@ class _OverviewState extends State<Overview> {
                         onTap: (){
                             Navigator.push(context,
                                 MaterialPageRoute(
-                                    builder: (context) => LeaderBoardView(leaderBoard: context.watch<DummyDatabase>().leaderboards[index]),));
+                                    builder: (context) => LeaderBoardView(leaderboardIndex: index),));
                         },
 
                       )

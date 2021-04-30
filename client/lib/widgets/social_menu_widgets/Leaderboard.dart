@@ -7,35 +7,29 @@ import 'package:provider/provider.dart';
 
 import 'User.dart';
 
-class LeaderBoard with ChangeNotifier{
+class LeaderBoard{
   String name;
   List<User> users;
 
   LeaderBoard(this.name, this.users){
     users.sort((a, b) => b.total.compareTo(a.total));
   }
-
-
-  void reSort(){
-    users.sort((a, b) => b.total.compareTo(a.total));
-    notifyListeners();
-  }
 }
 
 
 class LeaderBoardView extends StatelessWidget{
-  LeaderBoard leaderBoard;
+  int leaderboardIndex;
+  LeaderBoardView({Key key, @required this.leaderboardIndex}) : super(key: key);
 
-  LeaderBoardView({Key key, @required this.leaderBoard}) : super(key: key);
-
-  void _reSort(BuildContext context){
-    Provider.of<LeaderBoard>(context, listen: false).reSort();
-  }
   @override
   Widget build(BuildContext context){
+    var curLeaderboard = context.watch<DummyDatabase>().leaderboards[leaderboardIndex];
+    //we sort the list whenever we open the list, such that it is in correct order in case of updates to the database
+    curLeaderboard.users.sort((a, b) => b.total.compareTo(a.total));
+
     return Scaffold(
       appBar: MapTogetherAppBar(
-        title: "Leaderboard for " + leaderBoard.name,
+        title: "Leaderboard for " + curLeaderboard.name,
         actionButtons: [],
       ),
       body: Center(
@@ -45,21 +39,21 @@ class LeaderBoardView extends StatelessWidget{
           children: <Widget>[
           Expanded(
           child: ListView.builder(
-              itemCount: leaderBoard.users.length,
+              itemCount: curLeaderboard.users.length,
               itemBuilder: (context, index){
                 return Card(
                   child: ListTile(
                     title: Text("#"
                         + (index+1).toString()
                         + " "
-                        + leaderBoard.users[index].name
+                        + curLeaderboard.users[index].name
                         + " : "
-                        + leaderBoard.users[index].total.toString()
+                        + curLeaderboard.users[index].total.toString()
                         + " points"),
 
                     leading: CircleAvatar(
                       backgroundImage:
-                        AssetImage('assets/${leaderBoard.users[index].pfp}'),
+                        AssetImage('assets/${curLeaderboard.users[index].pfp}'),
 
                     ),
                   ),
@@ -68,10 +62,10 @@ class LeaderBoardView extends StatelessWidget{
           ),
             TextButton(
                 onPressed: (){
-                  for(int x = 0; x < leaderBoard.users.length; x++)
-                    if(leaderBoard.users[x].name == context.watch<DummyDatabase>().currentUserName)
-                      leaderBoard.users[x].total += 10;
-                  leaderBoard.users.sort((a, b) => b.total.compareTo(a.total));
+                  for(int x = 0; x < curLeaderboard.users.length; x++)
+                    if(curLeaderboard.users[x].name == context.read<DummyDatabase>().currentUserName)
+                      Provider.of<DummyDatabase>(context, listen: false).givePoints(10);
+                  curLeaderboard.users.sort((a, b) => b.total.compareTo(a.total));
                 },
                 child: Text("+++++")
             )
