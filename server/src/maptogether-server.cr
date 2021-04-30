@@ -40,9 +40,9 @@ module MapTogether::Server
 
     end
 
-    #get "/" do
-        #"hi"
-    #end
+    get "/" do
+        "hi"
+    end
 
     get "/user/:id" do |env|
         string = JSON.build do |json|
