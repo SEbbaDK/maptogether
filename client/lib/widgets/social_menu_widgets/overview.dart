@@ -11,9 +11,23 @@ class Overview extends StatefulWidget {
   _OverviewView createState() => _OverviewView();
 }
 
-class _OverviewView extends State<Overview>{
+class _OverviewView extends State<Overview> with TickerProviderStateMixin{
   //Modes are All, Weekly and Daily, changes depending on which leaderboards we are interested in
   String mode = "All";
+  TabController _nestedTabController;
+
+  @override
+  void initState(){
+    super.initState();
+
+    _nestedTabController = new TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _nestedTabController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,42 +38,23 @@ class _OverviewView extends State<Overview>{
           flex: 2,
             child: UserOverView()
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            TextButton(
-              onPressed: (){
-                mode = "Daily";
-              },
-              child: Text("Daily", textAlign: TextAlign.center),
-              style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.lightGreen
+        TabBar(
+            controller: _nestedTabController,
+            indicatorColor: Colors.green,
+            labelColor: Colors.lightGreen,
+            unselectedLabelColor: Colors.black,
+            isScrollable: false,
+            tabs: <Widget>[
+              Tab(
+                text: "Daily",
               ),
-            ),
-
-            TextButton(
-              onPressed: (){
-                mode = "Weekly";
-              },
-              child: Text("Weekly", textAlign: TextAlign.center),
-              style: TextButton.styleFrom(
-                primary: Colors.white,
-                backgroundColor: Colors.lightGreen
+              Tab(
+                text: "Weekly",
               ),
-            ),
-
-            TextButton(
-              onPressed: (){
-                mode = "All";
-              },
-              child: Text("All Time", textAlign: TextAlign.center),
-              style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Colors.lightGreen
+              Tab(
+                text: "All Time",
               ),
-          )
-          ],
+            ]
         ),
         Expanded(
           flex: 7,
