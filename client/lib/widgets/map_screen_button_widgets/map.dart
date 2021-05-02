@@ -279,7 +279,18 @@ class _InteractiveMapState extends State<InteractiveMap> {
                 _mapController.move(
                     LatLng(currentLocation.latitude,
                         currentLocation.longitude),
-                    _mapController.zoom);
+                    19);
+            },
+          ),
+        ),
+
+        Positioned(
+          top: 25,
+          right: 65,
+          child: MapScreenButton(
+            child: Icon(Icons.compass_calibration),
+            onPressed: () {
+              _mapController.rotate(0); // to north
             },
           ),
         ),
