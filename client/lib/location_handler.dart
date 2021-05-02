@@ -4,23 +4,20 @@ import 'package:location/location.dart';
 
 class LocationHandler extends ChangeNotifier {
   // From location lib
-  Location _locationService = new Location();
+  Location _locationService = Location();
 
   LatLng _currentLocation = LatLng(0, 0); // = LatLng(35, 10);
-
-  LatLng get currentLocation => _currentLocation;
 
   LocationHandler() {
     initLocationService();
   }
 
-  initLocationService() async {
-    /* await _locationService.changeSettings(
+  void initLocationService() async {
+    await _locationService.changeSettings(
       accuracy: LocationAccuracy.high,
-      interval: 1000,
+      interval: 2000,
     );
 
-    */
 
     LocationData locationData = await _locationService.getLocation();
     _currentLocation = LatLng(locationData.latitude, locationData.longitude);
@@ -30,6 +27,7 @@ class LocationHandler extends ChangeNotifier {
     updateLocation().then((value) {
       return _currentLocation;
     });
+    notifyListeners();
     return _currentLocation;
   }
 

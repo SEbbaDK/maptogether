@@ -1,21 +1,13 @@
 import 'package:client/location_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
-class InteractiveMap extends StatefulWidget {
-  const InteractiveMap({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  _InteractiveMapState createState() => _InteractiveMapState();
-}
-
-class PointOfInterest {
+class PointOfInterest { // TODO: I think this should be moved to some model package
   String name;
   LatLng location;
   TimeOfDay openingTime;
@@ -29,6 +21,16 @@ class PointOfInterest {
   }
 }
 
+class InteractiveMap extends StatefulWidget {
+  const InteractiveMap({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  _InteractiveMapState createState() => _InteractiveMapState();
+}
+
+
 class _InteractiveMapState extends State<InteractiveMap> {
   List<PointOfInterest> taskPoints = [];
 
@@ -38,10 +40,31 @@ class _InteractiveMapState extends State<InteractiveMap> {
   bool showPopUp = false;
   TextEditingController poiNameController = TextEditingController();
 
+  MapController _mapController;
+
+  LatLng currentLocation;
+
+  void initLocationService() {
+    currentLocation = context.watch<LocationHandler>().getLocation();
+    _mapController.move(currentLocation, 10);
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
-    LocationHandler locationHandler = context.read<LocationHandler>();
+    _mapController = MapController();
+    initLocationService();
+
+    LocationHandler locationHandler = context.watch<LocationHandler>();
+
+    Marker currentPositionMarker = Marker(
+      point: currentLocation,
+      builder: (context) => Icon(
+        Icons.location_history_rounded,
+        color: Colors.red,
+      ),
+    );
 
     var taskMarkers = taskPoints.map((poi) {
       return Marker(
@@ -61,6 +84,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
         ),
       );
     }).toList();
+
+
 
     Widget selector = Container(
       child: FittedBox(
@@ -177,7 +202,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
       });
     }
 
-    LatLng currentLatLng = locationHandler.getLocation();
 
     return Stack(
       children: [
@@ -208,7 +232,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
             },
             // Aalborg
             //center: LatLng(57.04, 9.92),
-            center: currentLatLng,
+            center: context.watch<LocationHandler>().getLocation(),
             zoom: 12.0,
             maxZoom: 22.0,
           ),
@@ -233,23 +257,10 @@ class _InteractiveMapState extends State<InteractiveMap> {
             ),
             //MarkerLayerOptions(markers: markers)
             MarkerLayerOptions(
-              markers: [popUpMarker],
+              markers: [popUpMarker] + [currentPositionMarker],
             ),
           ],
         ),
-
-        ////////////////////////////////////////////////////////////////////////
-        Center(
-          child: ElevatedButton(
-            onPressed: () {
-              setState(() {
-                context.read<LocationHandler>().getLocation();
-              });
-            },
-          ),
-        ),
-
-
       ],
     );
   }

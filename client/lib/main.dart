@@ -15,7 +15,6 @@ void main() => runApp(
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print(context.watch<LocationHandler>().getLocation().latitude);
     return MaterialApp(
       title: '${context.watch<DummyDatabase>().currentUserName}',
       theme: ThemeData(
