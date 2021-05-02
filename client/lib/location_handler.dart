@@ -6,7 +6,7 @@ import 'package:location/location.dart';
 
 class LocationHandler extends ChangeNotifier {
 
-  bool isFirstTime = true;
+  bool _isFirstTime = true;
 
   // From location lib
   Location _locationService = Location();
@@ -28,9 +28,9 @@ class LocationHandler extends ChangeNotifier {
     _locationService.onLocationChanged.listen((result) {
       _currentLocation = LatLng(result.latitude, result.longitude);
 
-      if (isFirstTime) {
+      if (_isFirstTime) {
         mapController.move(_currentLocation, 18);
-        isFirstTime = false;
+        _isFirstTime = false;
       }
 
       notifyListeners();
