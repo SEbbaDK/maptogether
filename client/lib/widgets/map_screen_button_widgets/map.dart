@@ -1,4 +1,5 @@
 import 'package:client/location_handler.dart';
+import 'package:client/widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -40,7 +41,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
   bool showPopUp = false;
   TextEditingController poiNameController = TextEditingController();
 
-  MapController _mapController;
+  MapController _mapController = MapController();
 
   LatLng currentLocation;
 
@@ -54,15 +55,12 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   void initLocationService() async {
     currentLocation = context.watch<LocationHandler>().getLocation();
-
-    _mapController.move(currentLocation, 17);
   }
 
 
   @override
   Widget build(BuildContext context) {
 
-    _mapController = MapController();
     initLocationService();
 
     locationHandler = context.watch<LocationHandler>();
@@ -216,6 +214,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
     return Stack(
       children: [
         FlutterMap(
+          mapController: _mapController,
           children: [
             TileLayerWidget(
               options: TileLayerOptions(
@@ -270,6 +269,19 @@ class _InteractiveMapState extends State<InteractiveMap> {
               markers: [popUpMarker] + [currentPositionMarker],
             ),
           ],
+        ),
+        Positioned(
+          top: 25,
+          right: 10,
+          child: MapScreenButton(
+            child: Icon(Icons.location_history_rounded),
+            onPressed: () {
+                _mapController.move(
+                    LatLng(currentLocation.latitude,
+                        currentLocation.longitude),
+                    _mapController.zoom);
+            },
+          ),
         ),
       ],
     );
