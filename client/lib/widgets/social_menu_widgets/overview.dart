@@ -6,13 +6,28 @@ import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 
 
-
 class Overview extends StatefulWidget {
   @override
-  _OverviewState createState() => _OverviewState();
+  _OverviewView createState() => _OverviewView();
 }
 
-class _OverviewState extends State<Overview> {
+class _OverviewView extends State<Overview> with TickerProviderStateMixin{
+  //Modes are All, Weekly and Daily, changes depending on which leaderboards we are interested in
+  String mode = "All";
+  TabController _nestedTabController;
+
+  @override
+  void initState(){
+    super.initState();
+
+    _nestedTabController = new TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    _nestedTabController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +37,24 @@ class _OverviewState extends State<Overview> {
         Expanded(
           flex: 2,
             child: UserOverView()
+        ),
+        TabBar(
+            controller: _nestedTabController,
+            indicatorColor: Colors.green,
+            labelColor: Colors.lightGreen,
+            unselectedLabelColor: Colors.black,
+            isScrollable: false,
+            tabs: <Widget>[
+              Tab(
+                text: "Daily",
+              ),
+              Tab(
+                text: "Weekly",
+              ),
+              Tab(
+                text: "All Time",
+              ),
+            ]
         ),
         Expanded(
           flex: 7,
@@ -42,7 +75,7 @@ class _OverviewState extends State<Overview> {
                         onTap: (){
                             Navigator.push(context,
                                 MaterialPageRoute(
-                                    builder: (context) => LeaderBoardView(leaderBoard: context.watch<DummyDatabase>().leaderboards[index]),));
+                                    builder: (context) => LeaderBoardView(leaderboardIndex: index),));
                         },
 
                       )
