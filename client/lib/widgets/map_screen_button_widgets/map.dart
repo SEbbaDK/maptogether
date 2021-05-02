@@ -8,7 +8,8 @@ import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
 
-class PointOfInterest { // TODO: I think this should be moved to some model package
+class PointOfInterest {
+  // TODO: I think this should be moved to some model package
   String name;
   LatLng location;
   TimeOfDay openingTime;
@@ -31,7 +32,6 @@ class InteractiveMap extends StatefulWidget {
   _InteractiveMapState createState() => _InteractiveMapState();
 }
 
-
 class _InteractiveMapState extends State<InteractiveMap> {
   List<PointOfInterest> taskPoints = [];
 
@@ -41,7 +41,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
   bool showPopUp = false;
   TextEditingController poiNameController = TextEditingController();
 
-  MapController _mapController = MapController();
+  MapController _mapController;
 
   LatLng currentLocation;
 
@@ -57,11 +57,11 @@ class _InteractiveMapState extends State<InteractiveMap> {
     currentLocation = context.watch<LocationHandler>().getLocation();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     initLocationService();
+
+    _mapController = context.watch<LocationHandler>().mapController;
 
     locationHandler = context.watch<LocationHandler>();
     currentLocation = locationHandler.getLocation();
@@ -92,8 +92,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
         ),
       );
     }).toList();
-
-
 
     Widget selector = Container(
       child: FittedBox(
@@ -210,7 +208,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
       });
     }
 
-
     return Stack(
       children: [
         FlutterMap(
@@ -276,19 +273,17 @@ class _InteractiveMapState extends State<InteractiveMap> {
           child: MapScreenButton(
             child: Icon(Icons.location_history_rounded),
             onPressed: () {
-                _mapController.move(
-                    LatLng(currentLocation.latitude,
-                        currentLocation.longitude),
-                    19);
+              _mapController.move(
+                  LatLng(currentLocation.latitude, currentLocation.longitude),
+                  19);
             },
           ),
         ),
-
         Positioned(
           top: 25,
           right: 65,
           child: MapScreenButton(
-            child: Icon(Icons.compass_calibration),
+            child: Icon(Icons.north),
             onPressed: () {
               _mapController.rotate(0); // to north
             },

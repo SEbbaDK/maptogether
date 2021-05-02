@@ -1,12 +1,19 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
 
 class LocationHandler extends ChangeNotifier {
+
+  bool isFirstTime = true;
+
   // From location lib
   Location _locationService = Location();
 
   LatLng _currentLocation = LatLng(0, 0); // = LatLng(35, 10);
+
+  MapController mapController = MapController();
 
   LocationHandler() {
     initLocationService();
@@ -20,18 +27,22 @@ class LocationHandler extends ChangeNotifier {
 
     _locationService.onLocationChanged.listen((result) {
       _currentLocation = LatLng(result.latitude, result.longitude);
+
+      if (isFirstTime) {
+        mapController.move(_currentLocation, 18);
+        isFirstTime = false;
+      }
+
       notifyListeners();
     });
     
-    
     LocationData locationData = await _locationService.getLocation();
     _currentLocation = LatLng(locationData.latitude, locationData.longitude);
+    notifyListeners();
   }
 
   LatLng getLocation() {
-    updateLocation().then((value) {
-      return _currentLocation;
-    });
+    updateLocation();
     notifyListeners();
     return _currentLocation;
   }
