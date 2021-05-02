@@ -208,86 +208,60 @@ class _InteractiveMapState extends State<InteractiveMap> {
       });
     }
 
-    return Stack(
+    return FlutterMap(
+      mapController: _mapController,
       children: [
-        FlutterMap(
-          mapController: _mapController,
-          children: [
-            TileLayerWidget(
-              options: TileLayerOptions(
-                tileSize: 256,
-                urlTemplate:
-                    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                subdomains: ['a', 'b', 'c'],
-                tileProvider: NetworkTileProvider(),
-                maxNativeZoom: 18,
-              ),
-            ),
-          ],
-          options: MapOptions(
-            plugins: [
-              MarkerClusterPlugin(),
-            ],
-            onLongPress: (latLng) {
-              _handleLongPress(latLng);
-            },
-            onTap: (latLng) {
-              setState(() {
-                showPopUp = false;
-              });
-            },
-            // Aalborg
-            //center: LatLng(57.04, 9.92),
-            center: currentLocation,
-            zoom: 12.0,
-            maxZoom: 22.0,
-          ),
-          layers: [
-            MarkerClusterLayerOptions(
-              maxClusterRadius: 100,
-              size: Size(40, 40),
-              fitBoundsOptions: FitBoundsOptions(
-                padding: EdgeInsets.all(50),
-              ),
-              markers: taskMarkers,
-              polygonOptions: PolygonOptions(
-                  borderColor: Colors.blueAccent,
-                  color: Colors.black12,
-                  borderStrokeWidth: 3),
-              builder: (context, markers) {
-                return FloatingActionButton(
-                  child: Text(markers.length.toString()),
-                  onPressed: null,
-                );
-              },
-            ),
-            //MarkerLayerOptions(markers: markers)
-            MarkerLayerOptions(
-              markers: [popUpMarker] + [currentPositionMarker],
-            ),
-          ],
-        ),
-        Positioned(
-          top: 25,
-          right: 10,
-          child: MapScreenButton(
-            child: Icon(Icons.location_history_rounded),
-            onPressed: () {
-              _mapController.move(
-                  LatLng(currentLocation.latitude, currentLocation.longitude),
-                  19);
-            },
+        TileLayerWidget(
+          options: TileLayerOptions(
+            tileSize: 256,
+            urlTemplate:
+                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            subdomains: ['a', 'b', 'c'],
+            tileProvider: NetworkTileProvider(),
+            maxNativeZoom: 18,
           ),
         ),
-        Positioned(
-          top: 25,
-          right: 65,
-          child: MapScreenButton(
-            child: Icon(Icons.north),
-            onPressed: () {
-              _mapController.rotate(0); // to north
-            },
+      ],
+      options: MapOptions(
+        plugins: [
+          MarkerClusterPlugin(),
+        ],
+        onLongPress: (latLng) {
+          _handleLongPress(latLng);
+        },
+        onTap: (latLng) {
+          setState(() {
+            showPopUp = false;
+          });
+        },
+        // Aalborg
+        //center: LatLng(57.04, 9.92),
+        center: currentLocation,
+        zoom: 12.0,
+        maxZoom: 22.0,
+      ),
+      layers: [
+        MarkerClusterLayerOptions(
+          maxClusterRadius: 100,
+          size: Size(40, 40),
+          fitBoundsOptions: FitBoundsOptions(
+            padding: EdgeInsets.all(50),
           ),
+          markers: taskMarkers,
+          polygonOptions: PolygonOptions(
+              borderColor: Colors.blueAccent,
+              color: Colors.black12,
+              borderStrokeWidth: 3),
+          builder: (context, markers) {
+            return FloatingActionButton(
+              child: Text(markers.length.toString()),
+              onPressed: null,
+            );
+          },
+        ),
+        //MarkerLayerOptions(markers: markers)
+        MarkerLayerOptions(
+          markers: [popUpMarker] + [currentPositionMarker],
         ),
       ],
     );
