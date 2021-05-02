@@ -54,16 +54,16 @@ class _InteractiveMapState extends State<InteractiveMap> {
   }
 
   void initLocationService() async {
-    currentLocation = context.watch<LocationHandler>().getLocation();
+    locationHandler = context.watch<LocationHandler>();
+    locationHandler.getLocation();
   }
 
   @override
   Widget build(BuildContext context) {
     initLocationService();
 
-    _mapController = context.watch<LocationHandler>().mapController;
+    _mapController = locationHandler.mapController;
 
-    locationHandler = context.watch<LocationHandler>();
     currentLocation = locationHandler.getLocation();
 
     Marker currentPositionMarker = Marker(
