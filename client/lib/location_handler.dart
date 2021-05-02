@@ -18,7 +18,6 @@ class LocationHandler extends ChangeNotifier {
       interval: 2000,
     );
 
-
     LocationData locationData = await _locationService.getLocation();
     _currentLocation = LatLng(locationData.latitude, locationData.longitude);
   }
@@ -36,4 +35,5 @@ class LocationHandler extends ChangeNotifier {
     locationData = await _locationService.getLocation();
     _currentLocation = LatLng(locationData.latitude, locationData.longitude);
   }
+  
 }

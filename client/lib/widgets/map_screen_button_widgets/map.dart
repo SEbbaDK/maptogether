@@ -44,9 +44,18 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   LatLng currentLocation;
 
-  void initLocationService() {
+  LocationHandler locationHandler;
+
+  @override
+  void initState() {
+    super.initState();
+    initLocationService();
+  }
+
+  void initLocationService() async {
     currentLocation = context.watch<LocationHandler>().getLocation();
-    _mapController.move(currentLocation, 10);
+
+    _mapController.move(currentLocation, 17);
   }
 
 
@@ -56,7 +65,8 @@ class _InteractiveMapState extends State<InteractiveMap> {
     _mapController = MapController();
     initLocationService();
 
-    LocationHandler locationHandler = context.watch<LocationHandler>();
+    locationHandler = context.watch<LocationHandler>();
+    currentLocation = locationHandler.getLocation();
 
     Marker currentPositionMarker = Marker(
       point: currentLocation,
@@ -232,7 +242,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
             },
             // Aalborg
             //center: LatLng(57.04, 9.92),
-            center: context.watch<LocationHandler>().getLocation(),
+            center: currentLocation,
             zoom: 12.0,
             maxZoom: 22.0,
           ),
