@@ -23,7 +23,7 @@ class DummyDatabase with ChangeNotifier{
     globalUsers = [
       User("Thomas", 40, 25, 15, "kid.png", "UK"),
       User("Sebba", 250, 150, 55, "clean.png", "DK"),
-      User("Simon", 5, 5, 5, "business.png", "DK"),
+      User("Simon", 25, 15, 5, "business.png", "DK"),
       User("Phillip", 55, 35, 15, "arthas.png", "DK"),
       User("Hartvig", 10, 10, 0, "anime.png", "JP"),
       User("Fjeldsø", 20, 20, 10, "wolf.png", "DK"),
