@@ -97,3 +97,64 @@ class Element {
       _$ElementFromJson(json);
   Map<String, dynamic> toJson() => _$ElementToJson(this);
 }
+
+@JsonSerializable()
+class User {
+  final int id;
+  final DateTime account_created;
+  final String display_name, description;
+  final Map<String, bool> contributor_terms;
+  final List<String> roles;
+  final Map<String, int> changesets, traces;
+  final List<String> languages;
+  final Block blocks;
+  final Message messages;
+
+
+  User({
+      required this.id,
+      required this.display_name,
+      required this.account_created,
+      required this.description,
+      required this.contributor_terms,
+      required this.roles,
+      required this.changesets,
+      required this.traces,
+      required this.blocks,
+      required this.languages,
+      required this.messages,
+  });
+
+  factory User.fromJson(Map<String, dynamic> json) =>
+      _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+
+}
+
+@JsonSerializable()
+class Message{
+
+  final Map<String, int> received, sent;
+
+
+  Message({required this.received, required this.sent});
+
+    factory Message.fromJson(Map<String, dynamic> json) =>
+      _$MessageFromJson(json);
+  Map<String, dynamic> toJson() => _$MessageToJson(this);
+
+}
+
+@JsonSerializable()
+class Block{
+  final Map<String, int> received;
+
+  Block({required this.received});
+
+      factory Block.fromJson(Map<String, dynamic> json) =>
+      _$BlockFromJson(json);
+  Map<String, dynamic> toJson() => _$BlockToJson(this);
+  
+}
+
+

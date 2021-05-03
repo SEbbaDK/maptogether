@@ -84,7 +84,6 @@ void main() {
         messages:
             Message(received: {"count": 0, "unread": 0}, sent: {"count": 0}));
 
-    //  test('does not have lat', () => expect(() => e.lat, throwsException));
-    // test('does not have lon', () => expect(() => e.lon, throwsException));
+      test('has lat', () => expect(user.id, 11321));
   });
 }
