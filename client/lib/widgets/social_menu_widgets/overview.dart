@@ -43,10 +43,10 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
             labelColor: Colors.lightGreen,
             unselectedLabelColor: Colors.black,
             isScrollable: false,
+
             tabs: <Widget>[
               Tab(
                 text: "Daily",
-
               ),
               Tab(
                 text: "Weekly",
@@ -58,8 +58,15 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
         ),
         Expanded(
           flex: 7,
-          child: leaderBoardWidget("")
-        ),
+          child: TabBarView(
+            controller: _nestedTabController,
+            children: [
+              leaderBoardWidget("1"),
+              leaderBoardWidget("2"),
+              leaderBoardWidget("3"),
+            ])
+        )
+
       ],
     );
   }
