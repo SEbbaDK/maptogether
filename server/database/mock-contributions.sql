@@ -4,7 +4,7 @@ VALUES
 	('Shop Name'),
 	('Number of Floors'),
 	('Tree'),
-	('Bench')
+	('Bench');
 
 INSERT INTO contributions (userID, type, changeSet, score)
 VALUES
