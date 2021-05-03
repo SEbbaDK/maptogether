@@ -13,10 +13,13 @@ class MapData {
 }
 
 enum ElementType { node, way, relation }
+String elementTypeString(ElementType t) =>
+    t.toString().toLowerCase().split(".").last;
 
 @JsonSerializable()
 class Member {
-  final String type, role;
+  final ElementType type;
+  final String role;
   final int ref;
 
   Member({required this.type, required this.ref, required this.role});
