@@ -16,33 +16,33 @@ module MapTogether::Server
 			user = User.new
 			id = env.params.url["id"]
 			DB.connect address do |db|
-				user.userID, user.name = db.query_one Queries.USER_FROM_ID, id, as: {Int32, String}
-				user.score = db.query_one Queries.TOTAL_SCORE_FROM_ID, id, as: {Int32}
+				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int32, String}
+				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int32}
 				
 				user.achievements = [] of String
-				db.query Queries.ACHIEVEMENTS_FROM_ID, id do |rows|
+				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
 					rows.each do
 						user.achievements << rows.read(String)
 					end
 				end
 
 				user.followers = [] of User
-				db.query Queries.FOLLOWERS_FROM_ID, id do |rows|
+				db.query Queries::FOLLOWERS_FROM_ID, id do |rows|
 					rows.each do
-						user.followers << User.new(userID: rows.read(Int32), name: rows.read(String))
+						user.followers << User.new(user_id: rows.read(Int32), name: rows.read(String))
 					end
 				end
 
 				user.following = [] of User
-				db.query Queries.FOLLOWING_FROM_ID, id do |rows|
+				db.query Queries::FOLLOWING_FROM_ID, id do |rows|
 					rows.each do
-						user.following << User.new(userID: rows.read(Int32), name: rows.read(String))
+						user.following << User.new(user_id: rows.read(Int32), name: rows.read(String))
 					end
 				end
 			end
 
 			JSON.build do |json|
-				user.toJson(json)
+				user.to_json(json)
 			end
 		end
 
@@ -51,11 +51,11 @@ module MapTogether::Server
 			JSON.build do |json|
 				json.object do
 					DB.connect address do |db|
-						db.query Queries.TOTAL_LEADERBOARD do |rows|
+						db.query Queries::TOTAL_LEADERBOARD do |rows|
 							json.field "users" do
 								rows.each do
 									json.array do
-										User.new(userID: rows.read(Int32), name: rows.read(String), score: rows.read(Int32)).toJson(json)
+										User.new(user_id: rows.read(Int32), name: rows.read(String), score: rows.read(Int32)).to_json(json)
 									end
 								end
 							end

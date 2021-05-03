@@ -1,5 +1,5 @@
 class User
-	property userID : Nil | Int32 
+	property user_id : Nil | Int32 
 	property score : Nil | Int32
 	property name : Nil | String
 	property achievements : Array(String)
@@ -7,7 +7,7 @@ class User
 	property following : Array(User)
 
 	def initialize (
-			@userID = nil,
+			@user_id = nil,
 			@score = nil,
 			@name = nil,
 			@achievements = [] of String,
@@ -16,9 +16,9 @@ class User
 		)
 	end
 
-	def toJson (jsonBuilder json : JSON::Builder)
+	def to_json (json_builder json : JSON::Builder)
 		json.object do
-			json.field "id", userID unless userID.nil?
+			json.field "id", user_id unless user_id.nil?
 			json.field "score", @score unless score.nil?
 			json.field "name", name unless name.nil?
 			
@@ -35,7 +35,7 @@ class User
 			json.field "followers" do
 				json.array do
 					fol.each do |follower|
-						follower.toJson(json)
+						follower.to_json(json)
 					end
 				end
 			end
@@ -44,7 +44,7 @@ class User
 			json.field "following" do
 				json.array do
 					foling.each do |followee|
-						followee.toJson(json)
+						followee.to_json(json)
 					end
 				end
 			end
