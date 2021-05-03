@@ -61,7 +61,7 @@ void main() {
       raw_nodes: [],
       raw_members: [
         Member(
-          type: "node",
+          type: ElementType.node,
           ref: 6772305769,
           role: "sign",
         )
