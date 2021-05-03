@@ -4,7 +4,6 @@ import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
 
 class LocationHandler extends ChangeNotifier {
-  bool _isFirstTime = true;
 
   // From location lib
   Location _locationService = Location();
@@ -17,6 +16,7 @@ class LocationHandler extends ChangeNotifier {
     initLocationService();
   }
 
+  bool _isFirstTime = true;
   void initLocationService() async {
     await _locationService.changeSettings(
       accuracy: LocationAccuracy.high,
@@ -41,7 +41,6 @@ class LocationHandler extends ChangeNotifier {
 
   LatLng getLocation() {
     updateLocation();
-    notifyListeners();
     return _currentLocation;
   }
 
@@ -49,5 +48,6 @@ class LocationHandler extends ChangeNotifier {
     LocationData locationData;
     locationData = await _locationService.getLocation();
     _currentLocation = LatLng(locationData.latitude, locationData.longitude);
+    notifyListeners();
   }
 }
