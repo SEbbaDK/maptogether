@@ -48,19 +48,9 @@ class _InteractiveMapState extends State<InteractiveMap> {
   LocationHandler locationHandler;
 
   @override
-  void initState() {
-    super.initState();
-    initLocationService();
-  }
-
-  void initLocationService() async {
-    locationHandler = context.watch<LocationHandler>();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    initLocationService();
 
+    locationHandler = context.watch<LocationHandler>();
     _mapController = locationHandler.mapController;
 
     currentLocation = locationHandler.getLocation();
