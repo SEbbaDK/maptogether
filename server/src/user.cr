@@ -1,6 +1,6 @@
 class User
-	property user_id : Nil | Int32 
-	property score : Nil | Int32
+	property user_id : Nil | Int32
+	property score : Nil | Int64
 	property name : Nil | String
 	property achievements : Array(String)
 	property followers : Array(User)
@@ -21,7 +21,7 @@ class User
 			json.field "id", user_id unless user_id.nil?
 			json.field "score", @score unless score.nil?
 			json.field "name", name unless name.nil?
-			
+
 			ach = achievements
 			json.field "achievements" do
 				json.array do
@@ -30,7 +30,7 @@ class User
 					end
 				end
 			end
-			
+
 			fol = followers
 			json.field "followers" do
 				json.array do
