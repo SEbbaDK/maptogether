@@ -60,3 +60,4 @@ VALUES
 	('Esben', 58),
 	('Torsten', 59),
 	('Allan', 60)
+;

@@ -4,7 +4,8 @@ VALUES
 	('Shop Name'),
 	('Number of Floors'),
 	('Tree'),
-	('Bench');
+	('Bench')
+;
 
 INSERT INTO contributions (userID, type, changeSet, score)
 VALUES
@@ -216,3 +217,4 @@ VALUES
 	(59, 'Bench', 7028, 3),
 	(36, 'Shop Name', 6210, 4),
 	(12, 'Road Name', 1498, 5)
+;
