@@ -12,8 +12,7 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewView extends State<Overview> with TickerProviderStateMixin{
-  //Modes are All, Weekly and Daily, changes depending on which leaderboards we are interested in
-  String mode = "All";
+  //We get All, Weekly and Daily from the index of the tabcontroller, changes depending on which leaderboards we are interested in, 0 = daily, 1 = weekly, 2 = all
   TabController _nestedTabController;
 
   @override
@@ -47,6 +46,7 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
             tabs: <Widget>[
               Tab(
                 text: "Daily",
+
               ),
               Tab(
                 text: "Weekly",
@@ -58,14 +58,21 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
         ),
         Expanded(
           flex: 7,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Expanded(
-                  child: ListView.builder(
-                    itemCount: context.watch<DummyDatabase>().leaderboards.length,
-                    itemBuilder: (context, index){
-                    return Card(
+          child: leaderBoardWidget("")
+        ),
+      ],
+    );
+  }
+
+
+  Widget leaderBoardWidget(String type) => Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+            child: ListView.builder(
+                itemCount: context.watch<DummyDatabase>().leaderboards.length,
+                itemBuilder: (context, index){
+                  return Card(
                       child: ListTile(
                         title: Text("#"
                             + ((context.watch<DummyDatabase>().leaderboards[index].users.indexOf(context.watch<DummyDatabase>().currentUser)+1).toString())
@@ -73,21 +80,19 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
                             + (context.watch<DummyDatabase>().leaderboards[index].users.length).toString()),
                         leading: Text(context.watch<DummyDatabase>().leaderboards[index].name),
                         onTap: (){
-                            Navigator.push(context,
-                                MaterialPageRoute(
-                                    builder: (context) => LeaderBoardView(leaderboardIndex: index),));
+                          Navigator.push(context,
+                              MaterialPageRoute(
+                                builder: (context) => LeaderBoardView(leaderboardIndex: index),));
                         },
 
                       )
-                    );
-                 }
-               )
-              )
-            ],
-          ),
-        ),
+                  );
+                }
+            )
+        )
       ],
     );
-  }
 }
+
+
 
