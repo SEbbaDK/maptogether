@@ -17,8 +17,8 @@ module MapTogether::Server
 			id = env.params.url["id"]
 			DB.connect address do |db|
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int32, String}
-				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int32}
-				
+				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
+
 				user.achievements = [] of String
 				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
 					rows.each do
@@ -53,9 +53,9 @@ module MapTogether::Server
 					DB.connect address do |db|
 						db.query Queries::TOTAL_LEADERBOARD do |rows|
 							json.field "users" do
-								rows.each do
-									json.array do
-										User.new(user_id: rows.read(Int32), name: rows.read(String), score: rows.read(Int32)).to_json(json)
+								json.array do
+									rows.each do
+										User.new(user_id: rows.read(Int32), name: rows.read(String), score: rows.read(Int64)).to_json(json)
 									end
 								end
 							end
@@ -64,7 +64,7 @@ module MapTogether::Server
 				end
 			end
 		end
-		
+
 		# Test endpoint
 		get "/" do
 			"hi"
