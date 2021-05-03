@@ -3,16 +3,16 @@ CREATE TABLE users (
 	name	varchar(20)
 );
 
+CREATE TABLE contributionTypes (
+	type varchar(30) PRIMARY KEY
+);
+
 CREATE TABLE contributions (
 	contributionID	SERIAL PRIMARY KEY,
 	userID			integer REFERENCES users(userID),
 	type			varchar(30) REFERENCES contributionTypes(type),
 	changeSet		integer,
 	score			integer
-);
-
-CREATE TABLE contributionTypes (
-	type varchar(30) PRIMARY KEY
 );
 
 CREATE TABLE achievements (
