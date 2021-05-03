@@ -8,6 +8,8 @@ let
   	${builtins.readFile ./server/database/create-tables.sql}
   	${builtins.readFile ./server/database/mock-users.sql}
   	${builtins.readFile ./server/database/mock-contributions.sql}
+  	${builtins.readFile ./server/database/mock-achievements.sql}
+  	${builtins.readFile ./server/database/mock-follows.sql}
   '';
 in
 {
