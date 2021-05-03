@@ -2,21 +2,23 @@ name: maptogether-server
 version: 0.1.0
 
 authors:
-  - SEbbaDK <sebbadk@gmail.com>
+	- SEbbaDK
+	- ThomasMG
+	- AAU-Phil
 
 dependencies:
-    kemal:
-        github: kemalcr/kemal
-    pg:
-      github: will/crystal-pg
+	kemal:
+		github: kemalcr/kemal
+	pg:
+		github: will/crystal-pg
 
 development_dependencies:
-    spec-kemal:
-        github: kemalcr/spec-kemal
-        branch: master
+	spec-kemal:
+		github: kemalcr/spec-kemal
+	branch: master
 
 targets:
-  maptogether-server:
-    main: src/maptogether-server.cr
+	maptogether-server:
+		main: src/maptogether-server.cr
 
 license: MIT
