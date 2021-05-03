@@ -55,7 +55,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   void initLocationService() async {
     locationHandler = context.watch<LocationHandler>();
-    locationHandler.getLocation();
   }
 
   @override
