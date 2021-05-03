@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS contributions (
 	userID			integer REFERENCES users(userID),
 	type			varchar(30) REFERENCES contributionTypes(type),
 	changeSet		integer,
-	score			integer
+	score			integer,
+	dateTime		timestamptz
 );
 
 
