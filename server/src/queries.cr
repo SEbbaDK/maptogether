@@ -29,11 +29,24 @@ module Queries
 			ON followee = userID
 		WHERE follower = $1"
 
-	TOTAL_LEADERBOARD =
+	GLOBAL_ALL_TIME =
 		"SELECT u.userID, u.name, s.score
 		FROM
 			(SELECT userID, SUM (score) AS score
 			FROM contributions
+			GROUP BY userID)
+			AS s
+			INNER JOIN
+			users AS u
+			ON u.userID = s.userID
+		ORDER BY score DESC"
+
+	GLOBAL_INTERVAL =
+		"SELECT u.userID, u.name, s.score
+		FROM
+			(SELECT userID, SUM (score) AS score
+			FROM contributions
+			WHERE dateTime > $1 AND datetime < $2
 			GROUP BY userID)
 			AS s
 			INNER JOIN
