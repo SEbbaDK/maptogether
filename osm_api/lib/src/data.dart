@@ -31,6 +31,8 @@ class Element {
   final int id, version, changeset, uid;
   final DateTime timestamp;
   final String user;
+  @JsonKey(defaultValue: false)
+  final bool visible;
 
   @JsonKey(defaultValue: {})
   Map<String, String> tags;
@@ -86,6 +88,7 @@ class Element {
     required this.changeset,
     required this.user,
     required this.uid,
+    required this.visible,
     required this.tags,
     required this.raw_lat,
     required this.raw_lon,
