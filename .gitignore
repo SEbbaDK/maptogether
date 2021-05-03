@@ -1,3 +1,5 @@
 .gradle/
 build/
 .idea
+
+client/ios/Runner.xcodeproj/project.pbxproj
