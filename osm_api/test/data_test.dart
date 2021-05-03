@@ -68,4 +68,23 @@ void main() {
     test('does not have lat', () => expect(() => e.lat, throwsException));
     test('does not have lon', () => expect(() => e.lon, throwsException));
   });
+
+  group('User', () {
+    var user = User(
+        id: 11321,
+        display_name: "maptogether-test",
+        account_created: DateTime.utc(2001, 9, 11),
+        description: "",
+        contributor_terms: {"agreed": true, "pd": false},
+        roles: [],
+        changesets: {"count": 0},
+        traces: {"count": 0},
+        blocks: Block(received: {"count": 0, "active": 0}),
+        languages: ["en-US", "en"],
+        messages:
+            Message(received: {"count": 0, "unread": 0}, sent: {"count": 0}));
+
+    //  test('does not have lat', () => expect(() => e.lat, throwsException));
+    // test('does not have lon', () => expect(() => e.lon, throwsException));
+  });
 }
