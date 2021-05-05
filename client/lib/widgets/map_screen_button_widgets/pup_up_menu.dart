@@ -1,4 +1,6 @@
+import 'package:client/screens/new_activity_screen.dart';
 import 'package:client/screens/settings.dart';
+import 'package:client/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'map_screen_button.dart';
@@ -24,19 +26,19 @@ class _PopUpMenuState extends State<PopUpMenu> {
   Widget build(BuildContext context) {
     List<Widget> menuButtons = [
       MapScreenButton(
-          child: Icon(Icons.settings),
+          child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Settings())
+                context, MaterialPageRoute(builder: (context) => NewActivityScreen())
             );
             closeMenu();
           }),
 
       MapScreenButton(
-          child: Icon(Icons.settings),
+          child: Icon(Icons.location_history),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Settings()));
+                context, MaterialPageRoute(builder: (context) => Login()));
             closeMenu();
           }),
 

@@ -2,55 +2,34 @@ import 'package:client/widgets/social_menu_widgets/user_overview.dart';
 import 'package:flutter/material.dart';
 import 'Leaderboard.dart';
 import 'User.dart';
-
+import 'package:client/database.dart';
+import 'package:provider/provider.dart';
 
 
 class Overview extends StatefulWidget {
   @override
-  _OverviewState createState() => _OverviewState();
+  _OverviewView createState() => _OverviewView();
 }
 
-class _OverviewState extends State<Overview> {
+class _OverviewView extends State<Overview> with TickerProviderStateMixin{
+  //We get All, Weekly and Daily from the index of the tabcontroller, changes depending on which leaderboards we are interested in, 0 = daily, 1 = weekly, 2 = all
+  TabController _nestedTabController;
 
+  @override
+  void initState(){
+    super.initState();
 
-  LeaderBoard dk = new LeaderBoard("DK", [
-    User("Thomas", 50, "kid.png"),
-    User("Sebba", 250, "clean.png"),
-    User("Simon", 15, "business.png"),
-    User("Phillip", 85, "arthas.png")
-  ]);
-
-  LeaderBoard world = new LeaderBoard("World", [
-      User("Hartvig", 10, "anime.png"),
-      User("Fjeldsø", 20, "wolf.png"),
-      User("Simon", 40, "business.png"),
-      User("Thomass", 30, "kid.png")
-  ]);
-
-  List<LeaderBoard> leaderboards;
-
-  void InitState() {
-    leaderboards = [dk, world];
+    _nestedTabController = new TabController(length: 3, vsync: this);
   }
 
-  //UI made under the assumption that we are Simon, should be automatically
-  //checked once user sessions have been created
-
-  int usIndex(LeaderBoard leaderBoard) {
-    for (int x = 0; x < leaderBoard.users.length; x++) {
-      if (leaderBoard.users[x].name == "Simon") {
-        return x;
-      }
-    }
-    return 0;
+  @override
+  void dispose(){
+    super.dispose();
+    _nestedTabController.dispose();
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
-    InitState();
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -58,38 +37,70 @@ class _OverviewState extends State<Overview> {
           flex: 2,
             child: UserOverView()
         ),
+
+        TabBar(
+            controller: _nestedTabController,
+            indicatorColor: Colors.green,
+            labelColor: Colors.lightGreen,
+            unselectedLabelColor: Colors.black,
+            isScrollable: false,
+
+            tabs: <Widget>[
+              Tab(
+                text: "Daily",
+              ),
+              Tab(
+                text: "Weekly",
+              ),
+              Tab(
+                text: "All Time",
+              ),
+            ]
+        ),
+
         Expanded(
           flex: 7,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          child: TabBarView(
+            controller: _nestedTabController,
             children: [
-              Expanded(
-                  child: ListView.builder(
-                    itemCount: leaderboards.length,
-                    itemBuilder: (context, index){
-                    return Card(
-                      child: ListTile(
-                        title: Text("#"
-                            + (usIndex(leaderboards[index])+1).toString()
-                            + "/"
-                            + (leaderboards[index].users.length).toString()),
-                        leading: Text(leaderboards[index].name),
-                        onTap: (){
-                            Navigator.push(context,
-                                MaterialPageRoute(
-                                    builder: (context) => LeaderBoardView(leaderBoard: leaderboards[index]),));
-                        },
-
-                      )
-                    );
-                 }
-               )
-              )
-            ],
-          ),
-        ),
+              leaderBoardWidget("1"),
+              leaderBoardWidget("2"),
+              leaderBoardWidget("3"),
+            ])
+        )
       ],
     );
   }
+
+
+  Widget leaderBoardWidget(String type) => Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+            child: ListView.builder(
+                itemCount: context.watch<DummyDatabase>().leaderboards.length,
+                itemBuilder: (context, index){
+                  return Card(
+                      child: ListTile(
+                        title: Text("#"
+                            + ((context.watch<DummyDatabase>().leaderboards[index].users.indexOf(context.watch<DummyDatabase>().currentUser)+1).toString())
+                            + "/"
+                            + (context.watch<DummyDatabase>().leaderboards[index].users.length).toString()),
+                        leading: Text(context.watch<DummyDatabase>().leaderboards[index].name),
+                        onTap: (){
+                          Navigator.push(context,
+                              MaterialPageRoute(
+                                builder: (context) => LeaderBoardView(leaderboardIndex: index),));
+                        },
+
+                      )
+                  );
+                }
+            )
+        )
+      ],
+    );
 }
+
+
 

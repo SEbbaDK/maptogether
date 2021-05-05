@@ -1,6 +1,8 @@
 import 'package:client/widgets/social_menu_widgets/newFriend.dart';
 import 'package:flutter/material.dart';
 import 'User.dart';
+import 'package:client/database.dart';
+import 'package:provider/provider.dart';
 
 class Friends extends StatefulWidget {
   @override
@@ -9,14 +11,6 @@ class Friends extends StatefulWidget {
 
 //TODO: move friends list to a seperate file or server
 class _FriendsState extends State<Friends> {
-  List<User> friends = [
-    User("Thomas", 24, "kid.png"),
-    User("Hartvig", 23,  "anime.png"),
-    User("Simon", 24, "business.png"),
-    User("Sebastian", 24, "clean.png"),
-    User("Phillip", 23, "arthas.png"),
-    User("Fjeldsø", 23, "wolf.png"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +18,11 @@ class _FriendsState extends State<Friends> {
       margin: EdgeInsets.all(40.0),
       child: Column(
         children: <Widget>[
-          Expanded(flex: 1, child: Text("Friends")),
+          Expanded(flex: 1, child: Text("Following")),
           Expanded(
               flex: 7,
               child: ListView.builder(
-                  itemCount: friends.length,
+                  itemCount: context.watch<DummyDatabase>().following.length,
                   itemBuilder: (context, index) {
                     return Card(
                       child: ListTile(
@@ -41,13 +35,14 @@ class _FriendsState extends State<Friends> {
                                   color: Colors.orange,
                                   child: Center(
                                     child: TextButton(
-                                      child: Text("Remove Friend"),
+                                      child: Text("Unfollow"),
                                       style: TextButton.styleFrom(
                                         primary: Colors.white,
                                         backgroundColor: Colors.red
                                       ),
                                       onPressed: (){
-                                        print(friends.removeAt(index));
+                                        context.read<DummyDatabase>().followingNames.remove(context.read<DummyDatabase>().following[index].name);
+                                        context.read<DummyDatabase>().following.removeAt(index);
 
                                         setState(() {
                                           Navigator.pop(context);
@@ -59,10 +54,10 @@ class _FriendsState extends State<Friends> {
                               }
                           );
                         },
-                        title: Text(friends[index].name),
+                        title: Text(context.watch<DummyDatabase>().following[index].name),
                         leading: CircleAvatar(
                           backgroundImage:
-                              AssetImage('assets/${friends[index].pfp}'),
+                              AssetImage('assets/${context.watch<DummyDatabase>().following[index].pfp}'),
                         ),
                       ),
                     );
@@ -75,7 +70,7 @@ class _FriendsState extends State<Friends> {
                 color: Colors.lightGreen,
                 child: TextButton(
                   child: Text(
-                    'Add New Friend',
+                    'Follow New',
                     style: TextStyle(fontSize: 20.0, color: Colors.white),
                   ),
                   onPressed: () {
