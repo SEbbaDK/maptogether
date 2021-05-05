@@ -2,9 +2,7 @@
 
 ## Endpoints
 
-### Requests
-#### Get user by id
-`/user/<id>`
+### `/user/<id>` Get user by id
 
 Responds with json object of a user like this:
 ```
@@ -32,8 +30,8 @@ Responds with json object of a user like this:
     ]
 }
 ```
-#### Get Global All-time Leaderboard
-`/leaderboard/global/all_time`
+
+### `/leaderboard/global/all_time` Get Global All-time Leaderboard
 
 Responds with a json object of all users' id, name and score sorted by score in descending order
 ```
