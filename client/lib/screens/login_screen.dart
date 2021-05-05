@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:client/widgets/app_bar.dart';
+import 'package:client/database.dart';
+import 'package:provider/provider.dart';
 
 
 class Login extends StatefulWidget{
@@ -8,24 +10,28 @@ class Login extends StatefulWidget{
 }
 
 class _LoginState extends State<Login> {
-  bool isBusy = false;
-  bool isLoggedIn = false;
-  String errorMessage;
-  String name;
-  String picture;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Auth0 Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Auth0 Demo'),
-        ),
-        body: Center(
-          child: Text('Implement User Authentication'),
-        ),
+    return Scaffold(
+      appBar: MapTogetherAppBar(
+        title: "Oauth",
       ),
+      body: Container(
+        child: Column(
+          children: <Widget>[
+            Center(
+            child: TextButton(
+                child: Text("Login to Oauth"),
+                style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Colors.lightGreen)
+              ),
+             ),
+            Text("Logged in as: " + context.watch<DummyDatabase>().currentUserName),
+          ]
+          ),
+      )
     );
   }
 }
