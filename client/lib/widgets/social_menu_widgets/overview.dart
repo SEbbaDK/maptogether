@@ -37,6 +37,7 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
           flex: 2,
             child: UserOverView()
         ),
+
         TabBar(
             controller: _nestedTabController,
             indicatorColor: Colors.green,
@@ -56,6 +57,7 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
               ),
             ]
         ),
+
         Expanded(
           flex: 7,
           child: TabBarView(
@@ -66,7 +68,6 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
               leaderBoardWidget("3"),
             ])
         )
-
       ],
     );
   }
