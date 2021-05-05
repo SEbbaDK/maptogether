@@ -11,7 +11,10 @@ Responds with json object of a user like this:
     "name": <name>,
     "score": <total score>,
     "achievements": [
-        <achievement name>,
+        {
+            "name": <achievement name>,
+            "description": <achievement desc>
+        },
         ...
     ]
     "followers": [
