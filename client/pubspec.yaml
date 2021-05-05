@@ -25,6 +25,8 @@ dependencies:
     path: ../osm_api
   flutter:
     sdk: flutter
+  flutter_appauth: ^1.0.0
+  flutter_secure_storage: ^3.3.3
 
   provider: ^5.0.0
 
