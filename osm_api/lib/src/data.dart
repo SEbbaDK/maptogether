@@ -5,8 +5,11 @@ part 'data.g.dart';
 @JsonSerializable()
 class MapData {
   final List<Element> elements;
+  @JsonKey(defaultValue: null)
+  final List<User>? user;
 
-  MapData({required this.elements});
+  
+  MapData({required this.elements, required this.user,});
   factory MapData.fromJson(Map<String, dynamic> json) =>
       _$MapDataFromJson(json);
   Map<String, dynamic> toJson() => _$MapDataToJson(this);
