@@ -25,6 +25,10 @@ module MapTogether::Server
 			end
 		end
 
+		before_get do |env|
+			env.response.content_type = "application/json"
+		end
+
 		# Request data about a specific user (id, name, score, achievements and followers)
 		get "/user/:id" do |env|
 			user = User.new
