@@ -4,13 +4,14 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 CREATE TABLE IF NOT EXISTS contributionTypes (
-	type varchar(30) PRIMARY KEY
+	contributionTypeID	SERIAL PRIMARY KEY,
+	type 				varchar
 );
 
 CREATE TABLE IF NOT EXISTS contributions (
 	contributionID	SERIAL PRIMARY KEY,
 	userID			integer REFERENCES users(userID),
-	type			varchar(30) REFERENCES contributionTypes(type),
+	type			varchar REFERENCES contributionTypes(type),
 	changeSet		integer,
 	score			integer,
 	dateTime		timestamptz
@@ -18,12 +19,14 @@ CREATE TABLE IF NOT EXISTS contributions (
 
 
 CREATE TABLE IF NOT EXISTS achievements (
-	name	varchar(50)	PRIMARY KEY
+	achievmentID	SERIAL PRIMARY KEY,
+	name			varchar,
+	description		varchar
 );
 
 CREATE TABLE IF NOT EXISTS unlocked (
 	userID 		integer REFERENCES users(userID),
-	achievement	varchar(50) REFERENCES achievements(name),
+	achievement	varchar REFERENCES achievements(name),
 	PRIMARY KEY	(userID, achievement)
 
 );

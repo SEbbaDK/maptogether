@@ -1,12 +1,12 @@
-INSERT INTO achievements (name)
+INSERT INTO achievements (name, description)
 VALUES
-	('Astronout'),
-	('Master of Benches'),
-	('10 days in a row'),
-	('Top Floor'),
-	('Shopper'),
-	('Well Actually...'),
-	('100 Activities');
+	('Astronout', 'Make a contribution where none have been made'),
+	('Master of Benches', 'Contribute to 50 benches'),
+	('10 days in a row', 'Make new contributions 10 days in a row'),
+	('Top Floor', 'Add 100 floors in total'),
+	('Shopper', 'Add 5 shops'),
+	('Well Actually...', 'Correct other contributions 10 times'),
+	('100 Activities', 'Complete 100 activities');
 
 INSERT INTO unlocked (userID, achievement)
 VALUES
