@@ -1,0 +1,19 @@
+name: "maptogether_api"
+
+on:
+  push:
+    paths:
+      - "maptogether_api/**"
+      - .github/workflows/maptogether_api.yml
+  pull_request:
+    paths:
+      - "maptogether_api/**"
+      - .github/workflows/maptogether_api.yml
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: nixbuild/nix-quick-install-action@v5
+      - run: nix-shell maptogether_api --quiet --run "cd maptogether_api && maptogether test"
