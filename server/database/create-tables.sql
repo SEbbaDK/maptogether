@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS contributionTypes (
 CREATE TABLE IF NOT EXISTS contributions (
 	contributionID	SERIAL PRIMARY KEY,
 	userID			integer REFERENCES users(userID),
-	type			varchar REFERENCES contributionTypes(type),
+	type			integer REFERENCES contributionTypes(contributionTypeID),
 	changeSet		integer,
 	score			integer,
 	dateTime		timestamptz
