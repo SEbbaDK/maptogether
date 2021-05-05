@@ -1,8 +1,10 @@
+require "./achievement.cr"
+
 class User
 	property user_id : Nil | Int32
 	property score : Nil | Int64
 	property name : Nil | String
-	property achievements : Array(String)
+	property achievements : Array(Achievement)
 	property followers : Array(User)
 	property following : Array(User)
 
@@ -10,7 +12,7 @@ class User
 			@user_id = nil,
 			@score = nil,
 			@name = nil,
-			@achievements = [] of String,
+			@achievements = [] of Achievement,
 			@followers = [] of User,
 			@following = [] of User
 		)
@@ -26,7 +28,7 @@ class User
 			json.field "achievements" do
 				json.array do
 					ach.each do |achievement|
-						json.string achievement
+						achievement.to_json(json)
 					end
 				end
 			end

@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS achievements (
 
 CREATE TABLE IF NOT EXISTS unlocked (
 	userID 		integer REFERENCES users(userID),
-	achievement	varchar REFERENCES achievements(name),
+	achievement	integer REFERENCES achievements(achievementID),
 	PRIMARY KEY	(userID, achievement)
 
 );

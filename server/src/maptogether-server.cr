@@ -4,6 +4,7 @@ require "pg"
 require "json"
 require "./user.cr"
 require "./queries.cr"
+require "./achievement.cr"
 
 
 module MapTogether::Server
@@ -32,10 +33,10 @@ module MapTogether::Server
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int32, String}
 				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
 
-				user.achievements = [] of String
+				user.achievements = [] of Achievement
 				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
 					rows.each do
-						user.achievements << rows.read(String)
+						user.achievements << Achievement.new(rows.read(String), rows.read(String))
 					end
 				end
 

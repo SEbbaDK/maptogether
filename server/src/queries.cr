@@ -12,9 +12,14 @@ module Queries
 		WHERE userID = $1"
 
 	ACHIEVEMENTS_FROM_ID =
-		"SELECT achievement
-		FROM unlocked
-		WHERE userID = $1"
+		"SELECT a.name, a.description
+		FROM
+			(SELECT *
+			FROM unlocked
+			WHERE userID = $1) AS u
+			INNER JOIN
+			achievements AS a
+			ON u.achievement = a.achievmentID"
 
 	FOLLOWERS_FROM_ID =
 		"SELECT userID, name
