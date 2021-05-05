@@ -30,4 +30,4 @@ in
   crystalBinaries.maptogether-server.src = "src/maptogether-server.cr";
 })
 # This line enables quicker builds
-.overrideAttrs (old: { buildPhase = builtins.replaceStrings ["--release"] [""] old.buildPhase; })
+.overrideAttrs (old: { buildPhase = builtins.replaceStrings [ "--release" ] [ "" ] old.buildPhase; })

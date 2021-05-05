@@ -1,62 +1,36 @@
-{ pkgs ? import <nixpkgs> { }
-, mockData ? false
-, ...
-}:
 let
-  maptogether-server = import ./server { inherit pkgs; };
-  setup-script = pkgs.writeText "setup.sql" ''
-  	${builtins.readFile ./server/database/create-tables.sql}
-  	${builtins.readFile ./server/database/mock-users.sql}
-  	${builtins.readFile ./server/database/mock-contributions.sql}
-  	${builtins.readFile ./server/database/mock-achievements.sql}
-  	${builtins.readFile ./server/database/mock-follows.sql}
-  '';
+  pkgs = import ./nixpkgs.nix { };
+  containerHost = "10.0.0.1";
+  apiContainer = "10.0.0.2";
 in
 {
-  services.postgresql = {
+  networking.firewall.enable = false;
+
+  services.nginx = {
     enable = true;
-    # ensureUsers = [{
-    #   name = "maptogether";
-    #   ensurePermissions = { "DATABASE maptogether" = "ALL PRIVILEGES"; };
-    # }];
-    initialScript = ./server/database/create-role-and-database.sql;
-  };
 
-  users.groups.maptogether.gid = 1001;
+    virtualHosts."maptogether.sebba.dk" = {
+      default = true;
+      forceSSL = true;
+      enableACME = true;
 
-  systemd.services.database-setup = {
-    serviceConfig = {
-      Type = "oneshot";
-      User = "maptogether";
-      Group = "maptogether";
-      ExecStart = "${pkgs.postgresql}/bin/psql -d maptogether -f ${setup-script}";
+      locations = {
+        "/".return = "200 'Welcome to MapTogether\n'";
+        "/api".extraConfig = ''
+          rewrite ^/api/(.*) /$1 break;
+          proxy_pass http://${apiContainer}:8080;
+        '';
+      };
     };
-    requires = [ "postgresql.service" ];
-    after = [ "postgresql.service" ];
   };
 
-  systemd.services.maptogether-server = {
-    description = "MapTogether Server";
-    serviceConfig = {
-      ExecStart = "${maptogether-server}/bin/maptogether-server";
-      User = "maptogether";
-      Group = "maptogether";
+  containers = {
+    apiServer = {
+      config = import ./api-server.nix { inherit pkgs; addMockData = true; };
+      autoStart = true;
+      privateNetwork = true;
+      hostAddress = containerHost;
+      localAddress = apiContainer;
     };
-    requires = [ "database-setup.service" "postgresql.service" ];
-    after = [ "database-setup.service" "postgresql.service" ];
-    wantedBy = [ "default.target" ];
-  };
-  users.users.maptogether.extraGroups = [ "maptogether" ];
-
-  environment.systemPackages = with pkgs; [
-    coreutils
-    bash
-  ];
-  users.mutableUsers = false;
-  users.users.test = {
-    password = "test";
-    isNormalUser = true;
-    extraGroups = [ "wheel" ];
   };
 }
-
