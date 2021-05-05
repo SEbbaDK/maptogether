@@ -16,4 +16,4 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: nixbuild/nix-quick-install-action@v5
-      - run: nix-shell maptogether_api --quiet --run "cd maptogether_api && maptogether test"
+      - run: nix-shell maptogether_api --quiet --run "cd maptogether_api && dart test"
