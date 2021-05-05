@@ -19,7 +19,7 @@ module Queries
 			WHERE userID = $1) AS u
 			INNER JOIN
 			achievements AS a
-			ON u.achievement = a.achievmentID"
+			ON u.achievement = a.achievementID"
 
 	FOLLOWERS_FROM_ID =
 		"SELECT userID, name

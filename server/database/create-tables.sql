@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS contributions (
 
 
 CREATE TABLE IF NOT EXISTS achievements (
-	achievmentID	SERIAL PRIMARY KEY,
+	achievementID	SERIAL PRIMARY KEY,
 	name			varchar,
 	description		varchar
 );
