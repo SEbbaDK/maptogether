@@ -1,7 +1,7 @@
 require "./achievement.cr"
 
 class User
-	property user_id : Nil | Int32
+	property user_id : Nil | Int64
 	property score : Nil | Int64
 	property name : Nil | String
 	property achievements : Array(Achievement)

@@ -18,7 +18,7 @@ module MapTogether::Server
 				json.field "users" do
 					json.array do
 						rows.each do
-							User.new(user_id: rows.read(Int32), name: rows.read(String), score: rows.read(Int64)).to_json(json)
+							User.new(user_id: rows.read(Int64), name: rows.read(String), score: rows.read(Int64)).to_json(json)
 						end
 					end
 				end
@@ -30,7 +30,7 @@ module MapTogether::Server
 			user = User.new
 			id = env.params.url["id"]
 			DB.connect address do |db|
-				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int32, String}
+				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
 				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
 
 				user.achievements = [] of Achievement
@@ -43,14 +43,14 @@ module MapTogether::Server
 				user.followers = [] of User
 				db.query Queries::FOLLOWERS_FROM_ID, id do |rows|
 					rows.each do
-						user.followers << User.new(user_id: rows.read(Int32), name: rows.read(String))
+						user.followers << User.new(user_id: rows.read(Int64), name: rows.read(String))
 					end
 				end
 
 				user.following = [] of User
 				db.query Queries::FOLLOWING_FROM_ID, id do |rows|
 					rows.each do
-						user.following << User.new(user_id: rows.read(Int32), name: rows.read(String))
+						user.following << User.new(user_id: rows.read(Int64), name: rows.read(String))
 					end
 				end
 			end
