@@ -5,6 +5,7 @@ require "json"
 require "./user.cr"
 require "./queries.cr"
 require "./achievement.cr"
+require "./contribution.cr"
 
 
 module MapTogether::Server
@@ -25,9 +26,9 @@ module MapTogether::Server
 			end
 		end
 
-		before_get do |env|
-			env.response.content_type = "application/json"
-		end
+		#before_get do |env|
+		#	env.response.content_type = "application/json"
+		#end
 
 		# Request data about a specific user (id, name, score, achievements and followers)
 		get "/user/:id" do |env|
@@ -94,6 +95,19 @@ module MapTogether::Server
 				end
 			end
 		end
+
+		post "/contribution" do |env|
+	        contribution = Contribution.from_json(env.params.json)
+	        DB.connect address do |db|
+	            db.exec "INSERT INTO contributions (contributionID, userID, type, changeset, score, dateTime)
+	             VALUES (DEFAULT, $1, $2, $3, $4, $5)",
+	             contribution.user_id,
+	             contribution.type,
+	             contribution.changeset,
+	             contribution.score,
+	             contribution.date_time
+	        end
+	    end
 
 		# Test endpoint
 		get "/" do
