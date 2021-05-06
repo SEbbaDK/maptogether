@@ -97,10 +97,11 @@ module MapTogether::Server
 		end
 
 		post "/contribution" do |env|
-	        contribution = Contribution.from_json(env.params.json)
+		    puts env.params.json
+		    contribution = Contribution.from_json(env.params.json)
 	        DB.connect address do |db|
-	            db.exec "INSERT INTO contributions (contributionID, userID, type, changeset, score, dateTime)
-	             VALUES (DEFAULT, $1, $2, $3, $4, $5)",
+	            db.exec "INSERT INTO contributions (userID, type, changeset, score, dateTime)
+	             VALUES ($1, $2, $3, $4, $5)",
 	             contribution.user_id,
 	             contribution.type,
 	             contribution.changeset,
