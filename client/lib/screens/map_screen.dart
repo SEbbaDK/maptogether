@@ -33,17 +33,16 @@ class MapScreen extends StatelessWidget {
                   MapScreenButton(
                     child: Icon(Icons.person),
                     onPressed: () {
+                      //If no current user, go to login screen
                       if(context.read<DummyDatabase>().currentUserName == "") {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SocialScreen()));
-                      }
-                      else
                         showDialog(
-                            context: context,
-                            builder: (_) => notLoggedInSocial(context),
+                          context: context,
+                          builder: (_) => notLoggedInSocial(context)
                         );
+                      }
+                      else{
+                        Navigator.push(context,MaterialPageRoute(builder: (context) => SocialScreen()));
+                      }
                     },
                   ),
                   MapScreenButton(

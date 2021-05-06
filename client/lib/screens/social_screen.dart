@@ -29,9 +29,6 @@ class _SocialScreenState extends State<SocialScreen> {
     return mainSocial();
   }
 
-
-
-
   Scaffold mainSocial(){
     return Scaffold(
       appBar: MapTogetherAppBar(
