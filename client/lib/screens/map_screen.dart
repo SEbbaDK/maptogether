@@ -1,5 +1,7 @@
 import 'package:client/database.dart';
 import 'package:client/location_handler.dart';
+import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
+import 'package:client/quests/quest_finder.dart';
 import 'package:client/screens/social_screen.dart';
 import 'package:client/widgets/map_screen_button_widgets/button_row.dart';
 import 'package:client/widgets/map_screen_button_widgets/map.dart';

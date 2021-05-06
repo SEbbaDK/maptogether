@@ -7,7 +7,7 @@ import 'package:osm_api/osm_api.dart' as osm;
 class QuestFinder extends ChangeNotifier {
   osm.Api api;
 
-  List<Quest> quests;
+  List<BackrestBenchQuest> quests = [];
 
   QuestFinder() {
     getBenchQuests();
@@ -28,7 +28,7 @@ class QuestFinder extends ChangeNotifier {
     List<osm.Element> elements =
         (await api.mapByBox(11.58, 55.90, 11.6314, 55.9259)).elements;
 
-    List<BackrestBenchQuest> benchQuests;
+    List<BackrestBenchQuest> benchQuests = [];
     List<osm.Element> benchElements = elements
         .where((element) => _isBench(element))
         .where((element) => _hasTagBenchBackrest(element))
