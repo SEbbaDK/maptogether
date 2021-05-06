@@ -42,7 +42,7 @@ class MapScreen extends StatelessWidget {
                       onPressed: () {
                         locationHandler.mapController.move(
                             LatLng(locationHandler.getLocation().latitude, locationHandler.getLocation().longitude),
-                            19);;
+                            19);
                       },
                   ),
                   MapScreenButton(
