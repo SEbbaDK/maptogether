@@ -1,3 +1,4 @@
+import 'package:client/database.dart';
 import 'package:client/location_handler.dart';
 import 'package:client/screens/social_screen.dart';
 import 'package:client/widgets/map_screen_button_widgets/button_row.dart';
@@ -7,6 +8,7 @@ import 'package:client/widgets/map_screen_button_widgets/pup_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:latlong/latlong.dart';
+import 'login_screen.dart';
 
 class MapScreen extends StatelessWidget {
   @override
@@ -31,10 +33,17 @@ class MapScreen extends StatelessWidget {
                   MapScreenButton(
                     child: Icon(Icons.person),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SocialScreen()));
+                      if(context.read<DummyDatabase>().currentUserName == "") {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SocialScreen()));
+                      }
+                      else
+                        showDialog(
+                            context: context,
+                            builder: (_) => notLoggedInSocial(context),
+                        );
                     },
                   ),
                   MapScreenButton(
@@ -58,6 +67,47 @@ class MapScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+
+  AlertDialog notLoggedInSocial(BuildContext context){
+    return AlertDialog(
+      title: Text('You must be logged in to access social features'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Login to access the social features'),
+        ],
+      ),
+      actions: <Widget>[
+        Container(
+            color: Colors.lightGreen,
+            child: TextButton(
+              onPressed: (){
+                Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+              },
+              child: Text(
+                'Login',
+                style: TextStyle(fontSize: 14.0, color: Colors.white),
+              ),
+            )
+        ),
+        Container(
+            color: Colors.lightGreen,
+            child: TextButton(
+              onPressed: (){
+                Navigator.pop(context);
+              },
+              child: Text(
+                'No Thanks',
+                style: TextStyle(fontSize: 14.0, color: Colors.white),
+              ),
+            )
+        ),
+      ],
     );
   }
 }

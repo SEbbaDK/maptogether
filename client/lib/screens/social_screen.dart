@@ -5,6 +5,9 @@ import 'package:client/widgets/social_menu_widgets/history.dart';
 import 'package:client/widgets/social_menu_widgets/overview.dart';
 import 'package:client/widgets/social_menu_widgets/user_overview.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:client/database.dart';
+import 'login_screen.dart';
 
 class SocialScreen extends StatefulWidget {
   @override
@@ -23,6 +26,13 @@ class _SocialScreenState extends State<SocialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return mainSocial();
+  }
+
+
+
+
+  Scaffold mainSocial(){
     return Scaffold(
       appBar: MapTogetherAppBar(
         title: 'Social menu',

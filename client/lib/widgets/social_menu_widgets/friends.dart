@@ -4,13 +4,8 @@ import 'User.dart';
 import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 
-class Friends extends StatefulWidget {
-  @override
-  _FriendsState createState() => _FriendsState();
-}
-
 //TODO: move friends list to a seperate file or server
-class _FriendsState extends State<Friends> {
+class Friends extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -43,10 +38,7 @@ class _FriendsState extends State<Friends> {
                                       onPressed: (){
                                         context.read<DummyDatabase>().followingNames.remove(context.read<DummyDatabase>().following[index].name);
                                         context.read<DummyDatabase>().following.removeAt(index);
-
-                                        setState(() {
-                                          Navigator.pop(context);
-                                        });
+                                        Navigator.pop(context);
                                       },
                                     ),
                                   ),

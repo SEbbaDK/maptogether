@@ -8,12 +8,7 @@ import 'dart:io';
 import 'package:webview_flutter/webview_flutter.dart';
 
 
-class Login extends StatefulWidget{
-  @override
-  _LoginState createState() => _LoginState();
-}
-
-class _LoginState extends State<Login> {
+class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
