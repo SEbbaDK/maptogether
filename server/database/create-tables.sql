@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
-	userID	integer PRIMARY KEY,
+	userID	bigint PRIMARY KEY,
 	name	varchar(20)
 );
 
@@ -9,40 +9,40 @@ CREATE TABLE IF NOT EXISTS contributionTypes (
 );
 
 CREATE TABLE IF NOT EXISTS contributions (
-	contributionID	SERIAL PRIMARY KEY,
-	userID			integer REFERENCES users(userID),
+	contributionID	BIGSERIAL PRIMARY KEY,
+	userID			bigint REFERENCES users(userID),
 	type			integer REFERENCES contributionTypes(contributionTypeID),
-	changeSet		integer,
+	changeSet		bigint,
 	score			integer,
 	dateTime		timestamptz
 );
 
 
 CREATE TABLE IF NOT EXISTS achievements (
-	achievementID	SERIAL PRIMARY KEY,
+	achievementID	BIGSERIAL PRIMARY KEY,
 	name			varchar,
 	description		varchar
 );
 
 CREATE TABLE IF NOT EXISTS unlocked (
-	userID 		integer REFERENCES users(userID),
-	achievement	integer REFERENCES achievements(achievementID),
+	userID 		bigint REFERENCES users(userID),
+	achievement	bigint REFERENCES achievements(achievementID),
 	PRIMARY KEY	(userID, achievement)
 
 );
 
 CREATE TABLE IF NOT EXISTS follows (
-	follower	integer REFERENCES users(userID),
-	followee	integer REFERENCES users(userID),
+	follower	bigint REFERENCES users(userID),
+	followee	bigint REFERENCES users(userID),
 	PRIMARY KEY (follower, followee)
 );
 
 CREATE TABLE IF NOT EXISTS groups (
-	groupID SERIAL PRIMARY KEY
+	groupID BIGSERIAL PRIMARY KEY
 );
 
 CREATE TABLE IF NOT EXISTS hasMember (
-	groupID	integer REFERENCES groups(groupID),
-	userID	integer REFERENCES users(userID),
+	groupID	bigint REFERENCES groups(groupID),
+	userID	bigint REFERENCES users(userID),
 	PRIMARY KEY (groupID, userID)
 );
