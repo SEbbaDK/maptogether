@@ -24,32 +24,29 @@ class User
 			json.field "score", @score unless score.nil?
 			json.field "name", name unless name.nil?
 
-			ach = achievements
 			json.field "achievements" do
 				json.array do
-					ach.each do |achievement|
+					achievements.each do |achievement|
 						achievement.to_json(json)
 					end
 				end
-			end
+			end unless achievements.size == 0
 
-			fol = followers
 			json.field "followers" do
 				json.array do
-					fol.each do |follower|
+					followers.each do |follower|
 						follower.to_json(json)
 					end
 				end
-			end
+			end unless followers.size == 0
 
-			foling = following
 			json.field "following" do
 				json.array do
-					foling.each do |followee|
+					following.each do |followee|
 						followee.to_json(json)
 					end
 				end
-			end
+			end unless following.size == 0
 		end
 	end
 end
