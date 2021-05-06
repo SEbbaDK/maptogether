@@ -34,7 +34,7 @@ class MapScreen extends StatelessWidget {
                     child: Icon(Icons.person),
                     onPressed: () {
                       //If no current user, go to login screen
-                      if(context.read<DummyDatabase>().currentUserName == "") {
+                      if(context.read<DummyDatabase>().loginURL == "") {
                         showDialog(
                           context: context,
                           builder: (_) => notLoggedInSocial(context)

@@ -39,13 +39,9 @@ class Login extends StatelessWidget {
   }
 }
 
-class WebViewContainer extends StatefulWidget{
-  @override
-  _WebViewContainerState createState() => _WebViewContainerState();
-}
 
-class _WebViewContainerState extends State<WebViewContainer> {
-  var _url = "https://www.duckduckgo.com";
+class WebViewContainer extends StatelessWidget{
+  var initialUrl = "https://www.duckduckgo.com";
   Completer<WebViewController> webViewController = Completer<WebViewController>();
 
   @override
@@ -60,11 +56,51 @@ class _WebViewContainerState extends State<WebViewContainer> {
                         webViewController.complete(c);
                     },
                     javascriptMode: JavascriptMode.unrestricted,
-                    initialUrl: _url),
+                    initialUrl: initialUrl),
             )
           ],
         ),
+      floatingActionButton: loginFinished(),
     );
   }
+  Widget loginFinished() {
+    return FutureBuilder<WebViewController>(
+        future: webViewController.future,
+        builder: (BuildContext context,
+            AsyncSnapshot<WebViewController> controller) {
+          if (controller.hasData) {
+            return FloatingActionButton(
+              onPressed: () async {
+                final String url = (await controller.data.currentUrl());
+                Provider.of<DummyDatabase>(context, listen: false).loginURL = url;
+                // ignore: deprecated_member_use
+                print("Succesfully saves url: $url");
+
+                showDialog(context: context, builder: (_) => AlertDialog(
+                  title: Text('Succesfully logged url: $url!'),
+                  actions: <Widget>[
+                    Container(
+                      alignment: Alignment.center,
+                      color: Colors.lightGreen,
+                      child: TextButton(
+                          onPressed: (){
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          },
+                          child: Text("Okay",
+                                      style: TextStyle(fontSize: 14.0, color: Colors.white))),
+                    ),
+                  ],
+                ));
+
+              },
+              child: const Icon(Icons.favorite),
+            );
+          }
+          return Container();
+        });
+  }
+
 }
 
