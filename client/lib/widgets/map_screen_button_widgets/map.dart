@@ -1,4 +1,7 @@
 import 'package:client/location_handler.dart';
+import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
+import 'package:client/quests/quest.dart';
+import 'package:client/quests/quest_finder.dart';
 import 'package:client/widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -49,6 +52,22 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   @override
   Widget build(BuildContext context) {
+
+    QuestFinder questFinder = context.watch<QuestFinder>();
+
+    List<Quest> backrestBenchQuests = questFinder.quests;
+
+    List<Marker> backrestQuestMarkers = backrestBenchQuests.map((e) {
+      return Marker(
+        width: 30,
+        height: 30,
+        point: e.position,
+        builder: (context) => FittedBox(
+          child: Icon(Icons.airline_seat_recline_normal_sharp),
+        )
+      );
+    }).toList();
+
 
     locationHandler = context.watch<LocationHandler>();
     _mapController = locationHandler.mapController;
@@ -250,7 +269,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
         ),
         //MarkerLayerOptions(markers: markers)
         MarkerLayerOptions(
-          markers: [popUpMarker] + [currentPositionMarker],
+          markers: [popUpMarker] + [currentPositionMarker] + backrestQuestMarkers,
         ),
       ],
     );

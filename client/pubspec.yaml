@@ -23,8 +23,11 @@ environment:
 dependencies:
   osm_api:
     path: ../osm_api
+
   flutter:
     sdk: flutter
+
+  http: ^0.13.3
 
   provider: ^5.0.0
 
