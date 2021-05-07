@@ -11,6 +11,3 @@ build/
 
 # Directory created by dartdoc
 doc/api/
-
-# json_serializable generated files
-*.g.dart
