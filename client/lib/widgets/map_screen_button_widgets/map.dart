@@ -53,15 +53,11 @@ class _InteractiveMapState extends State<InteractiveMap> {
   @override
   Widget build(BuildContext context) {
 
-    QuestFinder questFinder = context.watch<QuestFinder>();
-    //questFinder.getBenchQuests(11.58, 55.90, 11.6314, 55.9259);
-
     locationHandler = context.watch<LocationHandler>();
     _mapController = locationHandler.mapController;
 
-    //questFinder.getBenchQuests(_mapController.bounds.west, _mapController.bounds.south, _mapController.bounds.east, _mapController.bounds.north);
 
-    List<Quest> backrestBenchQuests = questFinder.quests;
+    List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
 
     List<Marker> backrestQuestMarkers = backrestBenchQuests.map((e) {
       return Marker(
@@ -258,6 +254,34 @@ class _InteractiveMapState extends State<InteractiveMap> {
           fitBoundsOptions: FitBoundsOptions(
             padding: EdgeInsets.all(50),
           ),
+          markers: backrestQuestMarkers,
+          polygonOptions: PolygonOptions(
+              borderColor: Colors.blueAccent,
+              color: Colors.black12,
+              borderStrokeWidth: 3),
+          builder: (context, markers) {
+            return Row(
+              children: [
+                Icon(Icons.airline_seat_recline_normal_sharp),
+                Text(markers.length.toString()),
+              ],
+            );
+
+            /*
+              FloatingActionButton(
+              child: Text(markers.length.toString()),
+              onPressed: null,
+            );
+
+             */
+          },
+        ),
+        MarkerClusterLayerOptions(
+          maxClusterRadius: 100,
+          size: Size(40, 40),
+          fitBoundsOptions: FitBoundsOptions(
+            padding: EdgeInsets.all(50),
+          ),
           markers: taskMarkers,
           polygonOptions: PolygonOptions(
               borderColor: Colors.blueAccent,
@@ -272,7 +296,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
         ),
         //MarkerLayerOptions(markers: markers)
         MarkerLayerOptions(
-          markers: [popUpMarker] + [currentPositionMarker] + backrestQuestMarkers,
+          markers: [popUpMarker] + [currentPositionMarker],
         ),
       ],
     );
