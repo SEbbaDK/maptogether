@@ -56,6 +56,19 @@ class _InteractiveMapState extends State<InteractiveMap> {
     List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
 
     List<Marker> backrestQuestMarkers = backrestBenchQuests.map((quest) {
+      List<Widget> textButtons = [];
+      for (int i = 0; i < quest.getPossibilities().length; i++) {
+        textButtons.add(Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            child: Text(quest.getPossibilities()[i]),
+            onPressed: () {
+              print('Hej med dig');
+            },
+          ),
+        ));
+      }
+
       return Marker(
           width: 60,
           height: 60,
@@ -63,10 +76,39 @@ class _InteractiveMapState extends State<InteractiveMap> {
           builder: (context) => FittedBox(
                 child: TextButton(
                   child: Icon(
-                      Icons.airline_seat_recline_normal_sharp,
+                    Icons.airline_seat_recline_normal_sharp,
                     color: Colors.black,
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            decoration: BoxDecoration(
+                                color: Colors.lightGreen,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20))),
+                            height: 200,
+                            child: Column(
+                              children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        quest.getQuestion(),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ] +
+                                  textButtons,
+                            ),
+                          );
+                        });
+                  },
                 ),
               ));
     }).toList();
