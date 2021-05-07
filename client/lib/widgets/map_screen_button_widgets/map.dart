@@ -54,6 +54,12 @@ class _InteractiveMapState extends State<InteractiveMap> {
   Widget build(BuildContext context) {
 
     QuestFinder questFinder = context.watch<QuestFinder>();
+    //questFinder.getBenchQuests(11.58, 55.90, 11.6314, 55.9259);
+
+    locationHandler = context.watch<LocationHandler>();
+    _mapController = locationHandler.mapController;
+
+    //questFinder.getBenchQuests(_mapController.bounds.west, _mapController.bounds.south, _mapController.bounds.east, _mapController.bounds.north);
 
     List<Quest> backrestBenchQuests = questFinder.quests;
 
@@ -68,9 +74,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
       );
     }).toList();
 
-
-    locationHandler = context.watch<LocationHandler>();
-    _mapController = locationHandler.mapController;
 
     currentLocation = locationHandler.getLocation();
 
