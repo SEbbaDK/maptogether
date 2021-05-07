@@ -49,3 +49,15 @@ Responds with a json object of all users' id, name and score sorted by score in 
     ...
 ]
 ```
+
+### `/contribution` Post Contribution
+Post a new contribution. The JSON object has to include user_id, type, changeset, score and date_time
+```
+{
+    "user_id": <user-id>,
+    "type": <id of type of contribution>,
+    "changeset": <id of changeset from OSM>,
+    "score": <points rewarded>,
+    "date_time": <ISO8601 format timestamp>
+}
+```
