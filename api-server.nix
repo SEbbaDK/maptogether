@@ -1,5 +1,5 @@
+{ testing ? false }
 { pkgs ? import ./nixpkgs.nix { }
-, addMockData ? false
 , ...
 }:
 let
@@ -12,7 +12,7 @@ let
   '';
   setupScript = pkgs.writeText "setup.sql" ''
     ${builtins.readFile ./server/database/create-tables.sql}
-    ${if addMockData then mockData else ""}
+    ${if testing then mockData else ""}
   '';
 in
 {

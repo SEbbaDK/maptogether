@@ -26,7 +26,7 @@ in
 
   containers = {
     apiServer = {
-      config = import ./api-server.nix { inherit pkgs; addMockData = true; };
+      config = import ./api-server.nix { testing = true; } { inherit pkgs; };
       autoStart = true;
       privateNetwork = true;
       hostAddress = containerHost;

@@ -38,14 +38,14 @@ Responds with json object of a user like this:
 
 Responds with a json object of all users' id, name and score sorted by score in descending order
 ```
-{
-    users: [
-        {
+[
+    {
+    	user: {
             id: <user id>,
-            name: <user name>,
-            score: <1. place score>
+            name: <user name>
         },
-        ...
-    ]
-}
+        score: <1. place score>
+    },
+    ...
+]
 ```

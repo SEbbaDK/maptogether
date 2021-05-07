@@ -3,6 +3,7 @@ require "db"
 require "pg"
 require "json"
 require "./user.cr"
+require "./scoring.cr"
 require "./queries.cr"
 require "./achievement.cr"
 
@@ -14,13 +15,15 @@ module MapTogether::Server
 		address = "postgres://maptogether:maptogether@localhost:5432/maptogether?retry_attempts=100"
 
 		def leaderboard_to_json(json_builder json : JSON::Builder, rows)
-			json.object do
-				json.field "users" do
-					json.array do
-						rows.each do
-							User.new(user_id: rows.read(Int64), name: rows.read(String), score: rows.read(Int64)).to_json(json)
-						end
-					end
+			json.array do
+				rows.each do
+					Scoring.new(
+						user: User.new(
+							user_id: rows.read(Int64),
+							name: rows.read(String)
+						),
+						score: rows.read(Int64)
+					).to_json(json)
 				end
 			end
 		end
@@ -97,7 +100,7 @@ module MapTogether::Server
 		end
 	end
 
-
-	Kemal.run 8080
+	port = (ENV["KEMAL_PORT"]? || 8080).to_i32
+	Kemal.run port
 end
 
