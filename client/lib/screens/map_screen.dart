@@ -1,5 +1,11 @@
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:latlong/latlong.dart';
+
 import 'package:client/database.dart';
 import 'package:client/location_handler.dart';
+import 'package:client/login_handler.dart';
 import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
 import 'package:client/quests/quest_finder.dart';
 import 'package:client/screens/social_screen.dart';
@@ -7,10 +13,7 @@ import 'package:client/widgets/map_screen_button_widgets/button_row.dart';
 import 'package:client/widgets/map_screen_button_widgets/map.dart';
 import 'package:client/widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:client/widgets/map_screen_button_widgets/pup_up_menu.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:latlong/latlong.dart';
-import 'login_screen.dart';
+import 'package:client/screens/login_screen.dart';
 
 class MapScreen extends StatelessWidget {
   @override
@@ -36,15 +39,14 @@ class MapScreen extends StatelessWidget {
                     child: Icon(Icons.person),
                     onPressed: () {
                       //If no current user, go to login screen
-                      if(context.read<DummyDatabase>().loginURL == "") {
+                      if(context.read<LoginHandler>().loggedIntoSocial != true)
                         showDialog(
                           context: context,
                           builder: (_) => notLoggedInSocial(context)
                         );
-                      }
-                      else{
+                      else
                         Navigator.push(context,MaterialPageRoute(builder: (context) => SocialScreen()));
-                      }
+                      
                     },
                   ),
                   MapScreenButton(
@@ -55,12 +57,19 @@ class MapScreen extends StatelessWidget {
                             19);
                       },
                   ),
-                  MapScreenButton(
-                    child: Icon(Icons.north),
-                    onPressed: () {
-                      locationHandler.mapController.rotate(0);
-                    },
-                  ),
+                  StreamBuilder(
+                      stream: locationHandler.rotationStream,
+                      builder: (BuildContext context, AsyncSnapshot<double> snapshot) =>
+                      	Transform.rotate(
+                          angle: snapshot.data,
+                          child: MapScreenButton(
+                            child: Icon(Icons.north),
+                            onPressed: () {
+                              locationHandler.mapController.rotate(0);
+                            },
+                          ),
+                      ),
+				  ),
                   PopUpMenu(),
                 ],
               ),
