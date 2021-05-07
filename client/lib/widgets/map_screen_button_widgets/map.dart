@@ -1,5 +1,6 @@
 import 'package:client/location_handler.dart';
 import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
+import 'package:client/quests/quest.dart';
 import 'package:client/quests/quest_finder.dart';
 import 'package:client/widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
     QuestFinder questFinder = context.watch<QuestFinder>();
 
-    List<BackrestBenchQuest> backrestBenchQuests = questFinder.quests;
+    List<Quest> backrestBenchQuests = questFinder.quests;
 
     List<Marker> backrestQuestMarkers = backrestBenchQuests.map((e) {
       return Marker(

@@ -6,8 +6,5 @@ abstract class Quest {
 
   osm.Element element;
 
-
-
-
-  Quest(this.position);
+  Quest(this.position, this.element);
 }
