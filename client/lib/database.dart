@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 class DummyDatabase with ChangeNotifier{
 
+  String loginURL = "";
   String currentUserName;
   User currentUser;
 
