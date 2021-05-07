@@ -26,10 +26,6 @@ class _SocialScreenState extends State<SocialScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return mainSocial();
-  }
-
-  Scaffold mainSocial(){
     return Scaffold(
       appBar: MapTogetherAppBar(
         title: 'Social menu',
