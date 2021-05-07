@@ -76,24 +76,25 @@ class WebViewContainer extends StatelessWidget{
                 // ignore: deprecated_member_use
                 print("Succesfully saves url: $url");
 
-                showDialog(context: context, builder: (_) => AlertDialog(
-                  title: Text('Succesfully logged url: $url!'),
-                  actions: <Widget>[
-                    Container(
-                      alignment: Alignment.center,
-                      color: Colors.lightGreen,
-                      child: TextButton(
-                          onPressed: (){
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                          child: Text("Okay",
-                                      style: TextStyle(fontSize: 14.0, color: Colors.white))),
-                    ),
-                  ],
-                ));
-
+                showDialog(context: context, builder: (_) =>
+                    AlertDialog(
+                      title: Text('Succesfully logged url: $url!'),
+                      actions: <Widget>[
+                        Container(
+                          alignment: Alignment.center,
+                          color: Colors.lightGreen,
+                          child: TextButton(
+                              onPressed: (){
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                              child: Text("Okay",
+                                          style: TextStyle(fontSize: 14.0, color: Colors.white))),
+                        ),
+                      ],
+                    )
+                );
               },
               child: const Icon(Icons.favorite),
             );
