@@ -1,9 +1,8 @@
 require "./spec_helper"
 
-describe Maptogether::Server do
-  # TODO: Write tests
-
-  it "works" do
-    false.should eq(true)
-  end
+describe MapTogether::Server do
+	it "renders /" do
+		get "/"
+		response.body.should eq "hi"
+	end
 end
