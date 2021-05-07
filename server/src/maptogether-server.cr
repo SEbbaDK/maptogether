@@ -37,10 +37,6 @@ module MapTogether::Server
 			end
 		end
 
-		#before_get do |env|
-		#	env.response.content_type = "application/json"
-		#end
-
 		# Request data about a specific user (id, name, score, achievements and followers)
 		get "/user/:id" do |env|
 			user = User.new
@@ -72,6 +68,7 @@ module MapTogether::Server
 				end
 			end
 
+			env.response.content_type = "application/json"
 			JSON.build do |json|
 				user.to_json(json)
 			end
@@ -79,50 +76,60 @@ module MapTogether::Server
 
 		# Retrieve all users' id, name and score
 		get "/leaderboard/global/all_time" do |env|
-			JSON.build do |json|
+			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::GLOBAL_ALL_TIME do |rows|
 						Endpoints.leaderboard_to_json(json, rows)
 					end
 				end
 			end
+
+			env.response.content_type = "application/json"
+			string
 		end
 
 		get "/leaderboard/global/monthly" do |env|
-			JSON.build do |json|
+			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::GLOBAL_INTERVAL, Time.utc.at_beginning_of_month, Time.utc.at_end_of_month do |rows|
 						Endpoints.leaderboard_to_json(json, rows)
 					end
 				end
 			end
+
+			env.response.content_type = "application/json"
+			string
 		end
 
 		get "/leaderboard/global/weekly" do |env|
-			JSON.build do |json|
+			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::GLOBAL_INTERVAL, Time.utc.at_beginning_of_week, Time.utc.at_end_of_week do |rows|
 						Endpoints.leaderboard_to_json(json, rows)
 					end
 				end
 			end
+
+			env.response.content_type = "application/json"
+			string
 		end
 
 		post "/contribution" do |env|
 			contribution = Contribution.from_json(env.params.json)
 	        try_open_connection do |db|
 	            db.exec "INSERT INTO contributions (userID, type, changeset, score, dateTime)
-	             VALUES ($1, $2, $3, $4, $5)",
-	             contribution.user_id,
-	             contribution.type,
-	             contribution.changeset,
-	             contribution.score,
-	             contribution.date_time
+					VALUES ($1, $2, $3, $4, $5)",
+					contribution.user_id,
+	            	contribution.type,
+	            	contribution.changeset,
+	            	contribution.score,
+	            	contribution.date_time
 	        end
 	    end
 
 		# Test endpoint
 		get "/" do |env|
+			env.response.content_type = "application/json"
 			"hi"
 		end
 
