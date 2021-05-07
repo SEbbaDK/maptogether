@@ -1,8 +1,6 @@
 import 'package:client/location_handler.dart';
-import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
 import 'package:client/quests/quest.dart';
 import 'package:client/quests/quest_finder.dart';
-import 'package:client/widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -52,24 +50,26 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   @override
   Widget build(BuildContext context) {
-
     locationHandler = context.watch<LocationHandler>();
     _mapController = locationHandler.mapController;
 
-
     List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
 
-    List<Marker> backrestQuestMarkers = backrestBenchQuests.map((e) {
+    List<Marker> backrestQuestMarkers = backrestBenchQuests.map((quest) {
       return Marker(
-        width: 30,
-        height: 30,
-        point: e.position,
-        builder: (context) => FittedBox(
-          child: Icon(Icons.airline_seat_recline_normal_sharp),
-        )
-      );
+          width: 60,
+          height: 60,
+          point: quest.position,
+          builder: (context) => FittedBox(
+                child: TextButton(
+                  child: Icon(
+                      Icons.airline_seat_recline_normal_sharp,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {},
+                ),
+              ));
     }).toList();
-
 
     currentLocation = locationHandler.getLocation();
 
@@ -221,8 +221,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
         TileLayerWidget(
           options: TileLayerOptions(
             tileSize: 256,
-            urlTemplate:
-                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             subdomains: ['a', 'b', 'c'],
             tileProvider: NetworkTileProvider(),
             maxNativeZoom: 18,
@@ -266,14 +265,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
                 Text(markers.length.toString()),
               ],
             );
-
-            /*
-              FloatingActionButton(
-              child: Text(markers.length.toString()),
-              onPressed: null,
-            );
-
-             */
           },
         ),
         MarkerClusterLayerOptions(

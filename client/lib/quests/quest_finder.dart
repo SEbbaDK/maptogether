@@ -38,7 +38,10 @@ class QuestFinder extends ChangeNotifier {
     });
 
     print(benchElements);
+    quests.removeWhere((element) => benchQuests.contains(element));
     quests.addAll(benchQuests);
+
+    quests = benchQuests;
 
     notifyListeners();
   }

@@ -11,4 +11,17 @@ class BackrestBenchQuest extends Quest {
 
   void appyAnswer(BenchBackrestAnswer) {}
 
+  @override
+  List<String> getPossibilities() {
+    List<String> posibillities = [
+      'Yes', 'No',
+    ];
+    return posibillities;
+  }
+
+  @override
+  getQuestion() {
+    return 'Does the bench have a backrest?';
+  }
+
 }
