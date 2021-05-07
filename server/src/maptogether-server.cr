@@ -26,6 +26,14 @@ module MapTogether::Server
 			end
 		end
 
+		def try_open_connection(&block)
+			begin
+				yield DB.open "postgres://maptogether:maptogether@localhost:5432/maptogether?retry_attempts=100"
+			rescue exception : DB::ConnectionRefused
+				raise DB::ConnectionRefused.new("Could not connect to database")
+			end
+		end
+
 		#before_get do |env|
 		#	env.response.content_type = "application/json"
 		#end
@@ -34,7 +42,8 @@ module MapTogether::Server
 		get "/user/:id" do |env|
 			user = User.new
 			id = env.params.url["id"]
-			DB.connect address do |db|
+
+			try_open_connection do |db|
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
 				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
 
@@ -68,7 +77,7 @@ module MapTogether::Server
 		# Retrieve all users' id, name and score
 		get "/leaderboard/global/all_time" do |env|
 			JSON.build do |json|
-				DB.connect address do |db|
+				try_open_connection do |db|
 					db.query Queries::GLOBAL_ALL_TIME do |rows|
 						Endpoints.leaderboard_to_json(json, rows)
 					end
@@ -78,7 +87,7 @@ module MapTogether::Server
 
 		get "/leaderboard/global/monthly" do |env|
 			JSON.build do |json|
-				DB.connect address do |db|
+				try_open_connection do |db|
 					db.query Queries::GLOBAL_INTERVAL, Time.utc.at_beginning_of_month, Time.utc.at_end_of_month do |rows|
 						Endpoints.leaderboard_to_json(json, rows)
 					end
@@ -88,7 +97,7 @@ module MapTogether::Server
 
 		get "/leaderboard/global/weekly" do |env|
 			JSON.build do |json|
-				DB.connect address do |db|
+				try_open_connection do |db|
 					db.query Queries::GLOBAL_INTERVAL, Time.utc.at_beginning_of_week, Time.utc.at_end_of_week do |rows|
 						Endpoints.leaderboard_to_json(json, rows)
 					end
@@ -97,9 +106,8 @@ module MapTogether::Server
 		end
 
 		post "/contribution" do |env|
-		    puts env.params.json
-		    contribution = Contribution.from_json(env.params.json)
-	        DB.connect address do |db|
+			contribution = Contribution.from_json(env.params.json)
+	        try_open_connection do |db|
 	            db.exec "INSERT INTO contributions (userID, type, changeset, score, dateTime)
 	             VALUES ($1, $2, $3, $4, $5)",
 	             contribution.user_id,
@@ -111,8 +119,16 @@ module MapTogether::Server
 	    end
 
 		# Test endpoint
-		get "/" do
+		get "/" do |env|
 			"hi"
+		end
+
+		error 500 do |env, exc|
+			"Something went wrong, \"#{exc.class}\" was thrown with message: \"#{exc.message}\""
+		end
+	
+		error 404 do
+			"404 Path not defined"
 		end
 	end
 
