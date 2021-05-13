@@ -61,7 +61,7 @@ class MapScreen extends StatelessWidget {
                       stream: locationHandler.rotationStream,
                       builder: (BuildContext context, AsyncSnapshot<double> snapshot) =>
                       	Transform.rotate(
-                          angle: snapshot.data,
+                          angle: snapshot.data ?? 0,
                           child: MapScreenButton(
                             child: Icon(Icons.north),
                             onPressed: () {
