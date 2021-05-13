@@ -20,6 +20,7 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     LocationHandler locationHandler = context.watch<LocationHandler>();
+    final loginHandler = context.watch<LoginHandler>();
 
     return Scaffold(
       body: Stack(
@@ -39,10 +40,10 @@ class MapScreen extends StatelessWidget {
                     child: Icon(Icons.person),
                     onPressed: () {
                       //If no current user, go to login screen
-                      if(context.read<LoginHandler>().loggedIntoSocial != true)
+                      if(loginHandler.loggedIntoSocial() != true)
                         showDialog(
                           context: context,
-                          builder: (_) => notLoggedInSocial(context)
+                          builder: (_) => notLoggedInSocial(context, () => loginHandler.optIn())
                         );
                       else
                         Navigator.push(context,MaterialPageRoute(builder: (context) => SocialScreen()));
@@ -77,47 +78,6 @@ class MapScreen extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-
-
-  AlertDialog notLoggedInSocial(BuildContext context){
-    return AlertDialog(
-      title: Text('You must be logged in to access social features'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Login to access the social features'),
-        ],
-      ),
-      actions: <Widget>[
-        Container(
-            color: Colors.lightGreen,
-            child: TextButton(
-              onPressed: (){
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
-              },
-              child: Text(
-                'Login',
-                style: TextStyle(fontSize: 14.0, color: Colors.white),
-              ),
-            )
-        ),
-        Container(
-            color: Colors.lightGreen,
-            child: TextButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              child: Text(
-                'No Thanks',
-                style: TextStyle(fontSize: 14.0, color: Colors.white),
-              ),
-            )
-        ),
-      ],
     );
   }
 }

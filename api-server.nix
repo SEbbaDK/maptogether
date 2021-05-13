@@ -1,4 +1,4 @@
-{ testing ? false }
+{ testing ? false }:
 { pkgs ? import ./nixpkgs.nix { }
 , ...
 }:

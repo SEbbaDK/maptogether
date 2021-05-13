@@ -1,13 +1,15 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:client/database.dart';
 import 'package:client/widgets/app_bar.dart';
 import 'package:client/widgets/social_menu_widgets/friends.dart';
 import 'package:client/widgets/social_menu_widgets/groups.dart';
 import 'package:client/widgets/social_menu_widgets/history.dart';
 import 'package:client/widgets/social_menu_widgets/overview.dart';
 import 'package:client/widgets/social_menu_widgets/user_overview.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:client/database.dart';
-import 'login_screen.dart';
+import 'package:client/screens/login_screen.dart';
+import 'package:client/login_handler.dart';
 
 class SocialScreen extends StatefulWidget {
   @override
@@ -26,9 +28,17 @@ class _SocialScreenState extends State<SocialScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final loginHandler = context.watch<LoginHandler>();
+
     return Scaffold(
       appBar: MapTogetherAppBar(
         title: 'Social menu',
+        actions: [
+			TextButton(child: Text("Log out", style: TextStyle(color: Colors.white)), onPressed: () {
+		       loginHandler.logout();
+		       Navigator.pop(context);
+			}),
+        ],
       ),
       body: Container(
         //color: Colors.grey,

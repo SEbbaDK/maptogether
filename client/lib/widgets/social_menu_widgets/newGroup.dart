@@ -7,7 +7,7 @@ class NewGroup extends StatelessWidget {
     return Scaffold(
         appBar: MapTogetherAppBar(
           title: 'Create New Group',
-          actionButtons: [],
+          actions: [],
         ),
         body: Center(
             child: Column(children: <Widget>[
