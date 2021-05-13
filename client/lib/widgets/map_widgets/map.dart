@@ -44,14 +44,10 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   MapController _mapController;
 
-  LatLng currentLocation;
-
-  LocationHandler locationHandler;
-
   @override
   Widget build(BuildContext context) {
-    locationHandler = context.watch<LocationHandler>();
-    _mapController = locationHandler.mapController;
+
+    _mapController = context.watch<LocationHandler>().mapController;
 
     List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
 
@@ -63,7 +59,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
           child: ElevatedButton(
             child: Text(quest.getPossibilities()[i]),
             onPressed: () {
-              print('Hej med dig');
+              print('Selected answer: ' + quest.getPossibilities()[i].toString());
             },
           ),
         ));
@@ -113,10 +109,9 @@ class _InteractiveMapState extends State<InteractiveMap> {
               ));
     }).toList();
 
-    currentLocation = locationHandler.getLocation();
 
     Marker currentPositionMarker = Marker(
-      point: currentLocation,
+      point: context.watch<LocationHandler>().getLocation(),
       builder: (context) => Icon(
         Icons.location_history_rounded,
         color: Colors.red,
@@ -284,7 +279,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
         },
         // Aalborg
         //center: LatLng(57.04, 9.92),
-        center: currentLocation,
+        center: context.watch<LocationHandler>().getLocation(),
         zoom: 12.0,
         maxZoom: 22.0,
       ),
