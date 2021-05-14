@@ -68,44 +68,45 @@ module MapTogether::Server
 				end
 			end
 
-			put "/user/:id/following/:followee" do |env|
-				id = env.params.url["id"]
-				followee = env.params.url["followee"]
-				
-				# TODO: Does this throw a nice error if the user does not exist? else make some check
-				try_open_connection do |db|
-					#db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
-					db.exec "INSERT INTO follows (follower, followee) VALUES ($1, $2)", id, followee
-				end
-			end
-
-			delete "user/:id/following/:followee" do |env|
-				id = env.params.url["id"]
-				followee = env.params.url["followee"]
-
-				try_open_connection do |db|
-					# TODO: Does this throw a nice error if the follows does not exist? else make some check
-					#db.query_one "SELECT follower, followee FROM follows WHERE follower = $1 AND followee = $2", id, followee as: {Int64, Int64}
-					result = db.exec "DELETE FROM follows WHERE follower = $1 AND followee = $2", id, followee
-					raise "Oops deleted ${result.rows_affected} rows" if result.rows_affected != 1
-				end
-			end
-
-			put "/user/:id/:name" do |env|
-				id = env.params.url["id"]
-				name = env.params.url["name"]
-
-				try_open_connection do |db|
-					db.exec "INSERT INTO users (userID, name) VALUES ($1, $2)", id, name
-				end
-			end
-
+			
 			env.response.content_type = "application/json"
 			JSON.build do |json|
 				user.to_json(json)
 			end
 		end
+		
+		put "/user/:id/following/:followee" do |env|
+			id = env.params.url["id"]
+			followee = env.params.url["followee"]
+			
+			# TODO: Does this throw a nice error if the user does not exist? else make some check
+			try_open_connection do |db|
+				#db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
+				db.exec "INSERT INTO follows (follower, followee) VALUES ($1, $2)", id, followee
+			end
+		end
 
+		delete "/user/:id/following/:followee" do |env|
+			id = env.params.url["id"]
+			followee = env.params.url["followee"]
+
+			try_open_connection do |db|
+				# TODO: Does this throw a nice error if the follows does not exist? else make some check
+				#db.query_one "SELECT follower, followee FROM follows WHERE follower = $1 AND followee = $2", id, followee as: {Int64, Int64}
+				result = db.exec "DELETE FROM follows WHERE follower = $1 AND followee = $2", id, followee
+				raise "Oops deleted ${result.rows_affected} rows" if result.rows_affected != 1
+			end
+		end
+
+		put "/user/:id/:name" do |env|
+			id = env.params.url["id"]
+			name = env.params.url["name"]
+
+			try_open_connection do |db|
+				db.exec "INSERT INTO users (userID, name) VALUES ($1, $2)", id, name
+			end
+		end
+		
 		# Retrieve all users' id, name and score
 		get "/leaderboard/global/all_time" do |env|
 			string = JSON.build do |json|
