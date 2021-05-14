@@ -1,8 +1,6 @@
 import 'package:client/location_handler.dart';
-import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
 import 'package:client/quests/quest.dart';
 import 'package:client/quests/quest_finder.dart';
-import 'package:client/widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -46,36 +44,74 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   MapController _mapController;
 
-  LatLng currentLocation;
-
-  LocationHandler locationHandler;
-
   @override
   Widget build(BuildContext context) {
 
-    QuestFinder questFinder = context.watch<QuestFinder>();
+    _mapController = context.watch<LocationHandler>().mapController;
 
-    List<Quest> backrestBenchQuests = questFinder.quests;
+    List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
 
-    List<Marker> backrestQuestMarkers = backrestBenchQuests.map((e) {
+    List<Marker> backrestQuestMarkers = backrestBenchQuests.map((quest) {
+      List<Widget> textButtons = [];
+      for (int i = 0; i < quest.getPossibilities().length; i++) {
+        textButtons.add(Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            child: Text(quest.getPossibilities()[i]),
+            onPressed: () {
+              print('Selected answer: ' + quest.getPossibilities()[i].toString());
+            },
+          ),
+        ));
+      }
+
       return Marker(
-        width: 30,
-        height: 30,
-        point: e.position,
-        builder: (context) => FittedBox(
-          child: Icon(Icons.airline_seat_recline_normal_sharp),
-        )
-      );
+          width: 60,
+          height: 60,
+          point: quest.position,
+          builder: (context) => FittedBox(
+                child: TextButton(
+                  child: Icon(
+                    Icons.airline_seat_recline_normal_sharp,
+                    color: Colors.black,
+                  ),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        backgroundColor: Colors.transparent,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            decoration: BoxDecoration(
+                                color: Colors.lightGreen,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20))),
+                            height: 200,
+                            child: Column(
+                              children: <Widget>[
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        quest.getQuestion(),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ] +
+                                  textButtons,
+                            ),
+                          );
+                        });
+                  },
+                ),
+              ));
     }).toList();
 
 
-    locationHandler = context.watch<LocationHandler>();
-    _mapController = locationHandler.mapController;
-
-    currentLocation = locationHandler.getLocation();
-
     Marker currentPositionMarker = Marker(
-      point: currentLocation,
+      point: context.watch<LocationHandler>().getLocation(),
       builder: (context) => Icon(
         Icons.location_history_rounded,
         color: Colors.red,
@@ -222,8 +258,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
         TileLayerWidget(
           options: TileLayerOptions(
             tileSize: 256,
-            urlTemplate:
-                'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             subdomains: ['a', 'b', 'c'],
             tileProvider: NetworkTileProvider(),
             maxNativeZoom: 18,
@@ -244,11 +279,31 @@ class _InteractiveMapState extends State<InteractiveMap> {
         },
         // Aalborg
         //center: LatLng(57.04, 9.92),
-        center: currentLocation,
+        center: context.watch<LocationHandler>().getLocation(),
         zoom: 12.0,
         maxZoom: 22.0,
       ),
       layers: [
+        MarkerClusterLayerOptions(
+          maxClusterRadius: 100,
+          size: Size(40, 40),
+          fitBoundsOptions: FitBoundsOptions(
+            padding: EdgeInsets.all(50),
+          ),
+          markers: backrestQuestMarkers,
+          polygonOptions: PolygonOptions(
+              borderColor: Colors.blueAccent,
+              color: Colors.black12,
+              borderStrokeWidth: 3),
+          builder: (context, markers) {
+            return Row(
+              children: [
+                Icon(Icons.airline_seat_recline_normal_sharp),
+                Text(markers.length.toString()),
+              ],
+            );
+          },
+        ),
         MarkerClusterLayerOptions(
           maxClusterRadius: 100,
           size: Size(40, 40),
@@ -269,7 +324,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
         ),
         //MarkerLayerOptions(markers: markers)
         MarkerLayerOptions(
-          markers: [popUpMarker] + [currentPositionMarker] + backrestQuestMarkers,
+          markers: [popUpMarker] + [currentPositionMarker],
         ),
       ],
     );

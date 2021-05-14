@@ -9,9 +9,6 @@ class QuestFinder extends ChangeNotifier {
 
   List<Quest> quests = [];
 
-  QuestFinder() {
-    getBenchQuests();
-  }
 
   bool _isBench(osm.Element element) {
     return (element.tags.containsKey('amenity') &&
@@ -22,11 +19,13 @@ class QuestFinder extends ChangeNotifier {
     return !(element.tags.containsKey('backrest'));
   }
 
-  void getBenchQuests() async {
+  void getBenchQuests(double left, double bottom, double right, double top) async {
     api = osm.Api(
         'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.production());
     List<osm.Element> elements =
-        (await api.mapByBox(11.58, 55.90, 11.6314, 55.9259)).elements;
+        (await api.mapByBox(left, bottom, right, top)).elements;
+
+    // (await api.mapByBox(11.58, 55.90, 11.6314, 55.9259)).elements;
 
     List<Quest> benchQuests = [];
     List<osm.Element> benchElements = elements
@@ -39,8 +38,14 @@ class QuestFinder extends ChangeNotifier {
     });
 
     print(benchElements);
+    quests.removeWhere((element) => benchQuests.contains(element));
     quests.addAll(benchQuests);
+
+    quests = benchQuests;
+
+    notifyListeners();
   }
+
 }
 
 //void main() {
