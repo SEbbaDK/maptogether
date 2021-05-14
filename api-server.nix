@@ -1,4 +1,3 @@
-{ testing ? false }:
 { pkgs ? import ./nixpkgs.nix { }
 , ...
 }:
@@ -10,12 +9,14 @@ let
     ${builtins.readFile ./server/database/mock-achievements.sql}
     ${builtins.readFile ./server/database/mock-follows.sql}
   '';
-  setupScript = pkgs.writeText "setup.sql" ''
+  databaseSetup = ./server/database/create-role-and-database.sql;
+  tableSetup = pkgs.writeText "setup.sql" ''
     ${builtins.readFile ./server/database/create-tables.sql}
-    ${if testing then mockData else ""}
+    ${mockData}
   '';
 in
 {
+  networking.hostName = "maptogether-api-server";
   networking.firewall.allowedTCPPorts = [ 8080 ];
     
   services.postgresql = {
@@ -24,20 +25,29 @@ in
     #   name = "maptogether";
     #   ensurePermissions = { "DATABASE maptogether" = "ALL PRIVILEGES"; };
     # }];
-    initialScript = ./server/database/create-role-and-database.sql;
+    # initialScript = ./server/database/create-role-and-database.sql;
   };
 
-  users.groups.maptogether = { };
+  systemd.services.maptogether-database-setup = {
+    serviceConfig = {
+      Type = "oneshot";
+      User = "postgres";
+      Group = "postgres";
+      ExecStart = "${pkgs.postgresql}/bin/psql -f ${databaseSetup}";
+    };
+    requires = [ "postgresql.service" ];
+    after = [ "postgresql.service" ];
+  };
 
-  systemd.services.database-setup = {
+  systemd.services.maptogether-table-setup = {
     serviceConfig = {
       Type = "oneshot";
       User = "maptogether";
       Group = "maptogether";
-      ExecStart = "${pkgs.postgresql}/bin/psql -d maptogether -f ${setupScript}";
+      ExecStart = "${pkgs.postgresql}/bin/psql -d maptogether -f ${tableSetup}";
     };
-    requires = [ "postgresql.service" ];
-    after = [ "postgresql.service" ];
+    requires = [ "maptogether-database-setup.service" "postgresql.service" ];
+    after = [ "maptogether-database-setup.service" "postgresql.service" ];
   };
 
   systemd.services.maptogether-server = {
@@ -47,10 +57,12 @@ in
       User = "maptogether";
       Group = "maptogether";
     };
-    requires = [ "database-setup.service" "postgresql.service" ];
-    after = [ "database-setup.service" "postgresql.service" ];
+    requires = [ "maptogether-database-setup.service" "maptogether-table-setup.service" "postgresql.service" ];
+    after = [ "maptogether-database-setup.service" "maptogether-table-setup.service" "postgresql.service" ];
     wantedBy = [ "default.target" ];
   };
+
+  users.groups.maptogether.gid = 1005;
   users.users.maptogether = {
       isSystemUser = true;
       extraGroups = [ "maptogether" ];

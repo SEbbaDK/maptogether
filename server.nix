@@ -29,8 +29,8 @@ in
   };
 
   containers = {
-    apiServer = {
-      config = import ./api-server.nix { testing = true; } { inherit pkgs; };
+    api = {
+      config = import ./api-server.nix { inherit pkgs; };
       autoStart = true;
       privateNetwork = true;
       hostAddress = containerHost;
