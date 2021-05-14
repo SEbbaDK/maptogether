@@ -6,27 +6,6 @@ part of 'data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MapTogether _$MapTogetherFromJson(Map<String, dynamic> json) {
-  return MapTogether(
-    users: (json['users'] as List<dynamic>?)
-        ?.map((e) => User.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    leaderboards: (json['leaderboards'] as List<dynamic>?)
-        ?.map((e) => Leaderboard.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    simple_users: (json['simple_users'] as List<dynamic>?)
-        ?.map((e) => SimpleUser.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
-
-Map<String, dynamic> _$MapTogetherToJson(MapTogether instance) =>
-    <String, dynamic>{
-      'users': instance.users,
-      'leaderboards': instance.leaderboards,
-      'simple_users': instance.simple_users,
-    };
-
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
     id: json['id'] as int,
@@ -66,19 +45,6 @@ Map<String, dynamic> _$AchievementToJson(Achievement instance) =>
       'description': instance.description,
     };
 
-SimpleUser _$SimpleUserFromJson(Map<String, dynamic> json) {
-  return SimpleUser(
-    id: json['id'] as int,
-    name: json['name'] as String,
-  );
-}
-
-Map<String, dynamic> _$SimpleUserToJson(SimpleUser instance) =>
-    <String, dynamic>{
-      'id': instance.id,
-      'name': instance.name,
-    };
-
 Contribution _$ContributionFromJson(Map<String, dynamic> json) {
   return Contribution(
     user_id: json['user_id'] as int,
@@ -98,17 +64,41 @@ Map<String, dynamic> _$ContributionToJson(Contribution instance) =>
       'date_time': instance.date_time.toIso8601String(),
     };
 
+SimpleUser _$SimpleUserFromJson(Map<String, dynamic> json) {
+  return SimpleUser(
+    id: json['id'] as int,
+    name: json['name'] as String,
+  );
+}
+
+Map<String, dynamic> _$SimpleUserToJson(SimpleUser instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+    };
+
+LeaderboardEntry _$LeaderboardEntryFromJson(Map<String, dynamic> json) {
+  return LeaderboardEntry(
+    user: SimpleUser.fromJson(json['user'] as Map<String, dynamic>),
+    score: json['score'] as int,
+  );
+}
+
+Map<String, dynamic> _$LeaderboardEntryToJson(LeaderboardEntry instance) =>
+    <String, dynamic>{
+      'user': instance.user,
+      'score': instance.score,
+    };
+
 Leaderboard _$LeaderboardFromJson(Map<String, dynamic> json) {
   return Leaderboard(
     user: (json['user'] as List<dynamic>)
-        .map((e) => SimpleUser.fromJson(e as Map<String, dynamic>))
+        .map((e) => LeaderboardEntry.fromJson(e as Map<String, dynamic>))
         .toList(),
-    score: json['score'] as int,
   );
 }
 
 Map<String, dynamic> _$LeaderboardToJson(Leaderboard instance) =>
     <String, dynamic>{
       'user': instance.user,
-      'score': instance.score,
     };

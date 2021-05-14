@@ -1,20 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
 part 'data.g.dart';
-@JsonSerializable()
-class MapTogether{
-  @JsonKey(defaultValue: null)
-  final List<User>? users;
-  @JsonKey(defaultValue: null)
-  final List<Leaderboard>? leaderboards;
-  @JsonKey(defaultValue: null)
-  final List<SimpleUser>? simple_users;
-
-  MapTogether({ required this.users, required this.leaderboards, required this.simple_users});
-
-  factory MapTogether.fromJson(Map<String, dynamic> json) => _$MapTogetherFromJson(json);
-  Map<String, dynamic> toJson() => _$MapTogetherToJson(this);
-}
 
 @JsonSerializable()
 class User{
@@ -56,19 +42,6 @@ class Achievement {
   Map<String, dynamic> toJson() => _$AchievementToJson(this);
 }
 
-@JsonSerializable()
-class SimpleUser {
-  final int id;
-  final String name;
-
-  SimpleUser({
-    required this.id,
-    required this.name,
-  });
-
-  factory SimpleUser.fromJson(Map<String, dynamic> json) => _$SimpleUserFromJson(json);
-  Map<String, dynamic> toJson() => _$SimpleUserToJson(this);
-}
 
 @JsonSerializable()
 class Contribution {
@@ -88,11 +61,39 @@ class Contribution {
 }
 
 @JsonSerializable()
-class Leaderboard{
-  final List<SimpleUser> user;
-  final int score;
+class SimpleUser {
+  final int id;
+  final String name;
 
-  Leaderboard({required this.user, required this.score});
+  SimpleUser({
+    required this.id,
+    required this.name,
+  });
+
+  factory SimpleUser.fromJson(Map<String, dynamic> json) => _$SimpleUserFromJson(json);
+  Map<String, dynamic> toJson() => _$SimpleUserToJson(this);
+}
+
+@JsonSerializable()
+class LeaderboardEntry{
+  SimpleUser user;
+  int score;
+
+  LeaderboardEntry({required this.user, required this.score});
+
+  factory LeaderboardEntry.fromJson(Map<String, dynamic> json) =>
+      _$LeaderboardEntryFromJson(json);
+  Map<String, dynamic> toJson() => _$LeaderboardEntryToJson(this);
+
+}
+
+@JsonSerializable()
+class Leaderboard{
+  final String type = '';
+  @JsonKey(defaultValue: null)
+  final List<LeaderboardEntry> user;
+
+  Leaderboard({required this.user});
 
   factory Leaderboard.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardFromJson(json);

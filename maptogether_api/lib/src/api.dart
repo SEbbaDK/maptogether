@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'data.dart' as data;
 
 enum LeaderboardType { weekly, montly, all_time }
 String stringify(LeaderboardType type) {
@@ -34,20 +36,27 @@ class MapTogetherApi {
           return res.body;
       };
 
-  Future<String> user(int id) =>
-      _get('user/$id').then(_checkRequest('getting user'));
 
-  Future<String> leaderboard(String base, LeaderboardType type) =>
+  data.User _decodeUser(String input) =>
+      data.User.fromJson(jsonDecode(input));
+
+  data.Leaderboard _decodeLeaderboard(String input) =>
+      data.Leaderboard.fromJson(jsonDecode(input));
+
+  Future<data.User> user(int id) =>
+      _get('user/$id').then(_checkRequest('getting user')).then(_decodeUser);
+
+  Future<data.Leaderboard> leaderboard(String base, LeaderboardType type) =>
       _get('leaderboard/$base/${stringify(type)}')
-          .then(_checkRequest('getting leaderboard'));
+          .then(_checkRequest('getting leaderboard')).then(_decodeLeaderboard);
 
-  Future<String> personalLeaderboard(LeaderboardType type) =>
+  Future<data.Leaderboard> personalLeaderboard(LeaderboardType type) =>
       leaderboard('personal', type);
 
-  Future<String> globalLeaderboard(LeaderboardType type) =>
+  Future<data.Leaderboard> globalLeaderboard(LeaderboardType type) =>
       leaderboard('global', type);
 
-  Future<String> regionalLeaderboard(String region, LeaderboardType type) {
+  Future<data.Leaderboard> regionalLeaderboard(String region, LeaderboardType type) {
     if (region == 'personal' || region == 'global')
       throw InvalidRegionException();
     else

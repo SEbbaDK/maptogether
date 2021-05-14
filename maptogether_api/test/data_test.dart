@@ -1,30 +1,28 @@
-import 'package:maptogether_api/src/data.dart';
 import 'package:test/test.dart';
-
-import '../lib/src/data.dart' as data;
+import 'package:maptogether_api/src/data.dart' as data;
 
 void main(){
   group('User', (){
     var user = data.User(
       id: 1,
       score: 12,
-      name: "Jens",
+      name: 'Jens',
       achievements: [
           data.Achievement(
-            name: "fdf",
-            description: "Sfsdf",
+            name: 'fdf',
+            description: 'Stuff',
           )
       ],
       followers: [
           data.SimpleUser(
             id: 1,
-            name: "Hej",
+            name: 'Hej',
           )
     ],
       following: [
         data.SimpleUser(
           id: 2,
-          name: "Med"
+          name: 'Med'
         )
       ]
     );
