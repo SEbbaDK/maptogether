@@ -94,7 +94,7 @@ module MapTogether::Server
 				# TODO: Does this throw a nice error if the follows does not exist? else make some check
 				#db.query_one "SELECT follower, followee FROM follows WHERE follower = $1 AND followee = $2", id, followee as: {Int64, Int64}
 				result = db.exec "DELETE FROM follows WHERE follower = $1 AND followee = $2", id, followee
-				raise "Oops deleted ${result.rows_affected} rows" if result.rows_affected != 1
+				raise "Error! deleted #{result.rows_affected} rows" if result.rows_affected != 1
 			end
 		end
 
