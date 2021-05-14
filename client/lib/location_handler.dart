@@ -10,11 +10,10 @@ class LocationHandler extends ChangeNotifier {
 
   LatLng _currentLocation = LatLng(0, 0); // = LatLng(35, 10);
 
-  MapController mapController;
+  MapController mapController = MapController();
 
   LocationHandler() {
     initLocationService();
-    mapController = MapController();
   }
 
   bool _isFirstTime = true;
