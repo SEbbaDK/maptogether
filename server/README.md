@@ -61,3 +61,18 @@ Post a new contribution. The JSON object has to include user_id, type, changeset
     "date_time": <ISO8601 format timestamp>
 }
 ```
+
+### `/user/<id>/following/<followee>` Put Follow Relationship
+Add follows relationship such that user with id <id> follows user with id <followee>.
+
+Throws an error if <id> or <followe> does not exist or if the relationship already exist.
+
+### `/user/<id>/<name>` Put New User
+Add a new user to the database with id <id> and name <name>.
+
+Throws an error if <id> already exist or if the name is more than 20 characters.
+
+### `/user/<id>/following/<followee>` Delete Follow Relationship
+Deletes the follows relationship such that user with id <id> no longer follows user with id <followee>.
+
+Throws an error if the relation does not exist.
