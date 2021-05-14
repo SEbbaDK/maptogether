@@ -7,4 +7,8 @@ abstract class Quest {
   osm.Element element;
 
   Quest(this.position, this.element);
+
+  getQuestion();
+
+  List<String> getPossibilities();
 }

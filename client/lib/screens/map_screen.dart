@@ -6,20 +6,22 @@ import 'package:latlong/latlong.dart';
 import 'package:client/database.dart';
 import 'package:client/location_handler.dart';
 import 'package:client/login_handler.dart';
+
 import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
 import 'package:client/quests/quest_finder.dart';
+
 import 'package:client/screens/social_screen.dart';
-import 'package:client/widgets/map_screen_button_widgets/button_row.dart';
-import 'package:client/widgets/map_screen_button_widgets/map.dart';
-import 'package:client/widgets/map_screen_button_widgets/map_screen_button.dart';
-import 'package:client/widgets/map_screen_button_widgets/pup_up_menu.dart';
 import 'package:client/screens/login_screen.dart';
+
+import 'package:client/widgets/map_widgets/map.dart';
+import 'package:client/widgets/map_widgets/map_screen_button_widgets/button_row.dart';
+import 'package:client/widgets/map_widgets/map_screen_button_widgets/map_screen_button.dart';
+import 'package:client/widgets/map_widgets/map_screen_button_widgets/pup_up_menu.dart';
 
 class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
-    LocationHandler locationHandler = context.watch<LocationHandler>();
+    final locationHandler = context.watch<LocationHandler>();
     final loginHandler = context.watch<LoginHandler>();
 
     return Scaffold(
@@ -47,16 +49,16 @@ class MapScreen extends StatelessWidget {
                         );
                       else
                         Navigator.push(context,MaterialPageRoute(builder: (context) => SocialScreen()));
-                      
                     },
                   ),
                   MapScreenButton(
-                      child: Icon(Icons.location_history_rounded),
-                      onPressed: () {
-                        locationHandler.mapController.move(
-                            LatLng(locationHandler.getLocation().latitude, locationHandler.getLocation().longitude),
-                            19);
-                      },
+                    child: Icon(Icons.location_history_rounded),
+                    onPressed: () {
+                      locationHandler.mapController.move(
+                          LatLng(locationHandler.getLocation().latitude,
+                              locationHandler.getLocation().longitude),
+                          19);
+                    },
                   ),
                   StreamBuilder(
                       stream: locationHandler.rotationStream,
@@ -71,6 +73,16 @@ class MapScreen extends StatelessWidget {
                           ),
                       ),
 				  ),
+                  MapScreenButton(
+                      child: Icon(Icons.wifi_protected_setup),
+                      onPressed: () {
+                        var questFinder = context.read<QuestFinder>();
+                        questFinder.getBenchQuests(
+                            locationHandler.mapController.bounds.west,
+                            locationHandler.mapController.bounds.south,
+                            locationHandler.mapController.bounds.east,
+                            locationHandler.mapController.bounds.north);
+                      }),
                   PopUpMenu(),
                 ],
               ),
