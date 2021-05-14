@@ -12,7 +12,7 @@ class NewFriend extends StatelessWidget {
     return Scaffold(
         appBar: MapTogetherAppBar(
           title: 'Follow New',
-          actionButtons: [],
+          actions: [],
         ),
         body: Center(child: Column(children: <Widget>[
           Container(

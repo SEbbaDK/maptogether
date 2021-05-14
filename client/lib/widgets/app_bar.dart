@@ -4,19 +4,19 @@ class MapTogetherAppBar extends StatelessWidget implements PreferredSizeWidget {
   MapTogetherAppBar(
       {Key key,
       @required this.title,
-      this.actionButtons})
+      this.actions})
       : super(key: key);
 
   String title;
 
-  List<IconButton> actionButtons;
+  List<Widget> actions;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(title),
       backgroundColor: Colors.lightGreen,
-      actions: actionButtons,
+      actions: actions,
     );
   }
 

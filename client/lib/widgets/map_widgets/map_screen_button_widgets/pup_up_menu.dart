@@ -39,7 +39,7 @@ class _PopUpMenuState extends State<PopUpMenu> {
           child: Icon(Icons.location_history),
           onPressed: () {
             Navigator.push(
-                context, MaterialPageRoute(builder: (context) => Login()));
+                context, MaterialPageRoute(builder: (context) => Settings()));
             closeMenu();
           }),
 

@@ -13,14 +13,20 @@ let
   shard = builtins.readFile ./shard.yml;
   version = builtins.head (builtins.match ".*version: ([0-9.]+).*" shard);
 in
-(buildCrystalPackage {
+(buildCrystalPackage rec {
   pname = "maptogether-server";
   inherit version;
 
   buildInputs = [ openssl openssl.out ];
-  src = ./.;
+  src = pkgs.runCommand "source" {} ''
+	mkdir $out
+	ln -s ${./shard.yml} $out/shard.yml
+	ln -s ${./src} $out/src
+	ln -s ${./spec} $out/spec
+  '';
 
   format = "shards";
+  lockFile = ./shard.lock;
   shardsFile = ./shards.nix;
 
   # Disable tests until they work

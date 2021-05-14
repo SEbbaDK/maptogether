@@ -30,7 +30,7 @@ class LeaderBoardView extends StatelessWidget{
     return Scaffold(
       appBar: MapTogetherAppBar(
         title: "Leaderboard for " + curLeaderboard.name,
-        actionButtons: [],
+        actions: [],
       ),
       body: Center(
         child: Container(

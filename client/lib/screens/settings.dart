@@ -7,7 +7,7 @@ class Settings extends StatelessWidget {
     return Scaffold(
       appBar: MapTogetherAppBar(
         title: "Settings",
-        actionButtons: [],
+        actions: [],
       ),
       body: Container(
         child: Center(
