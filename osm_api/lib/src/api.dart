@@ -120,10 +120,10 @@ class Api {
 
   /// Create a new node and return its id
   Future<int> createNode(
-          int changeset, double lat, double lon, Map<String, String> tags) =>
+          int changeset, double lat, double lon, int version, Map<String, String> tags) =>
       _put('node/create', '''
 			<osm>
-				<node lat="${lat}" lon="${lon}" changeset="${changeset}">
+				<node lat="${lat}" lon="${lon}" version="${version}" changeset="${changeset}">
 					${stringifyTags(tags)}
 				</node>
 			</osm>

@@ -1,4 +1,5 @@
 import 'package:client/location_handler.dart';
+import 'package:client/login_handler.dart';
 import 'package:client/quests/quest.dart';
 import 'package:client/quests/quest_finder.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   @override
   Widget build(BuildContext context) {
-
     _mapController = context.watch<LocationHandler>().mapController;
 
     List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
@@ -58,8 +58,31 @@ class _InteractiveMapState extends State<InteractiveMap> {
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             child: Text(quest.getPossibilities()[i]),
-            onPressed: () {
-              print('Selected answer: ' + quest.getPossibilities()[i].toString());
+            onPressed: () async {
+              LoginHandler loginHandler = context.read<LoginHandler>();
+
+              var api = loginHandler.getOsmApi();
+
+              if (loginHandler == null) {
+                print('OSM API er null !!! ');
+              }
+
+              int changesetId =
+                  await api.createChangeset(quest.getChangesetComment());
+
+              // add the new tag to the tag-map
+              quest.element.tags['backrest'] = quest.getPossibilities()[i].toString();
+
+              int nodeId = await api.createNode(
+                  changesetId,
+                  quest.position.latitude,
+                  quest.position.longitude,
+                  quest.element.version,
+                  quest.element.tags);
+
+              api.closeChangeset(changesetId);
+              print(
+                  'Selected answer: ' + quest.getPossibilities()[i].toString());
             },
           ),
         ));
@@ -108,7 +131,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
                 ),
               ));
     }).toList();
-
 
     Marker currentPositionMarker = Marker(
       point: context.watch<LocationHandler>().getLocation(),
