@@ -75,9 +75,11 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
               int nodeId = await api.createNode(
                   changesetId,
+                  quest.element.id,
                   quest.position.latitude,
                   quest.position.longitude,
                   quest.element.version,
+                  quest.element.visible,
                   quest.element.tags);
 
               api.closeChangeset(changesetId);
