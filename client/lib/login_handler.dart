@@ -13,8 +13,15 @@ class LoginHandler extends ChangeNotifier {
   osm.Api _osmApi = null;
   var _tempToken = null;
 
-	osm.Api getOsmApi() {
-		// TODO: Check for login ?
+	osm.Api api() {
+    	if (!loggedIntoOSM())
+        	throw Exception('Cannot get OSM Api before logging in');
+		if (_osmApi == null)
+            _osmApi = osm.Api(
+                'MapTogether v0.1.0pre',
+                _auth.getClient(_auth.createCredentials(_accessToken(), _accessSecret())),
+                _env
+            );
 		return _osmApi;
 	}
 
@@ -27,7 +34,6 @@ class LoginHandler extends ChangeNotifier {
     final creds = await _auth
         .getAccessToken(_tempToken, verifier)
         .then((res) => res.credentials);
-    _osmApi = osm.Api('MapTogether v0.1.0pre', _auth.getClient(creds), _env);
     login(creds.token, creds.tokenSecret);
     return true;
   }

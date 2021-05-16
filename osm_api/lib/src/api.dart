@@ -50,6 +50,9 @@ class Auth {
 
   static http.BaseClient getUnauthorizedClient() =>
       http.Client() as http.BaseClient;
+
+  Credentials createCredentials(String key, String secret) =>
+  	  Credentials(key, secret);
 }
 
 class Api {

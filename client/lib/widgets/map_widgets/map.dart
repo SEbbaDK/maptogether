@@ -61,7 +61,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
             onPressed: () async {
               LoginHandler loginHandler = context.read<LoginHandler>();
 
-              var api = loginHandler.getOsmApi();
+              var api = loginHandler.api();
 
               if (loginHandler == null) {
                 print('OSM API er null !!! ');
