@@ -9,6 +9,7 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
+import 'package:client/screens/login_screen.dart';
 
 class PointOfInterest {
   // TODO: I think this should be moved to some model package
@@ -49,42 +50,9 @@ class _InteractiveMapState extends State<InteractiveMap> {
   Widget build(BuildContext context) {
     _mapController = context.watch<LocationHandler>().mapController;
 
-    List<Quest> backrestBenchQuests = context.watch<QuestHandler>().quests;
+    List<Quest> quests = context.watch<QuestHandler>().quests;
 
-    Future<void> _showMyDialog() async {
-      return showDialog<void>(
-        context: context,
-        barrierDismissible: false, // user must tap button!
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('You are not logged in'),
-            content: SingleChildScrollView(
-              child: ListBody(
-                children: <Widget>[
-                  Text('You must be logged in to contribute to OpenStreetMap'),
-                ],
-              ),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text('Login'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text('Close'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-
-    List<Marker> backrestQuestMarkers = backrestBenchQuests.map((quest) {
+    List<Marker> backrestQuestMarkers = quests.map((quest) {
       List<Widget> textButtons = [];
       for (int i = 0; i < quest.getPossibilities().length; i++) {
         textButtons.add(Padding(
@@ -93,18 +61,15 @@ class _InteractiveMapState extends State<InteractiveMap> {
             child: Text(quest.getPossibilities()[i]),
             onPressed: () async {
               LoginHandler loginHandler = context.read<LoginHandler>();
-              QuestHandler questFinder = context.read<QuestHandler>();
+              QuestHandler questHandler = context.read<QuestHandler>();
               LocationHandler locationHandler = context.read<LocationHandler>();
 
-              if (!loginHandler.loggedIntoOSM()) {
-                _showMyDialog();
-              } else {
-                await context
-                    .read<QuestHandler>()
-                    .answerBenchQuest(
-                        loginHandler, locationHandler, questFinder, quest, i)
+              if (!loginHandler.loggedIntoOSM())
+                  requestLogin(context, social: false);
+              else
+				  questHandler
+                    .answerBenchQuest(loginHandler, locationHandler, questHandler, quest, i)
                     .then((value) => Navigator.pop(context));
-              }
             },
           ),
         ));

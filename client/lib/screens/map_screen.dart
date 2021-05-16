@@ -18,6 +18,10 @@ import 'package:client/widgets/map_widgets/map_screen_button_widgets/button_row.
 import 'package:client/widgets/map_widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:client/widgets/map_widgets/map_screen_button_widgets/pup_up_menu.dart';
 
+
+launchSocial(BuildContext context) =>
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen()));
+    
 class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -43,12 +47,14 @@ class MapScreen extends StatelessWidget {
                     onPressed: () {
                       //If no current user, go to login screen
                       if(loginHandler.loggedIntoSocial() != true)
-                        showDialog(
-                          context: context,
-                          builder: (_) => notLoggedInSocial(context, () => loginHandler.optIn())
-                        );
+                        requestLogin(context, social: true).then((r) {
+                             print('RH RESULT');
+                             print(r);
+							if (r == true)
+    							launchSocial(context);
+                         });
                       else
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => SocialScreen()));
+                      	launchSocial(context);
                     },
                   ),
                   MapScreenButton(
