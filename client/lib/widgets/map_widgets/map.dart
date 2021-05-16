@@ -51,6 +51,39 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
     List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
 
+    Future<void> _showMyDialog() async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('You are not logged in'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text('You must be logged in to contribute to OpenStreetMap'),
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text('Login'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text('Close'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     List<Marker> backrestQuestMarkers = backrestBenchQuests.map((quest) {
       List<Widget> textButtons = [];
       for (int i = 0; i < quest.getPossibilities().length; i++) {
@@ -61,28 +94,40 @@ class _InteractiveMapState extends State<InteractiveMap> {
             onPressed: () async {
               LoginHandler loginHandler = context.read<LoginHandler>();
 
-              var api = loginHandler.api();
+              if (!loginHandler.loggedIntoOSM()) {
+                _showMyDialog();
+              } else {
+                var api = loginHandler.api();
 
-              if (loginHandler == null) {
-                print('OSM API er null !!! ');
+                int changesetId =
+                    await api.createChangeset(quest.getChangesetComment());
+
+                // add the new tag to the tag-map
+                quest.element.tags['backrest'] =
+                    quest.getPossibilities()[i].toString();
+
+                int nodeId = await api.updateNode(
+                    quest.element.id,
+                    changesetId,
+                    quest.position.latitude,
+                    quest.position.longitude,
+                    quest.element.version,
+                    quest.element.tags);
+
+                api.closeChangeset(changesetId);
+                print('Selected answer: ' +
+                    quest.getPossibilities()[i].toString());
+
+                var locationHandler = context.read<LocationHandler>();
+                var questFinder = context.read<QuestFinder>();
+                questFinder.getBenchQuests(
+                    locationHandler.mapController.bounds.west,
+                    locationHandler.mapController.bounds.south,
+                    locationHandler.mapController.bounds.east,
+                    locationHandler.mapController.bounds.north);
+
+                Navigator.pop(context);
               }
-
-              int changesetId =
-                  await api.createChangeset(quest.getChangesetComment());
-
-              // add the new tag to the tag-map
-              quest.element.tags['backrest'] = quest.getPossibilities()[i].toString();
-
-              int nodeId = await api.createNode(
-                  changesetId,
-                  quest.position.latitude,
-                  quest.position.longitude,
-                  quest.element.version,
-                  quest.element.tags);
-
-              api.closeChangeset(changesetId);
-              print(
-                  'Selected answer: ' + quest.getPossibilities()[i].toString());
             },
           ),
         ));
@@ -131,6 +176,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
                 ),
               ));
     }).toList();
+
 
     Marker currentPositionMarker = Marker(
       point: context.watch<LocationHandler>().getLocation(),
