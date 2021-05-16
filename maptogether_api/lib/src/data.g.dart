@@ -79,8 +79,8 @@ Map<String, dynamic> _$SimpleUserToJson(SimpleUser instance) =>
 
 LeaderboardEntry _$LeaderboardEntryFromJson(Map<String, dynamic> json) {
   return LeaderboardEntry(
-    user: SimpleUser.fromJson(json['user'] as Map<String, dynamic>),
     score: json['score'] as int,
+    user: SimpleUser.fromJson(json['user'] as Map<String, dynamic>),
   );
 }
 
@@ -88,17 +88,4 @@ Map<String, dynamic> _$LeaderboardEntryToJson(LeaderboardEntry instance) =>
     <String, dynamic>{
       'user': instance.user,
       'score': instance.score,
-    };
-
-Leaderboard _$LeaderboardFromJson(Map<String, dynamic> json) {
-  return Leaderboard(
-    user: (json['user'] as List<dynamic>)
-        .map((e) => LeaderboardEntry.fromJson(e as Map<String, dynamic>))
-        .toList(),
-  );
-}
-
-Map<String, dynamic> _$LeaderboardToJson(Leaderboard instance) =>
-    <String, dynamic>{
-      'user': instance.user,
     };

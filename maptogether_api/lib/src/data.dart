@@ -65,10 +65,7 @@ class SimpleUser {
   final int id;
   final String name;
 
-  SimpleUser({
-    required this.id,
-    required this.name,
-  });
+  SimpleUser({ required this.id,  required this.name,});
 
   factory SimpleUser.fromJson(Map<String, dynamic> json) => _$SimpleUserFromJson(json);
   Map<String, dynamic> toJson() => _$SimpleUserToJson(this);
@@ -79,7 +76,7 @@ class LeaderboardEntry{
   SimpleUser user;
   int score;
 
-  LeaderboardEntry({required this.user, required this.score});
+  LeaderboardEntry({required this.score, required this.user});
 
   factory LeaderboardEntry.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardEntryFromJson(json);
@@ -87,15 +84,14 @@ class LeaderboardEntry{
 
 }
 
-@JsonSerializable()
+
+//@JsonSerializable()
 class Leaderboard{
   final String type = '';
-  @JsonKey(defaultValue: null)
-  final List<LeaderboardEntry> user;
+  //@JsonKey(defaultValue: null)
+  final List<LeaderboardEntry> entries;
 
-  Leaderboard({required this.user});
-
-  factory Leaderboard.fromJson(Map<String, dynamic> json) =>
-      _$LeaderboardFromJson(json);
-  Map<String, dynamic> toJson() => _$LeaderboardToJson(this);
+  Leaderboard(this.entries);
+  factory Leaderboard.fromJson(List<dynamic> json) =>
+     Leaderboard(json.map((e) => LeaderboardEntry.fromJson(e)).toList(growable: false));
 }

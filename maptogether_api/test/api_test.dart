@@ -12,7 +12,7 @@ void main(){
     });
 
     test('Fetching Leaderboard', () async {
-      var result = (await mapTogetherApi.globalLeaderboard(api.LeaderboardType.all_time)).user;
+      var result = (await mapTogetherApi.globalLeaderboard(api.LeaderboardType.all_time)).entries;
       expect(result.length, 60);
     });
   });
