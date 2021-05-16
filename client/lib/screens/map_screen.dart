@@ -8,7 +8,7 @@ import 'package:client/location_handler.dart';
 import 'package:client/login_handler.dart';
 
 import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
-import 'package:client/quests/quest_finder.dart';
+import 'package:client/quests/quest_handler.dart';
 
 import 'package:client/screens/social_screen.dart';
 import 'package:client/screens/login_screen.dart';

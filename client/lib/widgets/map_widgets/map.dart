@@ -1,7 +1,7 @@
 import 'package:client/location_handler.dart';
 import 'package:client/login_handler.dart';
 import 'package:client/quests/quest.dart';
-import 'package:client/quests/quest_finder.dart';
+import 'package:client/quests/quest_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
