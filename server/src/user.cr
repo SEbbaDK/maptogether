@@ -18,7 +18,7 @@ class User
 		)
 	end
 
-	def to_json (json_builder json : JSON::Builder)
+	def to_json (json : JSON::Builder)
 		json.object do
 			json.field "id", @user_id
 			json.field "name", @name

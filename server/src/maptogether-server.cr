@@ -3,7 +3,7 @@ require "db"
 require "pg"
 require "json"
 require "./user.cr"
-require "./scoring.cr"
+require "./leaderboard.cr"
 require "./queries.cr"
 require "./achievement.cr"
 require "./contribution.cr"
@@ -14,20 +14,6 @@ module MapTogether::Server
 	module Endpoints
 		extend self
 		address = "postgres://maptogether:maptogether@localhost:5432/maptogether?retry_attempts=100"
-
-		def leaderboard_to_json(json_builder json : JSON::Builder, rows)
-			json.array do
-				rows.each do
-					Scoring.new(
-						user: User.new(
-							user_id: rows.read(Int64),
-							name: rows.read(String)
-						),
-						score: rows.read(Int64)
-					).to_json(json)
-				end
-			end
-		end
 
 		def try_open_connection(&block)
 			begin
@@ -108,7 +94,7 @@ module MapTogether::Server
 			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::GLOBAL_ALL_TIME do |rows|
-						Endpoints.leaderboard_to_json(json, rows)
+    					Leaderboard.new(rows).to_json json
 					end
 				end
 			end
@@ -121,7 +107,7 @@ module MapTogether::Server
 			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::GLOBAL_INTERVAL, Time.utc.at_beginning_of_month, Time.utc.at_end_of_month do |rows|
-						Endpoints.leaderboard_to_json(json, rows)
+    					Leaderboard.new(rows).to_json json
 					end
 				end
 			end
@@ -134,7 +120,7 @@ module MapTogether::Server
 			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::GLOBAL_INTERVAL, Time.utc.at_beginning_of_week, Time.utc.at_end_of_week do |rows|
-						Endpoints.leaderboard_to_json(json, rows)
+    					Leaderboard.new(rows).to_json json
 					end
 				end
 			end
