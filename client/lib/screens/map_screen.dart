@@ -48,8 +48,6 @@ class MapScreen extends StatelessWidget {
                       //If no current user, go to login screen
                       if(loginHandler.loggedIntoSocial() != true)
                         requestLogin(context, social: true).then((r) {
-                             print('RH RESULT');
-                             print(r);
 							if (r == true)
     							launchSocial(context);
                          });
