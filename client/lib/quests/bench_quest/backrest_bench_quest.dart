@@ -6,8 +6,6 @@ class BackrestBenchQuest extends Quest {
 
   BackrestBenchQuest(LatLng position, osm.Element element) : super(position, element);
 
-  void appyAnswer(BenchBackrestAnswer) {}
-
   @override
   List<String> getPossibilities() {
     return ['yes', 'no'];

@@ -76,7 +76,7 @@ class MapScreen extends StatelessWidget {
                   MapScreenButton(
                       child: Icon(Icons.wifi_protected_setup),
                       onPressed: () {
-                        var questFinder = context.read<QuestFinder>();
+                        var questFinder = context.read<QuestHandler>();
                         questFinder.getBenchQuests(
                             locationHandler.mapController.bounds.west,
                             locationHandler.mapController.bounds.south,

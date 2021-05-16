@@ -1,10 +1,12 @@
+import 'package:client/location_handler.dart';
+import 'package:client/login_handler.dart';
 import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
 import 'package:client/quests/quest.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:osm_api/osm_api.dart' as osm;
 
-class QuestFinder extends ChangeNotifier {
+class QuestHandler extends ChangeNotifier {
   osm.Api api;
 
   List<Quest> quests = [];
@@ -43,5 +45,36 @@ class QuestFinder extends ChangeNotifier {
     quests = benchQuests;
 
     notifyListeners();
+  }
+
+  Future<void> answerBenchQuest(
+    LoginHandler loginHandler,
+    LocationHandler locationHandler,
+    QuestHandler questFinder,
+    BackrestBenchQuest quest, int possibilityNumber,
+  ) async {
+    var api = loginHandler.api();
+
+    int changeSetId = await api.createChangeset(quest.getChangesetComment());
+
+    // add the new tag to the tag-map
+    quest.element.tags['backrest'] = quest.getPossibilities()[possibilityNumber].toString();
+
+    int nodeId = await api.updateNode(
+        quest.element.id,
+        changeSetId,
+        quest.position.latitude,
+        quest.position.longitude,
+        quest.element.version,
+        quest.element.tags);
+
+    api.closeChangeset(changeSetId);
+    print('Selected answer: ' + quest.getPossibilities()[possibilityNumber].toString());
+
+    questFinder.getBenchQuests(
+        locationHandler.mapController.bounds.west,
+        locationHandler.mapController.bounds.south,
+        locationHandler.mapController.bounds.east,
+        locationHandler.mapController.bounds.north);
   }
 }

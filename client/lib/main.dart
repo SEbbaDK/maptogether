@@ -12,7 +12,7 @@ void main() => runApp(
         ChangeNotifierProvider(create: (_) => DummyDatabase()),
         ChangeNotifierProvider(create: (_) => LoginHandler()),
         ChangeNotifierProvider(create: (_) => LocationHandler()),
-        ChangeNotifierProvider(create: (_) => QuestFinder()),
+        ChangeNotifierProvider(create: (_) => QuestHandler()),
       ], child: MyApp()),
     );
 

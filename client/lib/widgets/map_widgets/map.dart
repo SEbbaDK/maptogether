@@ -49,7 +49,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
   Widget build(BuildContext context) {
     _mapController = context.watch<LocationHandler>().mapController;
 
-    List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
+    List<Quest> backrestBenchQuests = context.watch<QuestHandler>().quests;
 
     Future<void> _showMyDialog() async {
       return showDialog<void>(
@@ -93,40 +93,17 @@ class _InteractiveMapState extends State<InteractiveMap> {
             child: Text(quest.getPossibilities()[i]),
             onPressed: () async {
               LoginHandler loginHandler = context.read<LoginHandler>();
+              QuestHandler questFinder = context.read<QuestHandler>();
+              LocationHandler locationHandler = context.read<LocationHandler>();
 
               if (!loginHandler.loggedIntoOSM()) {
                 _showMyDialog();
               } else {
-                var api = loginHandler.api();
-
-                int changesetId =
-                    await api.createChangeset(quest.getChangesetComment());
-
-                // add the new tag to the tag-map
-                quest.element.tags['backrest'] =
-                    quest.getPossibilities()[i].toString();
-
-                int nodeId = await api.updateNode(
-                    quest.element.id,
-                    changesetId,
-                    quest.position.latitude,
-                    quest.position.longitude,
-                    quest.element.version,
-                    quest.element.tags);
-
-                api.closeChangeset(changesetId);
-                print('Selected answer: ' +
-                    quest.getPossibilities()[i].toString());
-
-                var locationHandler = context.read<LocationHandler>();
-                var questFinder = context.read<QuestFinder>();
-                questFinder.getBenchQuests(
-                    locationHandler.mapController.bounds.west,
-                    locationHandler.mapController.bounds.south,
-                    locationHandler.mapController.bounds.east,
-                    locationHandler.mapController.bounds.north);
-
-                Navigator.pop(context);
+                await context
+                    .read<QuestHandler>()
+                    .answerBenchQuest(
+                        loginHandler, locationHandler, questFinder, quest, i)
+                    .then((value) => Navigator.pop(context));
               }
             },
           ),
@@ -176,7 +153,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
                 ),
               ));
     }).toList();
-
 
     Marker currentPositionMarker = Marker(
       point: context.watch<LocationHandler>().getLocation(),
