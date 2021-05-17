@@ -9,7 +9,7 @@ let
   version = builtins.head (builtins.match ".*version: ([0-9.]+).*" pubspec);
 in
 mkDerivation {
-  name = "maptogether-dart_api";
+  pname = "maptogether-api";
   inherit version;
   buildInputs = [ dart ];
 }
