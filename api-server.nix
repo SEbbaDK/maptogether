@@ -1,4 +1,5 @@
 { pkgs ? import ./nixpkgs.nix { }
+, port ? 3000
 , ...
 }:
 let
@@ -17,7 +18,7 @@ let
 in
 {
   networking.hostName = "maptogether-api-server";
-  networking.firewall.allowedTCPPorts = [ 8080 ];
+  networking.firewall.allowedTCPPorts = [ port ];
     
   services.postgresql = {
     enable = true;
@@ -53,7 +54,7 @@ in
   systemd.services.maptogether-server = {
     description = "MapTogether Server";
     serviceConfig = {
-      ExecStart = "${maptogether-server}/bin/maptogether-server";
+      ExecStart = "${maptogether-server}/bin/maptogether-server ${builtins.toString port}";
       User = "maptogether";
       Group = "maptogether";
     };

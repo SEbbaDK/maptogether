@@ -2,12 +2,12 @@ require "kemal"
 require "db"
 require "pg"
 require "json"
+require "oauth"
 require "./user.cr"
 require "./leaderboard.cr"
 require "./queries.cr"
 require "./achievement.cr"
 require "./contribution.cr"
-
 
 module MapTogether::Server
 
@@ -23,10 +23,43 @@ module MapTogether::Server
 			end
 		end
 		
+		macro http_raise(status, message)
+			halt env, status_code: {{status}}, response: {{message}}
+		end
+		
+		put "/user/:id" do |env|
+    		id = env.params.url["id"].to_i64
+    		
+    		vals = env.request.headers["Authorization"].split(" ")
+    		http_raise 400, "Both access and client keypairs are required" if vals.size < 5
+    		atype, key, secret, ckey, csecret = vals
+    		http_raise 400, "Authentication type needs to be 'Basic'" if atype != "Basic"
+    		
+    		client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
+    		OAuth.authenticate client, key, secret, ckey, csecret
+    		
+    		response = client.get("/api/0.6/user/details.json")
+    		http_raise 401, "Authentication failed for OSM" if response.status_code == 401
+    		http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
+    		json = JSON.parse(response.body)
+    		osm_id = json["user"]["id"].as_i64
+    		name = json["user"]["display_name"]
+    		
+    		http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
+    		
+    		try_open_connection do |db|
+        		db.query Queries::USER_UPSERT, id, name, key
+    		end
+    		
+    		id
+		end
+		
 		# Request data about a specific user (id, name, score, achievements and followers)
 		get "/user/:id" do |env|
 			user = User.new
 			id = env.params.url["id"]
+			#access = env.request.headers["Authorization"]
+			#puts "Access: #{access}"
 			
 			try_open_connection do |db|
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
@@ -145,20 +178,20 @@ module MapTogether::Server
 
 		# Test endpoint
 		get "/" do |env|
-			env.response.content_type = "application/json"
+			env.response.content_type = "text/html"
 			"hi"
 		end
 
 		error 500 do |env, exc|
 			"Something went wrong, \"#{exc.class}\" was thrown with message: \"#{exc.message}\""
-		end
+	end
 	
 		error 404 do
 			"404 Path not defined"
 		end
 	end
 
-	port = (ENV["KEMAL_PORT"]? || 8080).to_i32
+    port = (ARGV[0]? || 3000).to_i32
 	Kemal.run port
 end
 
