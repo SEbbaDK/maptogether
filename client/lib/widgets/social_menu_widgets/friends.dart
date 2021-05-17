@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'User.dart';
 import 'package:client/database.dart';
 import 'package:provider/provider.dart';
+import 'package:maptogether_api/maptogether_api.dart';
 
 //TODO: move friends list to a seperate file or server
 class Friends extends StatelessWidget {
