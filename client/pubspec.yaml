@@ -24,6 +24,9 @@ dependencies:
   osm_api:
     path: ../osm_api
 
+  maptogether_api:
+    path: ../maptogether_api
+
   flutter:
     sdk: flutter
 
