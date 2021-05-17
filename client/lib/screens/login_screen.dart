@@ -13,7 +13,7 @@ class LoginWebView extends StatelessWidget{
 
   final String url;
   void Function(BuildContext) onVerified;
-  LoginWebView(this.url, this.onVerified);
+  LoginWebView(this.url);
     
   Completer<WebViewController> webViewController = Completer<WebViewController>();
 
@@ -41,7 +41,7 @@ class LoginWebView extends StatelessWidget{
 							loginHandler.authorize(verifier).then((_) {
 								onVerified(context);
 							});
-                            Navigator.pop(context);
+                            Navigator.of(context).pop(true);
                         }
                     },
                 ),
@@ -52,37 +52,53 @@ class LoginWebView extends StatelessWidget{
   }
 }
 
-  AlertDialog notLoggedInSocial(BuildContext context, void Function() optin){
-    return AlertDialog(
-      title: Text('You must be logged in to access social features'),
+  MaterialPageRoute<bool> loginPage() =>
+    MaterialPageRoute<bool>(
+        builder: (context) => FutureBuilder<String>(
+            future: context.watch<LoginHandler>().loginUrl(),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) =>
+            	(snapshot.hasData)
+            		? LoginWebView(snapshot.data)
+            		: (snapshot.hasError)
+            			? Text('Error: ${snapshot.error}')
+                    	: CircularProgressIndicator(semanticsLabel: 'Getting auth url')
+        )
+    );
+
+  Future<bool> requestLogin(BuildContext context, {bool social}) =>
+	request(
+    	context,
+    	title: social ? 'You must login to access social features' : 'You must login to upload changes',
+    	body: social ? 'The social features are optional' : 'An OSM login is necessary to upload data',
+    	yes: 'Login',
+    	no: 'No Thanks',
+	).then((answer) async {
+        if (answer == false)
+            return false;
+
+        return await Navigator.push<bool>(context, loginPage());
+	});
+
+  Future<bool> request(BuildContext context, { String title, String body, String yes, String no }) {
+    return showDialog(
+        context: context,
+        builder: (context) =>
+    AlertDialog(
+      title: Text(title),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Login to access the social features'),
+          Text(body),
         ],
       ),
       actions: <Widget>[
         Container(
             color: Colors.lightGreen,
             child: TextButton(
-              onPressed: (){
-                optin();
-                Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(
-                    builder: (context) => FutureBuilder<String>(
-                        future: context.watch<LoginHandler>().loginUrl(),
-                        builder: (BuildContext context, AsyncSnapshot<String> snapshot) =>
-                        	(snapshot.hasData)
-                        		? LoginWebView(snapshot.data, (c) { Navigator.push(c, MaterialPageRoute(builder: (context) => SocialScreen())); })
-                        		: (snapshot.hasError)
-                        			? Text('Error: ${snapshot.error}')
-                                	: CircularProgressIndicator(semanticsLabel: 'Getting auth url')
-                    ))
-                );
-              },
+              onPressed: () => Navigator.of(context).pop(true),
               child: Text(
-                'Login',
+                yes,
                 style: TextStyle(fontSize: 14.0, color: Colors.white),
               ),
             )
@@ -90,16 +106,15 @@ class LoginWebView extends StatelessWidget{
         Container(
             color: Colors.lightGreen,
             child: TextButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
+              onPressed: () => Navigator.of(context).pop(false),
               child: Text(
-                'No Thanks',
+                no,
                 style: TextStyle(fontSize: 14.0, color: Colors.white),
               ),
             )
         ),
       ],
+    )
     );
   }
 

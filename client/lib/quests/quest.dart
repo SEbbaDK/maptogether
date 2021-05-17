@@ -8,7 +8,9 @@ abstract class Quest {
 
   Quest(this.position, this.element);
 
-  getQuestion();
+  String getChangesetComment();
+
+  String getQuestion();
 
   List<String> getPossibilities();
 }

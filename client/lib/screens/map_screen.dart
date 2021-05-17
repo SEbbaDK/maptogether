@@ -8,7 +8,7 @@ import 'package:client/location_handler.dart';
 import 'package:client/login_handler.dart';
 
 import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
-import 'package:client/quests/quest_finder.dart';
+import 'package:client/quests/quest_handler.dart';
 
 import 'package:client/screens/social_screen.dart';
 import 'package:client/screens/login_screen.dart';
@@ -18,6 +18,10 @@ import 'package:client/widgets/map_widgets/map_screen_button_widgets/button_row.
 import 'package:client/widgets/map_widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:client/widgets/map_widgets/map_screen_button_widgets/pup_up_menu.dart';
 
+
+launchSocial(BuildContext context) =>
+    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen()));
+    
 class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -43,12 +47,12 @@ class MapScreen extends StatelessWidget {
                     onPressed: () {
                       //If no current user, go to login screen
                       if(loginHandler.loggedIntoSocial() != true)
-                        showDialog(
-                          context: context,
-                          builder: (_) => notLoggedInSocial(context, () => loginHandler.optIn())
-                        );
+                        requestLogin(context, social: true).then((r) {
+							if (r == true)
+    							launchSocial(context);
+                         });
                       else
-                        Navigator.push(context,MaterialPageRoute(builder: (context) => SocialScreen()));
+                      	launchSocial(context);
                     },
                   ),
                   MapScreenButton(
@@ -76,7 +80,7 @@ class MapScreen extends StatelessWidget {
                   MapScreenButton(
                       child: Icon(Icons.wifi_protected_setup),
                       onPressed: () {
-                        var questFinder = context.read<QuestFinder>();
+                        var questFinder = context.read<QuestHandler>();
                         questFinder.getBenchQuests(
                             locationHandler.mapController.bounds.west,
                             locationHandler.mapController.bounds.south,

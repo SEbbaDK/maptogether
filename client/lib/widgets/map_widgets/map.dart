@@ -1,6 +1,7 @@
 import 'package:client/location_handler.dart';
+import 'package:client/login_handler.dart';
 import 'package:client/quests/quest.dart';
-import 'package:client/quests/quest_finder.dart';
+import 'package:client/quests/quest_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
+import 'package:client/screens/login_screen.dart';
 
 class PointOfInterest {
   // TODO: I think this should be moved to some model package
@@ -46,20 +48,28 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
   @override
   Widget build(BuildContext context) {
-
     _mapController = context.watch<LocationHandler>().mapController;
 
-    List<Quest> backrestBenchQuests = context.watch<QuestFinder>().quests;
+    List<Quest> quests = context.watch<QuestHandler>().quests;
 
-    List<Marker> backrestQuestMarkers = backrestBenchQuests.map((quest) {
+    List<Marker> backrestQuestMarkers = quests.map((quest) {
       List<Widget> textButtons = [];
       for (int i = 0; i < quest.getPossibilities().length; i++) {
         textButtons.add(Padding(
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             child: Text(quest.getPossibilities()[i]),
-            onPressed: () {
-              print('Selected answer: ' + quest.getPossibilities()[i].toString());
+            onPressed: () async {
+              LoginHandler loginHandler = context.read<LoginHandler>();
+              QuestHandler questHandler = context.read<QuestHandler>();
+              LocationHandler locationHandler = context.read<LocationHandler>();
+
+              if (!loginHandler.loggedIntoOSM())
+                  requestLogin(context, social: false);
+              else
+				  questHandler
+                    .answerBenchQuest(loginHandler, locationHandler, questHandler, quest, i)
+                    .then((value) => Navigator.pop(context));
             },
           ),
         ));
@@ -108,7 +118,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
                 ),
               ));
     }).toList();
-
 
     Marker currentPositionMarker = Marker(
       point: context.watch<LocationHandler>().getLocation(),

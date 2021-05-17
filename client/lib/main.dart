@@ -1,5 +1,5 @@
 import 'package:client/location_handler.dart';
-import 'package:client/quests/quest_finder.dart';
+import 'package:client/quests/quest_handler.dart';
 import 'package:client/screens/map_screen.dart';
 import 'package:client/login_handler.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ void main() => runApp(
         ChangeNotifierProvider(create: (_) => DummyDatabase()),
         ChangeNotifierProvider(create: (_) => LoginHandler()),
         ChangeNotifierProvider(create: (_) => LocationHandler()),
-        ChangeNotifierProvider(create: (_) => QuestFinder()),
+        ChangeNotifierProvider(create: (_) => QuestHandler()),
       ], child: MyApp()),
     );
 

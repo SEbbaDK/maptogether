@@ -1,5 +1,6 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:oauth1/oauth1.dart';
 
@@ -9,8 +10,11 @@ class ApiEnv {
   final String _baseUrl;
 
   String get requestUrl => _baseUrl + '/oauth/request_token';
+
   String get authorizeUrl => _baseUrl + '/oauth/authorize';
+
   String get accessUrl => _baseUrl + '/oauth/access_token';
+
   String get apiUrl => _baseUrl + '/api/0.6/';
 
   ApiEnv.production() : _baseUrl = 'https://www.openstreetmap.org';
@@ -50,6 +54,9 @@ class Auth {
 
   static http.BaseClient getUnauthorizedClient() =>
       http.Client() as http.BaseClient;
+
+  Credentials createCredentials(String key, String secret) =>
+      Credentials(key, secret);
 }
 
 class Api {
@@ -118,12 +125,35 @@ class Api {
   Future<data.MapData> relation(int id) =>
       _get('relation/$id').then(_checkRequest).then(_decodeMapData);
 
+  String wayXmlData(int changeset, Map<String, String> tags, List<int> nodes) {
+    return '''
+        		<osm>
+        			<way changeset="$changeset">
+        				${stringifyTags(tags)}
+        				${stringifyNodes(nodes)}
+        			</way>
+        		</osm>
+    		''';
+  }
+
+  String relationXmlData(
+      int changeset, Map<String, String> tags, List<data.Member> members) {
+    return '''
+        		<osm>
+        			<relation changeset="${changeset}">
+        				${stringifyTags(tags)}
+        				${stringifyMembers(members)}
+        			</relation>
+        		</osm>
+    		''';
+  }
+
   /// Create a new node and return its id
-  Future<int> createNode(
-          int changeset, double lat, double lon, Map<String, String> tags) =>
+  Future<int> createNode(int changeset, double lat, double lon, int version,
+          Map<String, String> tags) =>
       _put('node/create', '''
 			<osm>
-				<node lat="${lat}" lon="${lon}" changeset="${changeset}">
+				<node changeset="$changeset" lat="$lat" lon="$lon" version="$version">
 					${stringifyTags(tags)}
 				</node>
 			</osm>
@@ -134,24 +164,46 @@ class Api {
           int changeset, Map<String, String> tags, List<int> nodes) =>
       _put('way/create', '''
         		<osm>
-        			<way changeset="${changeset}">
+        			<way changeset="$changeset">
         				${stringifyTags(tags)}
         				${stringifyNodes(nodes)}
         			</way>
         		</osm>
-    		''').then(_checkRequest).then(_decodeInt);
+    		''')
+          .then(_checkRequest)
+          .then(_decodeInt);
 
   /// Create a new relation and return its id
   Future<int> createRelation(
           int changeset, Map<String, String> tags, List<data.Member> members) =>
-      _put('relation/create', '''
-        		<osm>
-        			<relation changeset="${changeset}">
-        				${stringifyTags(tags)}
-        				${stringifyMembers(members)}
-        			</relation>
-        		</osm>
+      _put('relation/create', relationXmlData(changeset, tags, members))
+          .then(_checkRequest)
+          .then(_decodeInt);
+
+  /// Update a node
+  Future<int> updateNode(int id, int changeset, double lat, double lon,
+          int version, Map<String, String> tags) =>
+      _put('node/$id', '''
+			<osm>
+				<node changeset="$changeset" id="$id" lat="$lat" lon="$lon" version="$version">
+					${stringifyTags(tags)}
+				</node>
+			</osm>
     		''').then(_checkRequest).then(_decodeInt);
+
+  /// Update a way
+  Future<int> updateWay(
+          int id, int changeset, Map<String, String> tags, List<int> nodes) =>
+      _put('way/$id', wayXmlData(changeset, tags, nodes))
+          .then(_checkRequest)
+          .then(_decodeInt);
+
+  /// Update a relation
+  Future<int> updateRelation(int id, int changeset, Map<String, String> tags,
+          List<data.Member> members) =>
+      _put('relation/$id', relationXmlData(changeset, tags, members))
+          .then(_checkRequest)
+          .then(_decodeInt);
 
   String stringifyTags(Map<String, String> map) =>
       map.entries.map((e) => '<tag k="${e.key}" v="${e.value}"/>').join('\n');
