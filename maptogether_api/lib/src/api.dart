@@ -12,7 +12,7 @@ String stringify(LeaderboardType type) {
     case LeaderboardType.all_time:
       return "all_time";
   }
-  throw 'Missing case';
+  throw 'Leaderboard type does not exsist';
 }
 
 class InvalidRegionException implements Exception {
