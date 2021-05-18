@@ -8,17 +8,17 @@ class User
 	property followers : Array(User)
 	property following : Array(User)
 
-	def initialize (
-			@user_id = nil,
-			@name = nil,
-			@score = nil,
-			@achievements = [] of Achievement,
-			@followers = [] of User,
-			@following = [] of User
-		)
+	def initialize(
+		@user_id = nil,
+		@name = nil,
+		@score = nil,
+		@achievements = [] of Achievement,
+		@followers = [] of User,
+		@following = [] of User
+	)
 	end
 
-	def to_json (json : JSON::Builder)
+	def to_json(json : JSON::Builder)
 		json.object do
 			json.field "id", @user_id
 			json.field "name", @name

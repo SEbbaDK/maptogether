@@ -212,6 +212,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.11.4"
+  maptogether_api:
+    dependency: "direct main"
+    description:
+      path: "../maptogether_api"
+      relative: true
+    source: path
+    version: "0.2.0"
   matcher:
     dependency: transitive
     description:
