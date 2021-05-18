@@ -53,7 +53,7 @@ class QuestHandler extends ChangeNotifier {
     QuestHandler questFinder,
     BackrestBenchQuest quest, int possibilityNumber,
   ) async {
-    var api = loginHandler.api();
+    var api = loginHandler.osmApi();
 
     int changeSetId = await api.createChangeset(quest.getChangesetComment());
 

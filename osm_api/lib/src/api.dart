@@ -90,7 +90,11 @@ class Api {
           throw Exception('Request should return int but it returned »$s«'));
 
   /// Get the details of the user whose oauth token is logged in
-  Future<String> userDetails() => _get('user/details').then(_checkRequest);
+  Future<String> userDetails() =>
+  	_get('user/details').then(_checkRequest);
+
+  Future<int> userId() =>
+  	_get('user/details').then(_checkRequest).then((b) => jsonDecode(b)["user"]["id"]);
 
   /// Take a bounding box and return all the elements inside it
   Future<data.MapData> mapByBox(
