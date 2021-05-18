@@ -7,7 +7,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 class LoginWebView extends StatelessWidget {
   final String url;
-  void Function(BuildContext) onVerified;
 
   LoginWebView(this.url);
 
@@ -34,9 +33,9 @@ class LoginWebView extends StatelessWidget {
                   final verifier = u.split('verifier=')[1];
                   print('Verifier: $verifier');
                   loginHandler.authorize(verifier).then((_) {
-                    onVerified(context);
+                    Navigator.of(context).pop(true);
                   });
-                  Navigator.of(context).pop(true);
+
                 }
               },
             ),
