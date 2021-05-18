@@ -18,11 +18,11 @@ in
   inherit version;
 
   buildInputs = [ openssl openssl.out ];
-  src = pkgs.runCommand "source" {} ''
-	mkdir $out
-	ln -s ${./shard.yml} $out/shard.yml
-	ln -s ${./src} $out/src
-	ln -s ${./spec} $out/spec
+  src = pkgs.runCommand "source" { } ''
+    mkdir $out
+    ln -s ${./shard.yml} $out/shard.yml
+    ln -s ${./src} $out/src
+    ln -s ${./spec} $out/spec
   '';
 
   format = "shards";

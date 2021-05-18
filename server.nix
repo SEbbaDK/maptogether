@@ -16,8 +16,8 @@ in
       locations = {
         "/".return = "200 'Welcome to MapTogether\n'";
         "/login".extraConfig = ''
-        	default_type text/html;
-			return 200 'You should now be logged in. The browser should close shortly.';
+          default_type text/html;
+          return 200 'You should now be logged in. The browser should close shortly.';
         '';
         "/api".extraConfig = ''
           rewrite ^/api/(.*) /$1 break;

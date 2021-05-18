@@ -1,7 +1,6 @@
-{
-    pkgs ? import ../nixpkgs.nix { config.android_sdk.accept_license = true; },
-    includeAndroid ? true,
-    ...
+{ pkgs ? import ../nixpkgs.nix { config.android_sdk.accept_license = true; }
+, includeAndroid ? true
+, ...
 }:
 let
   btv = "29.0.2";

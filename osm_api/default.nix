@@ -1,8 +1,7 @@
-{
-  pkgs ? import ../nixpkgs.nix {},
-  mkDerivation ? pkgs.stdenv.mkDerivation,
-  dart ? pkgs.dart,
-  ...
+{ pkgs ? import ../nixpkgs.nix { }
+, mkDerivation ? pkgs.stdenv.mkDerivation
+, dart ? pkgs.dart
+, ...
 }:
 let
   pubspec = builtins.readFile ./pubspec.yaml;

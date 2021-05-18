@@ -19,7 +19,7 @@ in
 {
   networking.hostName = "maptogether-api-server";
   networking.firewall.allowedTCPPorts = [ port ];
-    
+
   services.postgresql = {
     enable = true;
     # ensureUsers = [{
@@ -65,8 +65,8 @@ in
 
   users.groups.maptogether.gid = 1005;
   users.users.maptogether = {
-      isSystemUser = true;
-      extraGroups = [ "maptogether" ];
+    isSystemUser = true;
+    extraGroups = [ "maptogether" ];
   };
 
   environment.systemPackages = with pkgs; [
