@@ -87,6 +87,6 @@ void main() {
         messages:
             Message(received: {"count": 0, "unread": 0}, sent: {"count": 0}));
 
-      test('has lat', () => expect(user.id, 11321));
+    test('has lat', () => expect(user.id, 11321));
   });
 }

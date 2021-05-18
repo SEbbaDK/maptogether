@@ -9,7 +9,7 @@ let
   version = builtins.head (builtins.match ".*version: ([0-9.]+).*" pubspec);
 in
 mkDerivation {
-  name = "maptogether-osmapi";
+  pname = "maptogether-osmapi";
   inherit version;
   buildInputs = [ dart ];
 }
