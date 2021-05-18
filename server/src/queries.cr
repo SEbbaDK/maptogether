@@ -1,7 +1,7 @@
 module Queries
 	extend self
-	
-	USER_UPSERT = 
+
+	USER_UPSERT =
 		"INSERT INTO users
 		VALUES ($1, $2, $3)
 		ON CONFLICT(userid) DO

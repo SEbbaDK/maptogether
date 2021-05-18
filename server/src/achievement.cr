@@ -2,7 +2,7 @@ class Achievement
 	property name : String
 	property description : String
 
-	def initialize (@name, @description)
+	def initialize(@name, @description)
 	end
 
 	def to_json(json_builder json : JSON::Builder)
