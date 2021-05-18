@@ -77,15 +77,3 @@ class LeaderBoardView extends StatelessWidget{
     );
   }
 }
-
-Future<List<Leaderboard>> getLeaderboards(MapTogetherApi api) async{
-  //This should call to get all the leaderboards in the future
-  await api.globalLeaderboard(LeaderboardType.all_time).then((l) {
-    for(var e in l.entries)
-      print(e.user.name);
-    List<Leaderboard> lst = [l];
-    return lst;
-
-  });
-}
-

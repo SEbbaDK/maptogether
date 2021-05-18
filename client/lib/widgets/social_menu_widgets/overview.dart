@@ -15,7 +15,6 @@ class Overview extends StatefulWidget {
 class _OverviewView extends State<Overview> with TickerProviderStateMixin{
   //We get All, Weekly and Daily from the index of the tabcontroller, changes depending on which leaderboards we are interested in, 0 = daily, 1 = weekly, 2 = all
   TabController _nestedTabController;
-  final api = MapTogetherApi();
 
   @override
   void initState(){
@@ -65,9 +64,9 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
           child: TabBarView(
             controller: _nestedTabController,
             children: [
-              leaderBoardWidget("1"),
-              leaderBoardWidget("2"),
-              leaderBoardWidget("3"),
+              leaderBoardWidget(LeaderboardType.weekly),
+              leaderBoardWidget(LeaderboardType.montly),
+              leaderBoardWidget(LeaderboardType.all_time),
             ])
         )
       ],
@@ -75,29 +74,53 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
   }
 
 
-  Widget leaderBoardWidget(String type) =>  Expanded(
-          child: ListView.builder(
-              itemCount: context.watch<DummyDatabase>().leaderboards.length,
-              itemBuilder: (context, index){
-                return Card(
-                    child: ListTile(
-                      title: Text("#"
-                          + ((context.watch<DummyDatabase>().leaderboards[index].users.indexOf(context.watch<DummyDatabase>().currentUser)+1).toString())
-                          + "/"
-                          + (context.watch<DummyDatabase>().leaderboards[index].users.length).toString()),
-                      leading: Text(context.watch<DummyDatabase>().leaderboards[index].name),
-                      onTap: (){
-                        Navigator.push(context,
-                            MaterialPageRoute(
-                              builder: (context) => LeaderBoardView(leaderboardIndex: index),));
-                      },
+  Widget leaderBoardWidget(LeaderboardType type) =>
+        FutureBuilder(
+          future: getLeaderboards(),
+          builder: (BuildContext context, AsyncSnapshot<List<Leaderboard>> snapshot) {
+            if (snapshot.hasData) {
+              return ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                        child: ListTile(
+                          title: Text("#"
+                              + ((snapshot.data[index].entries.indexWhere((element) => element.user.name == "Peer") + 1).toString())
+                              + "/"
+                              + (snapshot.data[index].entries.length).toString()),
+                          leading: Text("World"), //TODO: API should let us retrieve a leaderboard name
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      LeaderBoardView(
+                                          leaderboardIndex: index),));
+                          },
+                        )
+                    );
+                  }
+              );
+            }
 
-                    )
-                  );
-                }
-            )
+            else {
+              return SizedBox(
+                child: CircularProgressIndicator(),
+                width: 60,
+                height: 60,
+              );
+            }
+          }
         );
 }
+
+Future<List<Leaderboard>> getLeaderboards() async{
+  //This should call to get all the leaderboards in the future
+  final api = MapTogetherApi();
+  var l = await api.globalLeaderboard(LeaderboardType.all_time);
+  List<Leaderboard> lst = [l];
+  return lst;
+}
+
 
 
 

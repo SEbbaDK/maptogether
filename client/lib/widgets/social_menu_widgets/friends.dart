@@ -14,23 +14,21 @@ class Friends extends StatelessWidget {
     final api = MapTogetherApi();
 
     return Container(
-      margin: EdgeInsets.all(40.0),
       child: Column(
         children: <Widget>[
-          Expanded(flex: 1, child: Text("Following")),
           FutureBuilder<Leaderboard>(
             future: api.globalLeaderboard(LeaderboardType.all_time),
             builder: (BuildContext context, AsyncSnapshot<Leaderboard> snapshot) {
                 return Expanded(
-                    flex: 7,
-                    child: ListView.builder(
+                    flex: 14,
+                    child: ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) => const Divider(thickness: 2, height: 2),
                         itemCount: context
                             .watch<DummyDatabase>()
                             .following
                             .length,
                         itemBuilder: (context, index) {
-                          return Card(
-                            child: ListTile(
+                          return ListTile(
                               onLongPress: () {
                                 showModalBottomSheet <void>(
                                     context: context,
@@ -73,17 +71,16 @@ class Friends extends StatelessWidget {
                                     .watch<DummyDatabase>()
                                     .following[index].pfp}'),
                               ),
-                            ),
-                          );
+                            );
                         }
                     )
                 );
               }
       ),
           Expanded(
-            flex: 1,
+            flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10.0),
               child: Container(
                 color: Colors.lightGreen,
                 child: TextButton(

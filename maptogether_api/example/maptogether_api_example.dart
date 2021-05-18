@@ -10,9 +10,8 @@ void main() {
   api.globalLeaderboard(LeaderboardType.all_time).then(print);
 
   api.globalLeaderboard(LeaderboardType.all_time).then((l) {
-    for(var e in l.entries)
-      print(e.user.name);
-    print(l);
+    print(l.type);
+
   });
 
 }
