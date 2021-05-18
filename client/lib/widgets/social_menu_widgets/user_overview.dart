@@ -7,7 +7,7 @@ import 'Leaderboard.dart';
 class UserOverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    for(LeaderBoard l in context.watch<DummyDatabase>().leaderboards) {
+    for(LeaderBoardTest l in context.watch<DummyDatabase>().leaderboards) {
       l.users.sort((a, b) => b.total.compareTo(a.total));
     }
     return Container(

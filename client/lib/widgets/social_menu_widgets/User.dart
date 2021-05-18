@@ -1,4 +1,4 @@
-class User {
+class UserTest {
   String name; //name of user
   int total;
   int weekly;
@@ -9,5 +9,5 @@ class User {
   //weekly/daily score ved bare at tage ting i et specifikt interval
 
 
-  User(this.name, this.total, this.weekly, this.daily, this.pfp, this.nationality);
+  UserTest(this.name, this.total, this.weekly, this.daily, this.pfp, this.nationality);
 }

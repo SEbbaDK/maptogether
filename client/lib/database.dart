@@ -9,24 +9,24 @@ class DummyDatabase with ChangeNotifier{
 
   String loginURL = "";
   String currentUserName;
-  User currentUser;
+  UserTest currentUser;
 
-  List<User> globalUsers;
-  List<LeaderBoard> leaderboards;
+  List<UserTest> globalUsers;
+  List<LeaderBoardTest> leaderboards;
   List<String> followingNames;
-  List<User> following;
+  List<UserTest> following;
 
   DummyDatabase() {
     currentUserName = "Simon";
 
   //This is the list of all users to ever use the app, it makes up the global leaderboard.
     globalUsers = [
-      User("Thomas", 40, 25, 15, "kid.png", "UK"),
-      User("Sebba", 250, 150, 55, "clean.png", "DK"),
-      User("Simon", 25, 15, 5, "business.png", "DK"),
-      User("Phillip", 55, 35, 15, "arthas.png", "DK"),
-      User("Hartvig", 10, 10, 0, "anime.png", "JP"),
-      User("Fjeldsø", 20, 20, 10, "wolf.png", "DK"),
+      UserTest("Thomas", 40, 25, 15, "kid.png", "UK"),
+      UserTest("Sebba", 250, 150, 55, "clean.png", "DK"),
+      UserTest("Simon", 25, 15, 5, "business.png", "DK"),
+      UserTest("Phillip", 55, 35, 15, "arthas.png", "DK"),
+      UserTest("Hartvig", 10, 10, 0, "anime.png", "JP"),
+      UserTest("Fjeldsø", 20, 20, 10, "wolf.png", "DK"),
     ];
 
     followingNames = [
@@ -42,16 +42,16 @@ class DummyDatabase with ChangeNotifier{
     user.name == currentUserName);
 
     //Setting up Leaderboards
-    LeaderBoard national = new LeaderBoard(currentUser.nationality,
+    LeaderBoardTest national = new LeaderBoardTest(currentUser.nationality,
         globalUsers.where((user) => user.nationality == currentUser.nationality)
             .toList());
 
     following = globalUsers.where((user) =>
         followingNames.contains(user.name)).toList();
 
-    LeaderBoard world = new LeaderBoard("World", globalUsers);
+    LeaderBoardTest world = new LeaderBoardTest("World", globalUsers);
 
-    LeaderBoard followLB = new LeaderBoard("Follow", following);
+    LeaderBoardTest followLB = new LeaderBoardTest("Follow", following);
 
     leaderboards = [world, national, followLB];
 
@@ -64,7 +64,7 @@ class DummyDatabase with ChangeNotifier{
   }
 
   void followNew(String toFollow){
-    User userToFollow = globalUsers.firstWhere((user) => user.name == toFollow, orElse: () => null);
+    UserTest userToFollow = globalUsers.firstWhere((user) => user.name == toFollow, orElse: () => null);
     if(userToFollow == null)
       print("User does not exist");
 

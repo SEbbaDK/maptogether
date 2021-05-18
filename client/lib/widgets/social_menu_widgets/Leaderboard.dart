@@ -3,15 +3,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:client/database.dart';
+import 'package:maptogether_api/maptogether_api.dart';
 import 'package:provider/provider.dart';
 
 import 'User.dart';
 
-class LeaderBoard{
+class LeaderBoardTest{
   String name;
-  List<User> users;
+  List<UserTest> users;
 
-  LeaderBoard(this.name, this.users){
+  LeaderBoardTest(this.name, this.users){
     users.sort((a, b) => b.total.compareTo(a.total));
   }
 }
@@ -75,5 +76,16 @@ class LeaderBoardView extends StatelessWidget{
       )
     );
   }
+}
+
+Future<List<Leaderboard>> getLeaderboards(MapTogetherApi api) async{
+  //This should call to get all the leaderboards in the future
+  await api.globalLeaderboard(LeaderboardType.all_time).then((l) {
+    for(var e in l.entries)
+      print(e.user.name);
+    List<Leaderboard> lst = [l];
+    return lst;
+
+  });
 }
 
