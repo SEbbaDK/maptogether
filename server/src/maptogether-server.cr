@@ -27,6 +27,20 @@ module MapTogether::Server
 			halt env, status_code: {{status}}, response: {{message}}
 		end
 		
+		macro check_auth(id, env, db)
+    		%auth_head = {{env}}.request.headers["Authorization"]?
+    		http_raise 400, "Authentication header is missing" if %auth_head == nil
+    		
+    		%auth = %auth_head.as(String).split(" ")
+			http_raise 400, "Authentication header needs to be 'Basic <ACCESS_KEY>'" if %auth.size != 2
+			
+			%atype, %key = %auth
+			http_raise 400, "Authentication type needs to be 'Basic'" if %atype != "Basic"
+			
+			%aid = {{db}}.query_one "SELECT userid FROM users WHERE access = $1", %key, as: Int64
+			http_raise 401, "Authenticated user does not have permission for this (#{{{id}}} != #{%aid}" if {{id}} != %aid
+		end
+		
 		put "/user/:id" do |env|
     		id = env.params.url["id"].to_i64
     		
@@ -48,7 +62,7 @@ module MapTogether::Server
     		http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
     		
     		try_open_connection do |db|
-        		db.query Queries::USER_UPSERT, id, name, key
+        		db.exec Queries::USER_UPSERT, id, name, key
     		end
     		
     		id
@@ -58,8 +72,6 @@ module MapTogether::Server
 		get "/user/:id" do |env|
 			user = User.new
 			id = env.params.url["id"]
-			#access = env.request.headers["Authorization"]
-			#puts "Access: #{access}"
 			
 			try_open_connection do |db|
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
@@ -93,12 +105,14 @@ module MapTogether::Server
 				user.to_json(json)
 			end
 		end
-		
+
 		put "/user/:id/following/:followee" do |env|
 			id = env.params.url["id"]
 			followee = env.params.url["followee"]
-			
+			http_raise 400, "User can't follow themselves" if id == followee
+
 			try_open_connection do |db|
+    			check_auth(id, env, db)
 				db.exec "INSERT INTO follows (follower, followee) VALUES ($1, $2)", id, followee
 			end
 		end
@@ -108,20 +122,13 @@ module MapTogether::Server
 			followee = env.params.url["followee"]
 
 			try_open_connection do |db|
+    			check_auth(id, env, db)
 				result = db.exec "DELETE FROM follows WHERE follower = $1 AND followee = $2", id, followee
-				raise "Error! deleted #{result.rows_affected} rows" if result.rows_affected != 1
+				http_raise 400, "User not following that user" if result.rows_affected == 0
+				raise "Error! deleted #{result.rows_affected} rows" if result.rows_affected >= 1
 			end
 		end
 
-		put "/user/:id/:name" do |env|
-			id = env.params.url["id"]
-			name = env.params.url["name"]
-
-			try_open_connection do |db|
-				db.exec "INSERT INTO users (userID, name) VALUES ($1, $2)", id, name
-			end
-		end
-		
 		# Retrieve all users' id, name and score
 		get "/leaderboard/global/all_time" do |env|
 			string = JSON.build do |json|
@@ -165,6 +172,7 @@ module MapTogether::Server
 		post "/contribution" do |env|
 			contribution = Contribution.from_json(env.params.json)
 	        try_open_connection do |db|
+    	        check_auth(contribution.user_id, env, db)
 	            db.exec "INSERT INTO contributions (userID, type, changeset, score, dateTime)
 					VALUES ($1, $2, $3, $4, $5)",
 					contribution.user_id,
@@ -183,7 +191,7 @@ module MapTogether::Server
 		end
 
 		error 500 do |env, exc|
-			"Something went wrong, \"#{exc.class}\" was thrown with message: \"#{exc.message}\""
+        	"Something went wrong, \"#{exc.class}\" was thrown with message: \"#{exc.message}\""
 	end
 	
 		error 404 do
