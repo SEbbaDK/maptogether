@@ -23,11 +23,11 @@ class InvalidRegionException implements Exception {
   String toString() => _message;
 }
 
-class MapTogetherApi {
+class Api {
   final String _url = 'https://maptogether.sebba.dk/api/';
 
   final String _access;
-  MapTogetherApi(String access) : _access = access;
+  Api(String access) : _access = access;
 
   Map<String, String> _authHeader(String? auth) =>
   	{ 'Authorization': 'Basic ${auth != null ? auth : _access}' };
