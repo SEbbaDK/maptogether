@@ -1,4 +1,5 @@
 require "./achievement.cr"
+require "./placement.cr"
 
 class User
 	property user_id : Nil | Int64
@@ -7,6 +8,7 @@ class User
 	property achievements : Array(Achievement)
 	property followers : Array(User)
 	property following : Array(User)
+	property leaderboards : Array(Placement)
 
 	def initialize(
 		@user_id = nil,
@@ -14,7 +16,8 @@ class User
 		@score = nil,
 		@achievements = [] of Achievement,
 		@followers = [] of User,
-		@following = [] of User
+		@following = [] of User,
+		@leaderboards = [] of Placement
 	)
 	end
 
@@ -47,6 +50,14 @@ class User
 					end
 				end
 			end unless @following.size == 0
+
+			json.field "leaderboards" do
+				json.array do
+					@leaderboards.each do |placement|
+						placement.to_json(json)
+					end
+				end
+			end unless @leaderboards.size == 0
 		end
 	end
 end
