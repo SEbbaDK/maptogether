@@ -4,46 +4,70 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Leaderboard.dart';
 import 'package:maptogether_api/maptogether_api.dart';
+import 'package:client/data_fetchers.dart';
 
 class UserOverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    for(LeaderBoardTest l in context.watch<DummyDatabase>().leaderboards) {
-      l.users.sort((a, b) => b.total.compareTo(a.total));
-    }
-    return Container(
-      padding: EdgeInsets.all(10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                  image: AssetImage('assets/${context.watch<DummyDatabase>().currentUser.pfp}'),
-              )
-            )
+    return FutureBuilder<User>(
+        future: getUser(),
+        builder: (BuildContext context, AsyncSnapshot<User> user) {
+          if (user.hasData) {
+            return Container(
+              padding: EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: AssetImage('assets/business.png'),
+                          )
+                      )
 
-            ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Text("Daily    : " + context.watch<DummyDatabase>().currentUser.daily.toString(),
-              style: TextStyle(fontFamily: 'RobotoMono', fontSize: 18, color: Colors.lightGreen, fontWeight: FontWeight.bold),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text("Weekly   : " + user.data.score.toString(),
+                        style: TextStyle(fontFamily: 'RobotoMono',
+                            fontSize: 18,
+                            color: Colors.lightGreen,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text("Monthly  : " + user.data.score.toString(),
+                        style: TextStyle(fontFamily: 'RobotoMono',
+                            fontSize: 18,
+                            color: Colors.lightGreen,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text("All time : " + user.data.score.toString(),
+                          style: TextStyle(fontFamily: 'RobotoMono',
+                              fontSize: 18,
+                              color: Colors.lightGreen,
+                              fontWeight: FontWeight.bold
+                          )
+                      )
+                    ],
+                  )
+                ],
               ),
-              Text("Weekly  : " + context.watch<DummyDatabase>().currentUser.weekly.toString(),
-                style: TextStyle(fontFamily: 'RobotoMono', fontSize: 18, color: Colors.lightGreen, fontWeight: FontWeight.bold),
-              ),
-              Text("All time : " + context.watch<DummyDatabase>().currentUser.total.toString(),
-                style: TextStyle(fontFamily: 'RobotoMono', fontSize: 18, color:Colors.lightGreen, fontWeight: FontWeight.bold
-              )
-              )
-            ],
-          )
-        ],
-      ),
+            );
+          }
+
+          else{
+            return Container(
+              padding: EdgeInsets.all(10.0),
+                child: SizedBox(
+                    child: CircularProgressIndicator(),
+                    width: 60,
+                    height: 60)
+            );
+          }
+        }
     );
   }
 }

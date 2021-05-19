@@ -5,6 +5,7 @@ import 'User.dart';
 import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart';
+import 'package:client/data_fetchers.dart';
 
 
 //TODO: move friends list to a seperate file or server
@@ -107,9 +108,3 @@ class Friends extends StatelessWidget {
     }
   }
 
-Future<User> getUser() async{
-  //This should call to get all the leaderboards in the future
-  final api = MapTogetherApi();
-  var user = await api.user(2);
-  return user;
-}

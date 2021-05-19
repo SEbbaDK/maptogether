@@ -5,6 +5,7 @@ import 'Leaderboard.dart';
 import 'User.dart';
 import 'package:client/database.dart';
 import 'package:provider/provider.dart';
+import 'package:client/data_fetchers.dart';
 
 
 class Overview extends StatefulWidget {
@@ -48,13 +49,13 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
 
             tabs: <Widget>[
               Tab(
-                text: "Daily",
+                text: "All Time",
+              ),
+              Tab(
+                text: "Monthly",
               ),
               Tab(
                 text: "Weekly",
-              ),
-              Tab(
-                text: "All Time",
               ),
             ]
         ),
@@ -64,9 +65,9 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
           child: TabBarView(
             controller: _nestedTabController,
             children: [
-              leaderBoardWidget(LeaderboardType.weekly),
-              leaderBoardWidget(LeaderboardType.montly),
               leaderBoardWidget(LeaderboardType.all_time),
+              leaderBoardWidget(LeaderboardType.montly),
+              leaderBoardWidget(LeaderboardType.weekly),
             ])
         )
       ],
@@ -76,7 +77,7 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
 
   Widget leaderBoardWidget(LeaderboardType type) =>
         FutureBuilder(
-          future: getLeaderboards(),
+          future: getLeaderboards(type),
           builder: (BuildContext context, AsyncSnapshot<List<Leaderboard>> snapshot) {
             if (snapshot.hasData) {
               return ListView.builder(
@@ -111,14 +112,6 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
             }
           }
         );
-}
-
-Future<List<Leaderboard>> getLeaderboards() async{
-  //This should call to get all the leaderboards in the future
-  final api = MapTogetherApi();
-  var l = await api.globalLeaderboard(LeaderboardType.all_time);
-  List<Leaderboard> lst = [l];
-  return lst;
 }
 
 
