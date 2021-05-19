@@ -1,5 +1,5 @@
 import 'package:client/screens/new_activity_screen.dart';
-import 'package:client/screens/settings.dart';
+import 'package:client/screens/settings_screen.dart';
 import 'package:client/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:client/database.dart';
 import 'package:client/widgets/app_bar.dart';
 import 'package:client/data_fetchers.dart';
-import 'package:client/widgets/social_menu_widgets/User.dart';
+import 'package:client/widgets/social_menu_widgets/user.dart';
 
 class LeaderBoardView extends StatelessWidget {
   int leaderboardIndex;

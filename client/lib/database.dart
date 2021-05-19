@@ -1,4 +1,4 @@
-import 'package:client/widgets/social_menu_widgets/User.dart';
+import 'package:client/widgets/social_menu_widgets/user.dart';
 import 'package:flutter/foundation.dart';
 
 //We get the current user through their username, usernames are unique,

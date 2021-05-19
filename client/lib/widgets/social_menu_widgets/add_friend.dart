@@ -4,7 +4,7 @@ import 'friends.dart';
 import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 
-class NewFriend extends StatelessWidget {
+class AddFriend extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
 
   @override

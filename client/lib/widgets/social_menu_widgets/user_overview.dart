@@ -2,7 +2,7 @@ import 'package:client/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'Leaderboard.dart';
+import 'leaderboard.dart';
 import 'package:maptogether_api/maptogether_api.dart';
 import 'package:client/data_fetchers.dart';
 

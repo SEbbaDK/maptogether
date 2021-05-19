@@ -1,7 +1,7 @@
-import 'package:client/widgets/social_menu_widgets/Leaderboard.dart';
-import 'package:client/widgets/social_menu_widgets/newFriend.dart';
+import 'package:client/widgets/social_menu_widgets/leaderboard.dart';
+import 'package:client/widgets/social_menu_widgets/add_friend.dart';
 import 'package:flutter/material.dart';
-import 'User.dart';
+import 'user.dart';
 import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart';
@@ -87,7 +87,7 @@ class Friends extends StatelessWidget {
                             onPressed: () {
                               Navigator.push(context,
                                   MaterialPageRoute(
-                                      builder: (context) => NewFriend()));
+                                      builder: (context) => AddFriend()));
                             },
                           ),
                         ),
