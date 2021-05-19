@@ -1,9 +1,17 @@
-import 'package:client/widgets/social_menu_widgets/Leaderboard.dart';
 import 'package:client/widgets/social_menu_widgets/User.dart';
 import 'package:flutter/foundation.dart';
 
 //We get the current user through their username, usernames are unique,
 //for the purpose of testing we are Simon
+
+class LeaderBoardTest{
+  String name;
+  List<UserTest> users;
+
+  LeaderBoardTest(this.name, this.users){
+    users.sort((a, b) => b.total.compareTo(a.total));
+  }
+}
 
 class DummyDatabase with ChangeNotifier{
 

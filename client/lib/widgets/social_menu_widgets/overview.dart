@@ -16,6 +16,7 @@ class Overview extends StatefulWidget {
 class _OverviewView extends State<Overview> with TickerProviderStateMixin{
   //We get All, Weekly and Daily from the index of the tabcontroller, changes depending on which leaderboards we are interested in, 0 = daily, 1 = weekly, 2 = all
   TabController _nestedTabController;
+  List<String> lboards;
 
   @override
   void initState(){
@@ -75,27 +76,27 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
   }
 
 
+  //TODO: make future builder dependent
+
   Widget leaderBoardWidget(LeaderboardType type) =>
         FutureBuilder(
-          future: getLeaderboards(type),
-          builder: (BuildContext context, AsyncSnapshot<List<Leaderboard>> snapshot) {
+          future: getLeaderboard(type, "global"), //replace this once we have call to get all leaderboard names for user
+          builder: (BuildContext context, AsyncSnapshot<Leaderboard> snapshot) {
+            lboards = getLeaderboardNames();
             if (snapshot.hasData) {
               return ListView.builder(
-                  itemCount: snapshot.data.length,
+                  itemCount: lboards.length,
                   itemBuilder: (context, index) {
                     return Card(
                         child: ListTile(
-                          title: Text("#"
-                              + ((snapshot.data[index].entries.indexWhere((element) => element.user.name == "Peer") + 1).toString())
-                              + "/"
-                              + (snapshot.data[index].entries.length).toString()),
-                          leading: Text("World"), //TODO: API should let us retrieve a leaderboard name
+                          //title: Text("#" + ((snapshot.data[index].entries.indexWhere((element) => element.user.name == "Peer") + 1).toString()) + "/"+ (snapshot.data[index].entries.length).toString()),
+                          leading: Text(lboards[index].toString()), //TODO: API should let us retrieve a leaderboard name
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(
                                   builder: (context) =>
                                       LeaderBoardView(
-                                          leaderboardIndex: index),));
+                                          leaderBoardName: lboards[index], type: type,),));
                           },
                         )
                     );
@@ -103,13 +104,11 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
               );
             }
 
-            else {
-              return SizedBox(
-                child: CircularProgressIndicator(),
-                width: 60,
-                height: 60,
-              );
-            }
+            else if(snapshot.hasError)
+              return errorData();
+
+            else
+              return waitingLoop();
           }
         );
 }

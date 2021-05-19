@@ -58,14 +58,13 @@ class UserOverView extends StatelessWidget {
             );
           }
 
+          else if(user.hasError)
+            return errorData();
+
           else{
             return Container(
               padding: EdgeInsets.all(10.0),
-                child: SizedBox(
-                    child: CircularProgressIndicator(),
-                    width: 60,
-                    height: 60)
-            );
+                child: waitingLoop());
           }
         }
     );

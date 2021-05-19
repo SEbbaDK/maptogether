@@ -6,74 +6,72 @@ import 'package:client/database.dart';
 import 'package:maptogether_api/maptogether_api.dart';
 import 'package:provider/provider.dart';
 
+import '../../data_fetchers.dart';
 import 'User.dart';
-
-class LeaderBoardTest{
-  String name;
-  List<UserTest> users;
-
-  LeaderBoardTest(this.name, this.users){
-    users.sort((a, b) => b.total.compareTo(a.total));
-  }
-}
 
 
 class LeaderBoardView extends StatelessWidget{
   int leaderboardIndex;
-  LeaderBoardView({Key key, @required this.leaderboardIndex}) : super(key: key);
+  String leaderBoardName;
+  LeaderboardType type;
+  LeaderBoardView({Key key, @required this.leaderBoardName, @required this.type}) : super(key: key);
 
   @override
   Widget build(BuildContext context){
-    var curLeaderboard = context.watch<DummyDatabase>().leaderboards[leaderboardIndex];
-    //we sort the list whenever we open the list, such that it is in correct order in case of updates to the database
-    curLeaderboard.users.sort((a, b) => b.total.compareTo(a.total));
 
-    return Scaffold(
-      appBar: MapTogetherAppBar(
-        title: "Leaderboard for " + curLeaderboard.name,
-        actions: [],
-      ),
-      body: Center(
-        child: Container(
-        margin: EdgeInsets.all(40.0),
-        child: Column(
-          children: <Widget>[
-          Expanded(
-          child: ListView.builder(
-              itemCount: curLeaderboard.users.length,
-              itemBuilder: (context, index){
-                return Card(
-                  child: ListTile(
-                    title: Text("#"
-                        + (index+1).toString()
-                        + " "
-                        + curLeaderboard.users[index].name
-                        + " : "
-                        + curLeaderboard.users[index].total.toString()
-                        + " points"),
+    return FutureBuilder(
+        future: getLeaderboard(type, leaderBoardName),
+        builder: (BuildContext context, AsyncSnapshot<Leaderboard> snapshot) {
+          if(snapshot.hasData) {
+            return Scaffold(
+                appBar: MapTogetherAppBar(
+                  title: "Leaderboard for " + leaderBoardName,
+                  actions: [],
+                ),
+                body: Center(
+                    child: Container(
+                        margin: EdgeInsets.all(40.0),
+                        child: Column(
+                            children: <Widget>[
+                              Expanded(
+                                child: ListView.builder(
+                                    itemCount: snapshot.data.entries.length,
+                                    itemBuilder: (context, index) {
+                                      return Card(
+                                        child: ListTile(
+                                          title: Text("#"
+                                              + (index + 1).toString()
+                                              + " "
+                                              + snapshot.data.entries[index].user.name
+                                              + " : "
+                                              + snapshot.data.entries[index].score.toString()
+                                              + " points"),
 
-                    leading: CircleAvatar(
-                      backgroundImage:
-                        AssetImage('assets/${curLeaderboard.users[index].pfp}'),
+                                          leading: CircleAvatar(
+                                            backgroundImage:
+                                            AssetImage('assets/business.png'),
 
-                    ),
-                  ),
-                );
-              }),
-          ),
-            TextButton(
-                onPressed: (){
-                  for(int x = 0; x < curLeaderboard.users.length; x++)
-                    if(curLeaderboard.users[x].name == context.read<DummyDatabase>().currentUserName)
-                      Provider.of<DummyDatabase>(context, listen: false).givePoints(10);
-                  curLeaderboard.users.sort((a, b) => b.total.compareTo(a.total));
-                },
-                child: Text("+++++")
-            )
-          ]
-        )
-        )
-      )
-    );
+                                          ),
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ]
+                        )
+                    )
+                )
+            );
+          }
+          else if(snapshot.hasError)
+            return errorData();
+
+          else {
+            return Expanded(
+                flex: 14,
+                child: waitingLoop());
+          }
+        }
+        );
+
   }
 }

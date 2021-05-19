@@ -96,14 +96,13 @@ class Friends extends StatelessWidget {
                   ],
                 );
               }
+              else if(user.hasError)
+                return errorData();
+
               else {
                 return Expanded(
                     flex: 14,
-                    child: SizedBox(
-                        child: CircularProgressIndicator(),
-                        width: 60,
-                        height: 60)
-                );
+                    child: waitingLoop());
               }
             }
         ));
