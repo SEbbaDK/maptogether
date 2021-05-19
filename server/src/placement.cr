@@ -13,14 +13,14 @@ end
 class Placement
 	property leaderboard : String
 	property type : Leaderboard_Type
-	property rank : Int32
-	property total : Int32
+	property rank : Int64
+	property total : Int64
 
 	def initialize(
 		@leaderboard : String,
 		@type : Leaderboard_Type,
-		@rank : Int32,
-		@total : Int32
+		@rank : Int64,
+		@total : Int64
 	)
 	end
 

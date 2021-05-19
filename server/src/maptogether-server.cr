@@ -97,43 +97,43 @@ module MapTogether::Server
 						user.following << User.new(user_id: rows.read(Int64), name: rows.read(String))
 					end
 				end
-
+				
 				user.leaderboards = [
 					Placement.new(
 						"Global",
 						Leaderboard_Type::All_Time,
-						db.query_one Queries::GLOBAL_ALL_TIME_RANK, as:{Int64},
-						db.query_one Queries::GLOBAL_ALL_TIME_TOTAL
+						db.query_one(Queries::GLOBAL_ALL_TIME_RANK, as: Int64),
+						db.query_one(Queries::GLOBAL_ALL_TIME_COUNT, as: Int64)
 					),
 					Placement.new(
 						"Global",
 						Leaderboard_Type::Monthly,
-						db.query_one Queries::GLOBAL_MONTHLY_RANK, as:{Int64},
-						db.query_one Queries::GLOBAL_MONTHLY_TOTAL
+						db.query_one(Queries::GLOBAL_MONTHLY_RANK, as: Int64),
+						db.query_one(Queries::GLOBAL_MONTHLY_COUNT, as: Int64)
 					),
 					Placement.new(
 						"Global",
 						Leaderboard_Type::Weekly,
-						db.query_one Queries::GLOBAL_WEEKLY_RANK, as:{Int64},
-						db.query_one Queries::GLOBAL_WEEKLY_TOTAL
+						db.query_one(Queries::GLOBAL_WEEKLY_RANK, as: Int64),
+						db.query_one(Queries::GLOBAL_WEEKLY_COUNT, as: Int64)
 					),
 					Placement.new(
 						"Personal",
 						Leaderboard_Type::All_Time,
-						db.query_one Queries::PERSONAL_ALL_TIME_RANK, as:{Int64},
-						db.query_one Queries::PERSONAL_ALL_TIME_TOTAL
+						db.query_one(Queries::PERSONAL_ALL_TIME_RANK, id, as: Int64),
+						db.query_one(Queries::PERSONAL_ALL_TIME_COUNT, id, as: Int64)
 					),
 					Placement.new(
 						"Personal",
 						Leaderboard_Type::Monthly,
-						db.query_one Queries::PERSONAL_MONTHLY_RANK, as:{Int64},
-						db.query_one Queries::PERSONAL_MONTHLY_TOTAL
+						db.query_one(Queries::PERSONAL_MONTHLY_RANK, id, as: Int64),
+						db.query_one(Queries::PERSONAL_MONTHLY_COUNT, id, as: Int64)
 					),
 					Placement.new(
 						"Personal",
 						Leaderboard_Type::Weekly,
-						db.query_one Queries::PERSONAL_WEEKLY_RANK, as:{Int64},
-						db.query_one Queries::PERSONAL_WEEKLY_TOTAL
+						db.query_one(Queries::PERSONAL_WEEKLY_RANK, id, as: Int64),
+						db.query_one(Queries::PERSONAL_WEEKLY_COUNT, id, as: Int64)
 					)
 				]
 			end
