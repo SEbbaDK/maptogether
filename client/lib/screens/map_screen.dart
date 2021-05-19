@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:latlong/latlong.dart';
 
-import 'package:client/database.dart';
 import 'package:client/location_handler.dart';
 import 'package:client/login_handler.dart';
 

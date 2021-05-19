@@ -1,8 +1,6 @@
 import 'package:client/widgets/social_menu_widgets/leaderboard.dart';
 import 'package:client/widgets/social_menu_widgets/add_friend.dart';
 import 'package:flutter/material.dart';
-import 'user.dart';
-import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart';
 import 'package:client/data_fetchers.dart';
@@ -45,16 +43,7 @@ class Friends extends StatelessWidget {
                                                   backgroundColor: Colors.red
                                               ),
                                               onPressed: () {
-                                                context
-                                                    .read<DummyDatabase>()
-                                                    .followingNames
-                                                    .remove(context
-                                                    .read<DummyDatabase>()
-                                                    .following[index].name);
-                                                context
-                                                    .read<DummyDatabase>()
-                                                    .following
-                                                    .removeAt(index);
+                                                print("UNFOLLOW SOMEONE");
                                                 Navigator.pop(context);
                                               },
                                             ),

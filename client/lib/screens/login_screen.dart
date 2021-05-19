@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:client/widgets/app_bar.dart';
-import 'package:client/database.dart';
 import 'package:client/login_handler.dart';
 import 'package:client/screens/social_screen.dart';
 

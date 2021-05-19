@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:client/widgets/app_bar.dart';
 import 'friends.dart';
-import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 
 class AddFriend extends StatelessWidget {
@@ -53,7 +52,7 @@ class AddFriend extends StatelessWidget {
                       child: Text('Follow'),
                       onPressed: () {
                         //Add friend to backend for user here
-                        context.read<DummyDatabase>().followNew(nameController.text);
+                        print("FOLLOW SOMEONE");
                         print(nameController.text);
                         Navigator.pop(context);
                       },

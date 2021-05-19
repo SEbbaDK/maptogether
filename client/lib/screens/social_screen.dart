@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:client/database.dart';
 import 'package:client/widgets/app_bar.dart';
 import 'package:client/widgets/social_menu_widgets/friends.dart';
 import 'package:client/widgets/social_menu_widgets/groups.dart';
