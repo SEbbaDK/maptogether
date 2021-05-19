@@ -67,7 +67,7 @@ class _OverviewView extends State<Overview> with TickerProviderStateMixin{
             controller: _nestedTabController,
             children: [
               leaderBoardWidget(LeaderboardType.all_time),
-              leaderBoardWidget(LeaderboardType.montly),
+              leaderBoardWidget(LeaderboardType.monthly),
               leaderBoardWidget(LeaderboardType.weekly),
             ])
         )

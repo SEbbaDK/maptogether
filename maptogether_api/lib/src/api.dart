@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'data.dart' as data;
 
-enum LeaderboardType { weekly, montly, all_time }
+enum LeaderboardType { weekly, monthly, all_time }
 String stringify(LeaderboardType type) {
   switch (type) {
     case LeaderboardType.weekly:
       return "weekly";
-    case LeaderboardType.montly:
-      return "montly";
+    case LeaderboardType.monthly:
+      return "monthly";
     case LeaderboardType.all_time:
       return "all_time";
   }
