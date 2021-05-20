@@ -1,5 +1,5 @@
 import 'package:client/quests/quest.dart';
-import 'package:client/quests/quest_pop_up.dart';
+import 'package:client/widgets/quest_widgets/quest_pop_up.dart';
 import 'package:flutter/material.dart';
 
 /*
