@@ -67,6 +67,9 @@ class Api {
           .then(_checkRequest('getting leaderboard'))
           .then(_decodeLeaderboard);
 
+  Future<data.Leaderboard> leaderboard(String name, Leaderboard type) =>
+  	  throw Exception('leaderboard(string, type) is deprecated. Use leaderboard(type, string).');
+
   Future<data.Leaderboard> personalLeaderboard(LeaderboardType type) =>
       leaderboard(type, 'personal');
 
