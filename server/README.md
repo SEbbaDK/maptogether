@@ -43,14 +43,14 @@ Responds with json object of a user like this:
 }
 ```
 
-### `/leaderboard/<time frame>/global/` Get Global Leaderboard
+### `/leaderboard/<time frame>/global` Get Global Leaderboard
 Possible time frames:
 - all_time
 - monthly
 - weekly
 Responds with a leaderboard that includes all users that (within the time frame) has a score larger than 0.
 
-### `/leaderboard/<time frame>/Personal/<id>` Get Personal Leaderboard of Followed Users
+### `/leaderboard/<time frame>/personal/<id>` Get Personal Leaderboard of Followed Users
 Possible time frames:
 - all_time
 - monthly
