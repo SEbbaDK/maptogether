@@ -23,4 +23,8 @@ abstract class Quest {
       that is Quest &&
       that.position == this.position &&
       that.getQuestion() == this.getQuestion();
+
+  @override
+  // TODO: Is this correct?
+  int get hashCode => position.hashCode ^ element.hashCode;
 }
