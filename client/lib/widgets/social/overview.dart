@@ -1,4 +1,4 @@
-import 'package:client/widgets/social_menu_widgets/user_overview.dart';
+import 'package:client/widgets/social/user_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:maptogether_api/maptogether_api.dart';
 import 'leaderboard.dart';

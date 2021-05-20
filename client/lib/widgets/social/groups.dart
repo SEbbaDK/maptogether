@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:client/widgets/social_menu_widgets/create_group.dart';
+import 'package:client/widgets/social/create_group.dart';
 
 class Groups extends StatelessWidget {
   @override

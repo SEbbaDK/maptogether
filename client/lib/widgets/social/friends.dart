@@ -1,5 +1,5 @@
-import 'package:client/widgets/social_menu_widgets/leaderboard.dart';
-import 'package:client/widgets/social_menu_widgets/add_friend.dart';
+import 'package:client/widgets/social/leaderboard.dart';
+import 'package:client/widgets/social/add_friend.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart';

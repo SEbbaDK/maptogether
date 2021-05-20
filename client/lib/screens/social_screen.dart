@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:client/widgets/app_bar.dart';
-import 'package:client/widgets/social_menu_widgets/friends.dart';
-import 'package:client/widgets/social_menu_widgets/groups.dart';
-import 'package:client/widgets/social_menu_widgets/history.dart';
-import 'package:client/widgets/social_menu_widgets/overview.dart';
-import 'package:client/widgets/social_menu_widgets/user_overview.dart';
-import 'package:client/screens/login_screen.dart';
+import 'package:client/widgets/social/friends.dart';
+import 'package:client/widgets/social/groups.dart';
+import 'package:client/widgets/social/history.dart';
+import 'package:client/widgets/social/overview.dart';
+import 'package:client/widgets/social/user_overview.dart';
+import 'package:client/login_flow.dart';
 import 'package:client/login_handler.dart';
 
 class SocialScreen extends StatefulWidget {

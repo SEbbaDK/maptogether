@@ -9,7 +9,7 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
-import 'package:client/screens/login_screen.dart';
+import 'package:client/login_flow.dart';
 
 class PointOfInterest {
   // TODO: I think this should be moved to some model package
