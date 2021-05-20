@@ -1,5 +1,4 @@
 import 'package:client/location_handler.dart';
-import 'package:client/login_handler.dart';
 import 'package:client/quests/quest.dart';
 import 'package:client/quests/quest_handler.dart';
 import 'package:client/widgets/map_widgets/map_marker.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
-import 'package:client/screens/login_screen.dart';
 
 class PointOfInterest {
   // TODO: I think this should be moved to some model package
@@ -50,82 +48,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
   @override
   Widget build(BuildContext context) {
     _mapController = context.watch<LocationHandler>().mapController;
-
-    List<Quest> quests = context.watch<QuestHandler>().quests;
-
-    List<MapMarker> questMarkers = [];
-    quests.forEach((quest) {
-      questMarkers.add(MapMarker(context, quest));
-    });
-
-
-
-    List<Marker> backrestQuestMarkers = quests.map((quest) {
-      List<Widget> textButtons = [];
-      for (int i = 0; i < quest.getPossibilities().length; i++) {
-        textButtons.add(Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
-            child: Text(quest.getPossibilities()[i]),
-            onPressed: () async {
-              LoginHandler loginHandler = context.read<LoginHandler>();
-              QuestHandler questHandler = context.read<QuestHandler>();
-              LocationHandler locationHandler = context.read<LocationHandler>();
-
-              if (!loginHandler.loggedIntoOSM())
-                  requestLogin(context, social: false);
-              else
-				  questHandler
-                    .answerBenchQuest(loginHandler, locationHandler, questHandler, quest, i)
-                    .then((value) => Navigator.pop(context));
-            },
-          ),
-        ));
-      }
-
-      return Marker(
-          width: 60,
-          height: 60,
-          point: quest.position,
-          builder: (context) => FittedBox(
-                child: TextButton(
-                  child: Icon(
-                    Icons.airline_seat_recline_normal_sharp,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                color: Colors.lightGreen,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20))),
-                            height: 200,
-                            child: Column(
-                              children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        quest.getQuestion(),
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ] +
-                                  textButtons,
-                            ),
-                          );
-                        });
-                  },
-                ),
-              ));
-    }).toList();
 
     Marker currentPositionMarker = Marker(
       point: context.watch<LocationHandler>().getLocation(),
@@ -269,6 +191,35 @@ class _InteractiveMapState extends State<InteractiveMap> {
       });
     }
 
+    // Finding quests and creating MapMarkers for each of them
+    List<Quest> quests = context.watch<QuestHandler>().quests;
+    List<MapMarker> questMarkers = [];
+    quests.forEach((quest) {
+      questMarkers.add(MapMarker(context, quest));
+
+      /*
+       Marker(
+            width: 100.0,
+            height: 100.0,
+            point: LatLng(57.048820, 9.921747),
+            builder: (ctx) => FittedBox(
+              child: TextButton(
+                child: Icon(
+                  Icons.edit_location_rounded,
+                  color: Colors.pink,
+                ),
+                onPressed: () {
+                  print('This is ');
+                },
+              ),
+            ),
+          ));
+       */
+
+    });
+
+
+
     return FlutterMap(
       mapController: _mapController,
       children: [
@@ -313,7 +264,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
           builder: (context, markers) {
             return Row(
               children: [
-                Icon(Icons.airline_seat_recline_normal_sharp),
+                Icon(Icons.not_listed_location_rounded),
                 Text(markers.length.toString()),
               ],
             );
@@ -374,3 +325,72 @@ class _DropDownState extends State<DropDown> {
         }).toList());
   }
 }
+
+/* TODO: Slet !!
+List<Marker> backrestQuestMarkers = quests.map((quest) {
+  List<Widget> textButtons = [];
+  for (int i = 0; i < quest.getPossibilities().length; i++) {
+    textButtons.add(Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        child: Text(quest.getPossibilities()[i]),
+        onPressed: () async {
+          LoginHandler loginHandler = context.read<LoginHandler>();
+          QuestHandler questHandler = context.read<QuestHandler>();
+          LocationHandler locationHandler = context.read<LocationHandler>();
+
+          if (!loginHandler.loggedIntoOSM())
+            requestLogin(context, social: false);
+          else
+            questHandler
+                .answerBenchQuest(loginHandler, locationHandler, questHandler, quest, i)
+                .then((value) => Navigator.pop(context));
+        },
+      ),
+    ));
+  }
+
+  return Marker(
+      width: 60,
+      height: 60,
+      point: quest.position,
+      builder: (context) => FittedBox(
+        child: TextButton(
+          child: Icon(
+            Icons.airline_seat_recline_normal_sharp,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            showModalBottomSheet(
+                backgroundColor: Colors.transparent,
+                context: context,
+                builder: (BuildContext context) {
+                  return Container(
+                    decoration: BoxDecoration(
+                        color: Colors.lightGreen,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(20),
+                            topRight: Radius.circular(20))),
+                    height: 200,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            quest.getQuestion(),
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ] +
+                          textButtons,
+                    ),
+                  );
+                });
+          },
+        ),
+      ));
+}).toList();
+*/

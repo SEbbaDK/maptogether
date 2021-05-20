@@ -43,9 +43,11 @@ class QuestHandler extends ChangeNotifier {
   Future<List<Quest>> getQuests(double left, double bottom, double right, double top) async {
     List<Quest> quests = await getBenchQuests(left, bottom, right, top);
     notifyListeners();
-    return quests;
+    this.quests = quests;
   }
+}
 
+/*
   Future<void> answerBenchQuest(
     LoginHandler loginHandler,
     LocationHandler locationHandler,
@@ -79,4 +81,4 @@ class QuestHandler extends ChangeNotifier {
         locationHandler.mapController.bounds.east,
         locationHandler.mapController.bounds.north);
   }
-}
+ */
