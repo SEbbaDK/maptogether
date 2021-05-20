@@ -17,4 +17,6 @@ abstract class Quest {
   String getQuestion();
 
   List<String> getPossibilities();
+
+  void solve(osm.Api api, String possibility);
 }
