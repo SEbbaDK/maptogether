@@ -13,19 +13,13 @@ class BackrestBenchQuest extends SimpleTagQuest {
   }
 
   @override
-  String getChangesetComment() {
-    return 'Added backrest tag for a bench';
-  }
+  String getChangesetComment() => 'Added backrest tag for a bench';
 
   @override
-  Widget getMarkerSymbol() {
-    return Icon(Icons.airline_seat_recline_normal_sharp);
-  }
+  Widget getMarkerSymbol() => Icon(Icons.airline_seat_recline_normal_sharp);
 
   @override
-  Map<String, String> possibilitiesToTags() {
-    return {"Yes": "yes", "No": "no"};
-  }
+  Map<String, String> possibilitiesToTags() => {"Yes": "yes", "No": "no"};
 
   @override
   Future<void> solve(osm.Api api, String possibility) async {

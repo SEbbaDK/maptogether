@@ -235,7 +235,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
       layers: [
         MarkerClusterLayerOptions(
           maxClusterRadius: 100,
-          size: Size(40, 40),
+          size: Size(50, 50),
           fitBoundsOptions: FitBoundsOptions(
             padding: EdgeInsets.all(50),
           ),
@@ -247,14 +247,21 @@ class _InteractiveMapState extends State<InteractiveMap> {
           builder: (context, markers) {
             return Row(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.lightGreen,
-                    shape: BoxShape.circle,
+                Flexible(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.lightGreen,
+                      shape: BoxShape.circle,
+                    ),
+                    child:
+                        Icon(Icons.not_listed_location_rounded),
                   ),
-                  child: Icon(Icons.not_listed_location_rounded),
                 ),
-                Text(markers.length.toString()),
+                Flexible(
+                    child: Text(
+                  markers.length.toString(),
+                  overflow: TextOverflow.ellipsis,
+                )),
               ],
             );
           },

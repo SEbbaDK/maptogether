@@ -1,6 +1,4 @@
-import 'package:client/location_handler.dart';
-import 'package:client/login_handler.dart';
-import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
+import 'package:client/quests/bench_quests/backrest_bench_quest.dart';
 import 'package:client/quests/quest.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
@@ -11,6 +9,26 @@ class QuestHandler extends ChangeNotifier {
 
   List<Quest> quests = [];
 
+  Future<List<Quest>> getQuests(
+      double left, double bottom, double right, double top) async {
+    // Finding quests within bound
+    List<Quest> backrestBenchQuest =
+        await _getBackrestBenchQuests(left, bottom, right, top);
+
+    backrestBenchQuest.forEach((backrestBenchQuest) {
+      if (!this.quests.contains(backrestBenchQuest)) {
+        this.quests.add(backrestBenchQuest);
+      }
+    });
+
+    notifyListeners();
+  }
+
+  void removeQuest(Quest quest) {
+    this.quests.remove(quest);
+    notifyListeners();
+  }
+
   bool _isBench(osm.Element element) {
     return (element.tags.containsKey('amenity') &&
         element.tags.containsValue('bench'));
@@ -20,7 +38,7 @@ class QuestHandler extends ChangeNotifier {
     return !(element.tags.containsKey('backrest'));
   }
 
-  Future<List<Quest>> getBenchQuests(
+  Future<List<Quest>> _getBackrestBenchQuests(
       double left, double bottom, double right, double top) async {
     api = osm.Api(
         'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
@@ -39,16 +57,4 @@ class QuestHandler extends ChangeNotifier {
     });
     return benchQuests;
   }
-
-  Future<List<Quest>> getQuests(double left, double bottom, double right, double top) async {
-    List<Quest> quests = await getBenchQuests(left, bottom, right, top);
-    notifyListeners();
-    this.quests = quests;
-  }
-
-  void removeQuest(Quest quest) {
-    this.quests.remove(quest);
-    notifyListeners();
-  }
-
 }

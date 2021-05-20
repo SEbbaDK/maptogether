@@ -1,27 +1,19 @@
-
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:latlong/latlong.dart';
-
-import 'package:client/database.dart';
 import 'package:client/location_handler.dart';
 import 'package:client/login_handler.dart';
-
-import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
 import 'package:client/quests/quest_handler.dart';
-
-import 'package:client/screens/social_screen.dart';
 import 'package:client/screens/login_screen.dart';
-
+import 'package:client/screens/social_screen.dart';
 import 'package:client/widgets/map_widgets/map.dart';
 import 'package:client/widgets/map_widgets/map_screen_button_widgets/button_row.dart';
 import 'package:client/widgets/map_widgets/map_screen_button_widgets/map_screen_button.dart';
 import 'package:client/widgets/map_widgets/map_screen_button_widgets/pup_up_menu.dart';
+import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
+import 'package:provider/provider.dart';
 
+launchSocial(BuildContext context) => Navigator.of(context)
+    .push(MaterialPageRoute(builder: (context) => SocialScreen()));
 
-launchSocial(BuildContext context) =>
-    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen()));
-    
 class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -46,13 +38,12 @@ class MapScreen extends StatelessWidget {
                     child: Icon(Icons.person),
                     onPressed: () {
                       //If no current user, go to login screen
-                      if(loginHandler.loggedIntoSocial() != true)
+                      if (loginHandler.loggedIntoSocial() != true)
                         requestLogin(context, social: true).then((r) {
-							if (r == true)
-    							launchSocial(context);
-                         });
+                          if (r == true) launchSocial(context);
+                        });
                       else
-                      	launchSocial(context);
+                        launchSocial(context);
                     },
                   ),
                   MapScreenButton(
@@ -65,18 +56,19 @@ class MapScreen extends StatelessWidget {
                     },
                   ),
                   StreamBuilder(
-                      stream: locationHandler.rotationStream,
-                      builder: (BuildContext context, AsyncSnapshot<double> snapshot) =>
-                      	Transform.rotate(
-                          angle: snapshot.data ?? 0,
-                          child: MapScreenButton(
-                            child: Icon(Icons.north),
-                            onPressed: () {
-                              locationHandler.mapController.rotate(0);
-                            },
-                          ),
+                    stream: locationHandler.rotationStream,
+                    builder: (BuildContext context,
+                            AsyncSnapshot<double> snapshot) =>
+                        Transform.rotate(
+                      angle: snapshot.data ?? 0,
+                      child: MapScreenButton(
+                        child: Icon(Icons.north),
+                        onPressed: () {
+                          locationHandler.mapController.rotate(0);
+                        },
                       ),
-				  ),
+                    ),
+                  ),
                   MapScreenButton(
                       child: Icon(Icons.wifi_protected_setup),
                       onPressed: () {
