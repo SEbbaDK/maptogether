@@ -13,7 +13,7 @@ module Queries
 		WHERE userID = $1 limit 1"
 
 	TOTAL_SCORE_FROM_ID =
-		"SELECT SUM (score) AS score
+		"SELECT COALESCE(SUM(score),0) AS score
 		FROM contributions
 		WHERE userID = $1"
 

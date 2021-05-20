@@ -1,9 +1,12 @@
 import 'dart:async';
 
-import 'package:client/login_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import 'package:client/login_handler.dart';
+import 'package:client/widgets/app_bar.dart';
+
 
 class LoginWebView extends StatelessWidget {
   final String url;
@@ -70,7 +73,6 @@ Future<bool> requestLogin(BuildContext context, {bool social}) => request(
       no: 'No Thanks',
     ).then((answer) async {
       if (answer == false) return false;
-
       return await Navigator.push<bool>(context, loginPage());
     });
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'newGroup.dart';
+import 'package:client/widgets/social/create_group.dart';
 
 class Groups extends StatelessWidget {
   @override
@@ -25,7 +25,7 @@ class Groups extends StatelessWidget {
                 ),
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => NewGroup()));
+                      MaterialPageRoute(builder: (context) => CreateGroup()));
                 },
               ),
             ),
