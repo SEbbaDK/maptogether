@@ -173,7 +173,6 @@ module MapTogether::Server
 			
 			string = JSON.build do |json|
 				try_open_connection do |db|
-					check_auth(id, env, db)
 					db.query Queries::PERSONAL_ALL_TIME, id do |rows|
 						Leaderboard.new(rows).to_json json
 					end
@@ -189,7 +188,6 @@ module MapTogether::Server
 			
 			string = JSON.build do |json|
 				try_open_connection do |db|
-					check_auth(id, env, db)
 					db.query Queries::PERSONAL_WEEKLY, id do |rows|
 						Leaderboard.new(rows).to_json json
 					end
@@ -205,7 +203,6 @@ module MapTogether::Server
 			
 			string = JSON.build do |json|
 				try_open_connection do |db|
-					check_auth(id, env, db)
 					db.query Queries::PERSONAL_MONTHLY, id do |rows|
 						Leaderboard.new(rows).to_json json
 					end
