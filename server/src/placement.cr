@@ -4,20 +4,22 @@ enum Leaderboard_Type
 	All_Time
 
 	def to_string
-		"Weekly" if self == Leaderboard_Type::Weekly
-		"Monthly" if self == Leaderboard_Type::Monthly
-		"All_time" if self == Leaderboard_Type::All_Time
+		"weekly" if self == Leaderboard_Type::Weekly
+		"monthly" if self == Leaderboard_Type::Monthly
+		"all_time" if self == Leaderboard_Type::All_Time
 	end
 end
 
 class Placement
-	property leaderboard : String
+	property path : String
+	property name : String
 	property type : Leaderboard_Type
 	property rank : Int64
 	property total : Int64
 
 	def initialize(
-		@leaderboard : String,
+		@path : String,
+		@name : String,
 		@type : Leaderboard_Type,
 		@rank : Int64,
 		@total : Int64
@@ -26,7 +28,8 @@ class Placement
 
 	def to_json(json : JSON::Builder)
 		json.object do
-			json.field "leaderboard", @leaderboard
+			json.field "path", @path
+			json.field "name", @name
 			json.field "type", @type.to_string
 			json.field "rank", @rank
 			json.field "total", @total

@@ -100,36 +100,42 @@ module MapTogether::Server
 				
 				user.leaderboards = [
 					Placement.new(
+						"/leaderboard/all_time/global",
 						"Global",
 						Leaderboard_Type::All_Time,
 						db.query_one(Queries::GLOBAL_ALL_TIME_RANK, as: Int64),
 						db.query_one(Queries::GLOBAL_ALL_TIME_COUNT, as: Int64)
 					),
 					Placement.new(
+						"/leaderboard/monthly/global",
 						"Global",
 						Leaderboard_Type::Monthly,
 						db.query_one(Queries::GLOBAL_MONTHLY_RANK, as: Int64),
 						db.query_one(Queries::GLOBAL_MONTHLY_COUNT, as: Int64)
 					),
 					Placement.new(
+						"/leaderboard/weekly/global",
 						"Global",
 						Leaderboard_Type::Weekly,
 						db.query_one(Queries::GLOBAL_WEEKLY_RANK, as: Int64),
 						db.query_one(Queries::GLOBAL_WEEKLY_COUNT, as: Int64)
 					),
 					Placement.new(
+						"/leaderboard/all_time/personal/#{id}",
 						"Personal",
 						Leaderboard_Type::All_Time,
 						db.query_one(Queries::PERSONAL_ALL_TIME_RANK, id, as: Int64),
 						db.query_one(Queries::PERSONAL_ALL_TIME_COUNT, id, as: Int64)
 					),
 					Placement.new(
+						"/leaderboard/monthly/personal/#{id}",
 						"Personal",
 						Leaderboard_Type::Monthly,
 						db.query_one(Queries::PERSONAL_MONTHLY_RANK, id, as: Int64),
 						db.query_one(Queries::PERSONAL_MONTHLY_COUNT, id, as: Int64)
 					),
 					Placement.new(
+						"/leaderboard/weekly/personal/#{id}",
 						"Personal",
 						Leaderboard_Type::Weekly,
 						db.query_one(Queries::PERSONAL_WEEKLY_RANK, id, as: Int64),
