@@ -92,6 +92,10 @@ class Api {
   /// Get the details of the user whose oauth token is logged in
   Future<String> userDetails() => _get('user/details').then(_checkRequest);
 
+  Future<int> userId() => _get('user/details')
+      .then(_checkRequest)
+      .then((b) => jsonDecode(b)["user"]["id"]);
+
   /// Take a bounding box and return all the elements inside it
   Future<data.MapData> mapByBox(
           double left, double bottom, double right, double top) =>
@@ -169,9 +173,7 @@ class Api {
         				${stringifyNodes(nodes)}
         			</way>
         		</osm>
-    		''')
-          .then(_checkRequest)
-          .then(_decodeInt);
+    		''').then(_checkRequest).then(_decodeInt);
 
   /// Create a new relation and return its id
   Future<int> createRelation(

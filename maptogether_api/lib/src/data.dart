@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'data.g.dart';
 
 @JsonSerializable()
-class User{
+class User {
   final int id, score;
   final String name;
 
@@ -42,7 +42,6 @@ class Achievement {
   Map<String, dynamic> toJson() => _$AchievementToJson(this);
 }
 
-
 @JsonSerializable()
 class Contribution {
   final int user_id, type, changeset, score;
@@ -65,14 +64,18 @@ class SimpleUser {
   final int id;
   final String name;
 
-  SimpleUser({ required this.id,  required this.name,});
+  SimpleUser({
+    required this.id,
+    required this.name,
+  });
 
-  factory SimpleUser.fromJson(Map<String, dynamic> json) => _$SimpleUserFromJson(json);
+  factory SimpleUser.fromJson(Map<String, dynamic> json) =>
+      _$SimpleUserFromJson(json);
   Map<String, dynamic> toJson() => _$SimpleUserToJson(this);
 }
 
 @JsonSerializable()
-class LeaderboardEntry{
+class LeaderboardEntry {
   SimpleUser user;
   int score;
 
@@ -81,17 +84,15 @@ class LeaderboardEntry{
   factory LeaderboardEntry.fromJson(Map<String, dynamic> json) =>
       _$LeaderboardEntryFromJson(json);
   Map<String, dynamic> toJson() => _$LeaderboardEntryToJson(this);
-
 }
 
-
 //@JsonSerializable()
-class Leaderboard{
+class Leaderboard {
   final String type = '';
   //@JsonKey(defaultValue: null)
   final List<LeaderboardEntry> entries;
 
   Leaderboard(this.entries);
-  factory Leaderboard.fromJson(List<dynamic> json) =>
-     Leaderboard(json.map((e) => LeaderboardEntry.fromJson(e)).toList(growable: false));
+  factory Leaderboard.fromJson(List<dynamic> json) => Leaderboard(
+      json.map((e) => LeaderboardEntry.fromJson(e)).toList(growable: false));
 }

@@ -1,6 +1,12 @@
 module Queries
 	extend self
 
+	USER_UPSERT =
+		"INSERT INTO users
+		VALUES ($1, $2, $3)
+		ON CONFLICT(userid) DO
+			UPDATE SET name = EXCLUDED.name, access = EXCLUDED.access"
+
 	USER_FROM_ID =
 		"SELECT userID, name
 		FROM users

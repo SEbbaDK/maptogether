@@ -8,8 +8,10 @@ class MapData {
   @JsonKey(defaultValue: null)
   final List<User>? user;
 
-  
-  MapData({required this.elements, required this.user,});
+  MapData({
+    required this.elements,
+    required this.user,
+  });
   factory MapData.fromJson(Map<String, dynamic> json) =>
       _$MapDataFromJson(json);
   Map<String, dynamic> toJson() => _$MapDataToJson(this);
@@ -119,51 +121,41 @@ class User {
   final Block blocks;
   final Message messages;
 
-
   User({
-      required this.id,
-      required this.display_name,
-      required this.account_created,
-      required this.description,
-      required this.contributor_terms,
-      required this.roles,
-      required this.changesets,
-      required this.traces,
-      required this.blocks,
-      required this.languages,
-      required this.messages,
+    required this.id,
+    required this.display_name,
+    required this.account_created,
+    required this.description,
+    required this.contributor_terms,
+    required this.roles,
+    required this.changesets,
+    required this.traces,
+    required this.blocks,
+    required this.languages,
+    required this.messages,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) =>
-      _$UserFromJson(json);
+  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
-
 }
 
 @JsonSerializable()
-class Message{
-
+class Message {
   final Map<String, int> received, sent;
-
 
   Message({required this.received, required this.sent});
 
-    factory Message.fromJson(Map<String, dynamic> json) =>
+  factory Message.fromJson(Map<String, dynamic> json) =>
       _$MessageFromJson(json);
   Map<String, dynamic> toJson() => _$MessageToJson(this);
-
 }
 
 @JsonSerializable()
-class Block{
+class Block {
   final Map<String, int> received;
 
   Block({required this.received});
 
-      factory Block.fromJson(Map<String, dynamic> json) =>
-      _$BlockFromJson(json);
+  factory Block.fromJson(Map<String, dynamic> json) => _$BlockFromJson(json);
   Map<String, dynamic> toJson() => _$BlockToJson(this);
-  
 }
-
-

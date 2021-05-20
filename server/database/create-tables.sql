@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users (
 	userID	bigint PRIMARY KEY,
-	name	varchar(20)
+	name	varchar(255),
+	access	varchar
 );
 
 CREATE TABLE IF NOT EXISTS contributionTypes (
