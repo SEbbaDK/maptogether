@@ -1,14 +1,16 @@
 import 'package:client/quests/quest.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
 
+class QuestMarkerChild extends StatelessWidget {
 
-// TODO: Delete this class and file !!
-class MapMarker extends Marker {
-  MapMarker(BuildContext context, Quest quest)
-      : super(builder: (c) => widget(c, quest));
+  QuestMarkerChild(this.markerLogo, this.quest);
 
-  static Widget widget(BuildContext context, Quest quest) {
+  final Widget markerLogo;
+
+  final Quest quest;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: 30,
       width: 30,

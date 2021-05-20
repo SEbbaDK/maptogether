@@ -1,7 +1,7 @@
 import 'package:client/location_handler.dart';
 import 'package:client/quests/quest.dart';
 import 'package:client/quests/quest_handler.dart';
-import 'package:client/widgets/map_widgets/map_marker.dart';
+import 'package:client/quests/quest_marker_child.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -193,9 +193,12 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
     // Finding quests and creating MapMarkers for each of them
     List<Quest> quests = context.watch<QuestHandler>().quests;
-    List<MapMarker> questMarkers = [];
+    List<Marker> questMarkers = [];
     quests.forEach((quest) {
-      questMarkers.add(MapMarker(context, quest));
+      questMarkers.add(Marker(
+          point: quest.position,
+          builder: (context) =>
+              QuestMarkerChild(quest.getMarkerSymbol(), quest)));
 
       /*
        Marker(
@@ -215,10 +218,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
             ),
           ));
        */
-
     });
-
-
 
     return FlutterMap(
       mapController: _mapController,
