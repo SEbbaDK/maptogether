@@ -191,7 +191,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
       });
     }
 
-    // Finding quests and creating MapMarkers for each of them
+    // Finding quests and create Markers for each of them
     List<Quest> quests = context.watch<QuestHandler>().quests;
     List<Marker> questMarkers = [];
     quests.forEach((quest) {
@@ -199,25 +199,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
           point: quest.position,
           builder: (context) =>
               QuestMarkerChild(quest.getMarkerSymbol(), quest)));
-
-      /*
-       Marker(
-            width: 100.0,
-            height: 100.0,
-            point: LatLng(57.048820, 9.921747),
-            builder: (ctx) => FittedBox(
-              child: TextButton(
-                child: Icon(
-                  Icons.edit_location_rounded,
-                  color: Colors.pink,
-                ),
-                onPressed: () {
-                  print('This is ');
-                },
-              ),
-            ),
-          ));
-       */
     });
 
     return FlutterMap(
@@ -258,13 +239,19 @@ class _InteractiveMapState extends State<InteractiveMap> {
           ),
           markers: questMarkers,
           polygonOptions: PolygonOptions(
-              borderColor: Colors.blueAccent,
+              borderColor: Colors.lightGreen,
               color: Colors.black12,
               borderStrokeWidth: 3),
           builder: (context, markers) {
             return Row(
               children: [
-                Icon(Icons.not_listed_location_rounded),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.lightGreen,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(Icons.not_listed_location_rounded),
+                ),
                 Text(markers.length.toString()),
               ],
             );
@@ -278,7 +265,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
           ),
           markers: taskMarkers,
           polygonOptions: PolygonOptions(
-              borderColor: Colors.blueAccent,
+              borderColor: Colors.lightGreen,
               color: Colors.black12,
               borderStrokeWidth: 3),
           builder: (context, markers) {

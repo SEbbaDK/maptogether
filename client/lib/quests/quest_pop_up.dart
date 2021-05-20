@@ -15,7 +15,7 @@ class QuestPopUp extends StatelessWidget {
   Widget build(BuildContext context) {
     if (_quest is SimpleTagQuest) {
       return SimpleTagQuestPopUp(
-          _quest, context.watch<LoginHandler>().osmApi());
+          _quest, context.read<LoginHandler>().osmApi());
     } else {
       throw 'PopUp buttons not implemented for this quest type';
     }
