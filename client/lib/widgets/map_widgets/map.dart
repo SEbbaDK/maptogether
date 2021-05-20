@@ -158,31 +158,33 @@ class _InteractiveMapState extends State<InteractiveMap> {
       ),
     );
 
+    // The hold down on map pop up marker
     Marker popUpMarker = Marker(
-        height: 250,
-        width: 1000,
-        point: popUpPositionOnMap,
-        builder: (context) => Visibility(
-              visible: showPopUp,
-              child: FittedBox(
-                child: Stack(
-                  children: [
-                    Container(
-                      child: Center(
-                        child: Image(
-                          image: AssetImage('assets/MapTogether_popUp.png'),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 105,
-                      right: -40,
-                      child: SizedBox(height: 50, width: 200, child: selector),
-                    ),
-                  ],
+      height: 250,
+      width: 1000,
+      point: popUpPositionOnMap,
+      builder: (context) => Visibility(
+        visible: showPopUp,
+        child: FittedBox(
+          child: Stack(
+            children: [
+              Container(
+                child: Center(
+                  child: Image(
+                    image: AssetImage('assets/MapTogether_popUp.png'),
+                  ),
                 ),
               ),
-            ));
+              Positioned(
+                bottom: 105,
+                right: -40,
+                child: SizedBox(height: 50, width: 200, child: selector),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
 
     void _handleLongPress(LatLng latLng) {
       setState(() {

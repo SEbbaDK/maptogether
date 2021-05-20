@@ -45,6 +45,12 @@ class QuestHandler extends ChangeNotifier {
     notifyListeners();
     this.quests = quests;
   }
+
+  void removeQuest(Quest quest) {
+    this.quests.remove(quest);
+    notifyListeners();
+  }
+
 }
 
 // TODO: Slet det her

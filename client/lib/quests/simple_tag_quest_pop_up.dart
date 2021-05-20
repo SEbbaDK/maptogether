@@ -1,4 +1,5 @@
 import 'package:client/login_handler.dart';
+import 'package:client/quests/quest_handler.dart';
 import 'package:client/quests/simple_tag_quest.dart';
 import 'package:flutter/material.dart';
 import 'package:osm_api/osm_api.dart' as osm;
@@ -17,7 +18,12 @@ class SimpleTagQuestPopUp extends StatelessWidget {
       buttons.add(
         ElevatedButton(
           onPressed: () {
-            _quest.solve(context.read<LoginHandler>().osmApi(), tag);
+            _quest
+                .solve(context.read<LoginHandler>().osmApi(), tag)
+                .then((value) {
+              context.read<QuestHandler>().removeQuest(_quest);
+              Navigator.pop(context);
+            });
           },
           child: Text(possibility),
         ),
@@ -28,25 +34,25 @@ class SimpleTagQuestPopUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
-    decoration: BoxDecoration(
-        color: Colors.lightGreen,
-        borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-    height: 200,
-    child: Column(
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            _quest.getQuestion(),
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+        decoration: BoxDecoration(
+            color: Colors.lightGreen,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
+        height: 200,
+        child: Column(
+          children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    _quest.getQuestion(),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ] +
+              createButtons(context),
         ),
-      ] +
-          createButtons(context),
-    ),
-  );
+      );
 }

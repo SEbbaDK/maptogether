@@ -28,7 +28,7 @@ class BackrestBenchQuest extends SimpleTagQuest {
   }
 
   @override
-  void solve(osm.Api api, String possibility) async {
+  Future<void> solve(osm.Api api, String possibility) async {
     int changeSetId = await api.createChangeset(this.getChangesetComment());
 
     // add the new tag to the tag-map

@@ -3,7 +3,7 @@ import 'package:client/quests/quest_pop_up.dart';
 import 'package:flutter/material.dart';
 
 /*
-  This class should be used as our default child in Markers for quests
+  This class should be used as the default child in Markers for quests
  */
 class QuestMarkerChild extends StatelessWidget {
   QuestMarkerChild(this.markerLogo, this.quest);
