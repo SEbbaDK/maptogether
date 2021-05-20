@@ -62,24 +62,24 @@ class Api {
   Future<data.User> user(int id) =>
       _get('user/$id').then(_checkRequest('getting user')).then(_decodeUser);
 
-  Future<data.Leaderboard> leaderboard(String base, LeaderboardType type) =>
-      _get('leaderboard/$base/${stringify(type)}')
+  Future<data.Leaderboard> leaderboard(LeaderboardType type, String name) =>
+      _get('leaderboard/${stringify(type) / $name}')
           .then(_checkRequest('getting leaderboard'))
           .then(_decodeLeaderboard);
 
   Future<data.Leaderboard> personalLeaderboard(LeaderboardType type) =>
-      leaderboard('personal', type);
+      leaderboard(type, 'personal');
 
   Future<data.Leaderboard> globalLeaderboard(LeaderboardType type) =>
-      leaderboard('global', type);
+      leaderboard(type, 'global');
 
-  Future<data.Leaderboard> regionalLeaderboard(
-      String region, LeaderboardType type) {
-    if (region == 'personal' || region == 'global')
-      throw InvalidRegionException();
-    else
-      return leaderboard(region, type);
-  }
+  // Future<data.Leaderboard> regionalLeaderboard(
+  //     String region, LeaderboardType type) {
+  //   if (region == 'personal' || region == 'global')
+  //     throw InvalidRegionException();
+  //   else
+  //     return leaderboard(region, type);
+  // }
 
   // Push Endpoints
 

@@ -13,6 +13,8 @@ class User {
   final List<SimpleUser> followers;
   @JsonKey(defaultValue: null)
   final List<SimpleUser> following;
+  @JsonKey(defaultValue: null)
+  final List<LeaderboardSummary> leaderboards;
 
   User(
       {required this.id,
@@ -20,9 +22,28 @@ class User {
       required this.name,
       required this.achievements,
       required this.followers,
-      required this.following});
+      required this.following,
+      required this.leaderboards});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
+  Map<String, dynamic> toJson() => _$UserToJson(this);
+}
+
+@JsonSerializable()
+class LeaderboardSummary {
+  final String path, name, type;
+  final int rank, total;
+
+  LeaderboardSummary({
+    required this.path,
+    required this.name,
+    required this.type,
+    required this.rank,
+    required this.total,
+  });
+
+  factory LeaderboardSummary.fromJson(Map<String, dynamic> json) =>
+      _$LeaderboardSummaryFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }
 

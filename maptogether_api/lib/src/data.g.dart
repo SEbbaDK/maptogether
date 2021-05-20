@@ -20,6 +20,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
     following: (json['following'] as List<dynamic>)
         .map((e) => SimpleUser.fromJson(e as Map<String, dynamic>))
         .toList(),
+    leaderboards: (json['leaderboards'] as List<dynamic>)
+        .map((e) => LeaderboardSummary.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -30,6 +33,26 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'achievements': instance.achievements,
       'followers': instance.followers,
       'following': instance.following,
+      'leaderboards': instance.leaderboards,
+    };
+
+LeaderboardSummary _$LeaderboardSummaryFromJson(Map<String, dynamic> json) {
+  return LeaderboardSummary(
+    path: json['path'] as String,
+    name: json['name'] as String,
+    type: json['type'] as String,
+    rank: json['rank'] as int,
+    total: json['total'] as int,
+  );
+}
+
+Map<String, dynamic> _$LeaderboardSummaryToJson(LeaderboardSummary instance) =>
+    <String, dynamic>{
+      'path': instance.path,
+      'name': instance.name,
+      'type': instance.type,
+      'rank': instance.rank,
+      'total': instance.total,
     };
 
 Achievement _$AchievementFromJson(Map<String, dynamic> json) {
