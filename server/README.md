@@ -33,8 +33,9 @@ Responds with json object of a user like this:
     ],
     "leaderboards": [
         {
-            "leaderboard": <leaderboard name (Global/Personal)>,
-            "type": <All_Time/Monthly/Weekly>,
+            "path": <path to leaderboard>,
+            "name": <leaderboard name (Global/Personal)>,
+            "type": <all_time/monthly/weekly>,
             "rank": <rank number>,
             "total": <number of participants>
         },
