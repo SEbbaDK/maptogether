@@ -88,6 +88,15 @@ class LoginHandler extends ChangeNotifier {
 
   bool loggedIntoSocial() => socialOptIn() && loggedIntoOSM();
 
+  int _userId = null;
+  Future<int> userId() async {
+    if (_userId == null)
+      	_userId = await osmApi().userId();
+    return _userId;
+  }
+
+  Future<mt.User> user() async => mtApi().user(await userId());
+
   optIn() {
     prefs().setBool('socialOptIn', true);
     osmApi().userId().then((id) =>
@@ -104,6 +113,7 @@ class LoginHandler extends ChangeNotifier {
   }
 
   logout() {
+    _userId = null;
     prefs().setString('accessToken', '');
     prefs().setString('accessSecret', '');
     notifyListeners();

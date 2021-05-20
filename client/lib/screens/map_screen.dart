@@ -13,9 +13,9 @@ import 'package:client/screens/social_screen.dart';
 import 'package:client/login_flow.dart';
 
 import 'package:client/widgets/map/map.dart';
-import 'package:client/widgets/map/button/button_row.dart';
-import 'package:client/widgets/map/button/map_screen_button.dart';
-import 'package:client/widgets/map/button/pup_up_menu.dart';
+import 'package:client/widgets/map/buttons/button_row.dart';
+import 'package:client/widgets/map/buttons/map_screen_button.dart';
+import 'package:client/widgets/map/buttons/pup_up_menu.dart';
 
 
 launchSocial(BuildContext context) =>

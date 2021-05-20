@@ -5,14 +5,14 @@ import 'package:maptogether_api/maptogether_api.dart';
 import 'package:provider/provider.dart';
 
 import 'package:client/widgets/app_bar.dart';
-import 'package:client/data_fetchers.dart';
+import 'package:client/widgets/future_loader.dart';
 
-class LeaderBoardView extends StatelessWidget {
-  int leaderboardIndex;
-  String leaderBoardName;
-  LeaderboardType type;
-  LeaderBoardView(
-      {Key key, @required this.leaderBoardName, @required this.type})
+class LeaderboardWidget extends StatelessWidget {
+
+  Future<Leaderboard> leaderboard;
+    
+  LeaderboardWidget(
+      {Key key, @required this.leaderboard})
       : super(key: key);
 
   Widget scoreWidget(int placement, String name, int score) => Card(
@@ -24,9 +24,9 @@ class LeaderBoardView extends StatelessWidget {
         ),
       );
 
-  Widget leaderboard(Leaderboard leaderboard) => Scaffold(
+  Widget leaderboardWidget(Leaderboard leaderboard) => Scaffold(
       appBar: MapTogetherAppBar(
-        title: "Leaderboard for " + leaderBoardName,
+        title: "Leaderboard for <LEADERBOARDNAME>",
         actions: [],
       ),
       body: Column(children: <Widget>[
@@ -41,16 +41,9 @@ class LeaderBoardView extends StatelessWidget {
       ]));
 
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getLeaderboard(type, leaderBoardName),
-        builder: (BuildContext context, AsyncSnapshot<Leaderboard> snapshot) {
-          if (snapshot.hasData)
-            return leaderboard(snapshot.data);
-          else if (snapshot.hasError)
-            return errorData();
-          else
-            return Expanded(flex: 14, child: waitingLoop());
-        });
-  }
+  Widget build(BuildContext context) => FutureLoader(
+    future: leaderboard,
+    builder: (BuildContext context, Leaderboard leaderboard) =>
+        leaderboardWidget(leaderboard)
+  );
 }

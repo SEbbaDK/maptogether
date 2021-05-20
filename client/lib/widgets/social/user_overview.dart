@@ -1,18 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'leaderboard.dart';
 import 'package:maptogether_api/maptogether_api.dart';
-import 'package:client/data_fetchers.dart';
 
-class UserOverView extends StatelessWidget {
+import 'package:client/widgets/future_loader.dart';
+
+class UserOverview extends StatelessWidget {
+  Future<User> user;
+  UserOverview(this.user);
+    
   @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<User>(
-        future: getUser(),
-        builder: (BuildContext context, AsyncSnapshot<User> user) {
-          if (user.hasData) {
-            return Container(
+  Widget build(BuildContext context) =>
+    FutureLoader<User>(
+        future: user,
+        builder: (BuildContext context, User user) =>
+            Container(
               padding: EdgeInsets.all(10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -31,19 +33,7 @@ class UserOverView extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text("Weekly   : " + user.data.score.toString(),
-                        style: TextStyle(fontFamily: 'RobotoMono',
-                            fontSize: 18,
-                            color: Colors.lightGreen,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text("Monthly  : " + user.data.score.toString(),
-                        style: TextStyle(fontFamily: 'RobotoMono',
-                            fontSize: 18,
-                            color: Colors.lightGreen,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text("All time : " + user.data.score.toString(),
+                      Text("Score : ${user.score}",
                           style: TextStyle(fontFamily: 'RobotoMono',
                               fontSize: 18,
                               color: Colors.lightGreen,
@@ -54,18 +44,6 @@ class UserOverView extends StatelessWidget {
                   )
                 ],
               ),
-            );
-          }
-
-          else if(user.hasError)
-            return errorData();
-
-          else{
-            return Container(
-              padding: EdgeInsets.all(10.0),
-                child: waitingLoop());
-          }
-        }
+            )
     );
-  }
 }
