@@ -8,9 +8,7 @@ class BackrestBenchQuest extends SimpleTagQuest {
       : super(position, element);
 
   @override
-  getQuestion() {
-    return 'Does the bench have a backrest?';
-  }
+  getQuestion() => 'Does the bench have a backrest?';
 
   @override
   String getChangesetComment() => 'Added backrest tag for a bench';
@@ -19,7 +17,7 @@ class BackrestBenchQuest extends SimpleTagQuest {
   Widget getMarkerSymbol() => Icon(Icons.airline_seat_recline_normal_sharp);
 
   @override
-  Map<String, String> possibilitiesToTags() => {"Yes": "yes", "No": "no"};
+  Map<String, String> possibilitiesToTags() => {'Yes': 'yes', 'No': 'no'};
 
   @override
   Future<void> solve(osm.Api api, String possibility) async {
