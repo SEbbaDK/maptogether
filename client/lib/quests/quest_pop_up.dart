@@ -3,7 +3,6 @@ import 'package:client/quests/quest.dart';
 import 'package:client/quests/simple_tag_quest.dart';
 import 'package:client/quests/simple_tag_quest_pop_up.dart';
 import 'package:flutter/material.dart';
-import 'package:osm_api/osm_api.dart' as osm;
 import 'package:provider/provider.dart';
 
 class QuestPopUp extends StatelessWidget {
