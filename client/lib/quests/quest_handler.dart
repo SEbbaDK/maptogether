@@ -20,7 +20,7 @@ class QuestHandler extends ChangeNotifier {
     return !(element.tags.containsKey('backrest'));
   }
 
-  void getBenchQuests(
+  Future<List<Quest>> getBenchQuests(
       double left, double bottom, double right, double top) async {
     api = osm.Api(
         'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
@@ -37,28 +37,29 @@ class QuestHandler extends ChangeNotifier {
       benchQuests
           .add(BackrestBenchQuest(LatLng(element.lat, element.lon), element));
     });
+    return benchQuests;
+  }
 
-    print(benchElements);
-    quests.removeWhere((element) => benchQuests.contains(element));
-    quests.addAll(benchQuests);
-
-    quests = benchQuests;
-
+  Future<List<Quest>> getQuests(double left, double bottom, double right, double top) async {
+    List<Quest> quests = await getBenchQuests(left, bottom, right, top);
     notifyListeners();
+    return quests;
   }
 
   Future<void> answerBenchQuest(
     LoginHandler loginHandler,
     LocationHandler locationHandler,
     QuestHandler questFinder,
-    BackrestBenchQuest quest, int possibilityNumber,
+    BackrestBenchQuest quest,
+    int possibilityNumber,
   ) async {
     var api = loginHandler.osmApi();
 
     int changeSetId = await api.createChangeset(quest.getChangesetComment());
 
     // add the new tag to the tag-map
-    quest.element.tags['backrest'] = quest.getPossibilities()[possibilityNumber].toString();
+    quest.element.tags['backrest'] =
+        quest.getPossibilities()[possibilityNumber].toString();
 
     int nodeId = await api.updateNode(
         quest.element.id,
@@ -69,9 +70,10 @@ class QuestHandler extends ChangeNotifier {
         quest.element.tags);
 
     api.closeChangeset(changeSetId);
-    print('Selected answer: ' + quest.getPossibilities()[possibilityNumber].toString());
+    print('Selected answer: ' +
+        quest.getPossibilities()[possibilityNumber].toString());
 
-    questFinder.getBenchQuests(
+    questFinder.getQuests(
         locationHandler.mapController.bounds.west,
         locationHandler.mapController.bounds.south,
         locationHandler.mapController.bounds.east,

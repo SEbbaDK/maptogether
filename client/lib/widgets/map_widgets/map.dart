@@ -53,6 +53,13 @@ class _InteractiveMapState extends State<InteractiveMap> {
 
     List<Quest> quests = context.watch<QuestHandler>().quests;
 
+    List<MapMarker> questMarkers = [];
+    quests.forEach((quest) {
+      questMarkers.add(MapMarker(context, quest));
+    });
+
+
+
     List<Marker> backrestQuestMarkers = quests.map((quest) {
       List<Widget> textButtons = [];
       for (int i = 0; i < quest.getPossibilities().length; i++) {
@@ -287,8 +294,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
             showPopUp = false;
           });
         },
-        // Aalborg
-        //center: LatLng(57.04, 9.92),
         center: context.watch<LocationHandler>().getLocation(),
         zoom: 12.0,
         maxZoom: 22.0,
@@ -300,7 +305,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
           fitBoundsOptions: FitBoundsOptions(
             padding: EdgeInsets.all(50),
           ),
-          markers: backrestQuestMarkers,
+          markers: questMarkers,
           polygonOptions: PolygonOptions(
               borderColor: Colors.blueAccent,
               color: Colors.black12,

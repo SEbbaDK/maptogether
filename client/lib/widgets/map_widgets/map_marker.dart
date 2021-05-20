@@ -6,9 +6,7 @@ import 'package:latlong/latlong.dart';
 class MapMarker extends Marker {
   Quest quest;
 
-  LatLng position;
-
-  MapMarker(BuildContext context, this.quest, this.position) {
+  MapMarker(BuildContext context, this.quest) {
     build(context);
   }
 
