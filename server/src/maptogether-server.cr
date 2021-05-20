@@ -76,26 +76,29 @@ module MapTogether::Server
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
 				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
 
-				user.achievements = [] of Achievement
+				achievements = [] of Achievement
 				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
 					rows.each do
-						user.achievements << Achievement.new(rows.read(String), rows.read(String))
+						achievements << Achievement.new(rows.read(String), rows.read(String))
 					end
 				end
+				user.achievements = achievements
 
-				user.followers = [] of User
+				followers = [] of User
 				db.query Queries::FOLLOWERS_FROM_ID, id do |rows|
 					rows.each do
-						user.followers << User.new(user_id: rows.read(Int64), name: rows.read(String))
+						followers << User.new(user_id: rows.read(Int64), name: rows.read(String))
 					end
 				end
+				user.followers = followers
 
-				user.following = [] of User
+				following = [] of User
 				db.query Queries::FOLLOWING_FROM_ID, id do |rows|
 					rows.each do
-						user.following << User.new(user_id: rows.read(Int64), name: rows.read(String))
+						following << User.new(user_id: rows.read(Int64), name: rows.read(String))
 					end
 				end
+				user.following = following
 			end
 
 			env.response.content_type = "application/json"
