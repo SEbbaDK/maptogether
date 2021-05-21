@@ -26,15 +26,9 @@ class Overview extends StatelessWidget {
                   unselectedLabelColor: Colors.black,
                   isScrollable: false,
                   tabs: <Widget>[
-                    Tab(
-                      text: "All Time",
-                    ),
-                    Tab(
-                      text: "Monthly",
-                    ),
-                    Tab(
-                      text: "Weekly",
-                    ),
+                    Tab(text: "All Time"),
+                    Tab(text: "Monthly"),
+                    Tab(text: "Weekly"),
                   ]),
               body: TabBarView(
                 children: [
@@ -60,7 +54,7 @@ class Overview extends StatelessWidget {
                     leaderboardItem(context, type, "global")),
       );
 
-  Widget leaderboardItem(context, type, name) => Card(
+  Widget leaderboardItem(BuildContext context, LeaderboardType type, String name) => Card(
           child: ListTile(
         leading: Text(name),
         onTap: () {
@@ -70,7 +64,7 @@ class Overview extends StatelessWidget {
                 builder: (context) => LeaderboardWidget(leaderboard: context
                     .watch<LoginHandler>()
                     .mtApi()
-                    .leaderboard(type, name)),
+                    .leaderboard(name, type)),
               ));
         },
       ));

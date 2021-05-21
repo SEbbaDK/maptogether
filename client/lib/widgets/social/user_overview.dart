@@ -33,6 +33,13 @@ class UserOverview extends StatelessWidget {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      Text(user.name,
+                          style: TextStyle(fontFamily: 'RobotoMono',
+                              fontSize: 22,
+                              color: Colors.lightGreen,
+                              fontWeight: FontWeight.bold
+                          )
+                      ),
                       Text("Score : ${user.score}",
                           style: TextStyle(fontFamily: 'RobotoMono',
                               fontSize: 18,

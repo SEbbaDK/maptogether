@@ -86,7 +86,7 @@ class Api {
   Future<void> createUser(
           int id, String secret, String clientToken, String clientSecret) =>
       _put('user/$id',
-              auth: 'Basic $_access $secret $clientToken $clientSecret')
+              auth: '$_access $secret $clientToken $clientSecret')
           .then(_checkRequest('creating user'));
 
   Future<void> follow(int id, int other) =>

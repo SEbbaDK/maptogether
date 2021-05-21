@@ -37,7 +37,7 @@ class LoginHandler extends ChangeNotifier {
     final creds = await _auth
         .getAccessToken(_tempToken, verifier)
         .then((res) => res.credentials);
-    login(creds.token, creds.tokenSecret);
+    await login(creds.token, creds.tokenSecret);
     return true;
   }
 
@@ -47,8 +47,10 @@ class LoginHandler extends ChangeNotifier {
   mt.Api _mtApi = null;
 
   mt.Api mtApi() {
+    try {
 	if (!loggedIntoSocial())
       throw Exception('Cannot get MT Api before logging in');
+    } catch (e, s) { print("$s"); throw Exception("$e"); }
     if (_mtApi == null)
 		_mtApi = mt.Api(_accessToken());
 	return _mtApi;
@@ -97,18 +99,19 @@ class LoginHandler extends ChangeNotifier {
 
   Future<mt.User> user() async => mtApi().user(await userId());
 
-  optIn() {
-    prefs().setBool('socialOptIn', true);
-    osmApi().userId().then((id) =>
+  optIn() async {
+    print('Opting in to social features');
+    await prefs().setBool('socialOptIn', true);
+    await userId().then((id) =>
  	  mtApi().createUser(id, _accessSecret(), _ckey, _csec).then((_) => 
         notifyListeners()
       )
     );
   }
 
-  login(token, secret) {
-    prefs().setString('accessToken', token);
-    prefs().setString('accessSecret', secret);
+  login(token, secret) async {
+    await prefs().setString('accessToken', token);
+    await prefs().setString('accessSecret', secret);
     notifyListeners();
   }
 
