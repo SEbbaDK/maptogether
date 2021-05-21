@@ -18,8 +18,11 @@ class BuildingTypeQuest extends SimpleTagQuest {
 
   @override
   Map<String, String> possibilitiesToTags() => {
+        //Accomodation
         'Apartments': 'apartments',
         'Bungalow': 'bungalow',
+        'Cabin': 'cabin',
+        'Detached': 'detached',
         'Dormitory': 'dormitory',
         'Farm': 'farm',
         'Ger': 'ger',
@@ -29,6 +32,79 @@ class BuildingTypeQuest extends SimpleTagQuest {
         'Residential': 'residential',
         'Semidetached house': 'semidetached_house',
         'Static caravan': 'static_caravan',
+        'Terrace' : 'terrace',
+        // Commercial
+        'Commercial': 'commercial',
+        'Industrial': 'industrial',
+        'Kiosk': 'kiosk',
+        'Office': 'office',
+        'Retail': 'retail',
+        'Supermarket': 'supermarket',
+        'Warehouse': 'warehouse',
+        // Religious
+        'Cathedral': 'cathedral',
+        'Chapel': 'chapel',
+        'Church': 'church',
+        'Monastery': 'monastery',
+        'Mosque': 'mosque',
+        'Presbytery': 'presbytery',
+        'Religious': 'religious',
+        'Shine': 'shine',
+        'Synagogue': 'synagogue',
+        'Temple': 'temple',
+        //Civic/Amenity
+        'Bakehouse': 'bakehouse',
+        'Civic': 'civic',
+        'Fire station': 'fire_station',
+        'Government': 'government',
+        'Hospital': 'hospital',
+        'Public': 'public',
+        'Toilets': 'toilets',
+        'Train station': 'train_station',
+        'Transportation': 'transportation',
+        'Kindergarten': 'kindergarten',
+        'School': 'school',
+        'University': 'university',
+        'College': 'college',
+        //Agriculture
+        'Barn': 'barn',
+        'Conservatory': 'conservatory',
+        'Cowshed': 'cowshed',
+        'Farm auxiliary': 'farm_auxiliary',
+        'Greenhouse': 'greenhouse',
+        'Slurry tank': 'slurry_tank',
+        'Stable': 'stable',
+        'Sty': 'sty',
+        //spots
+        'Grandstand': 'grandstand',
+        'Pavilion': 'pavilion',
+        'Riding hall': 'riding_hall',
+        'Sports hall': 'sports_hall',
+        'Stadium': 'stadium',
+        //Storage
+        'Hangar': 'hangar',
+        'Hut': 'hut',
+        'Shed': 'shed',
+        //Cars
+        'Carport': 'carport',
+        'Garage': 'garage',
+        'Garages': 'garages',
+        'Parking': 'parking',
+        //Power
+        'Digester': 'digester',
+        'Service': 'service',
+        'Transformer tower': 'transformer_tower',
+        'Water tower': 'water_tower',
+        //Other
+        'Military': 'military',
+        'Bunker': 'bunker',
+        'Bridge': 'bridge',
+        'Construction': 'construction',
+        'Container': 'container',
+        'Gatehouse': 'gatehouse',
+        'Roof': 'roof',
+        'Ruins': 'ruins',
+        'Tree house': 'tree_house',
       };
 
   @override
