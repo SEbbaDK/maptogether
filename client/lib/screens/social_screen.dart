@@ -25,10 +25,8 @@ class _SocialScreenState extends State<SocialScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final loginHandler = context.watch<LoginHandler>();
-
     if (user == null) {
-        user = loginHandler.user();
+        user = context.read<LoginHandler>().user();
         menuItems = [
             Overview(user),
             Friends(user),
@@ -42,7 +40,7 @@ class _SocialScreenState extends State<SocialScreen> {
         title: 'Social menu',
         actions: [
 			TextButton(child: Text("Log out", style: TextStyle(color: Colors.white)), onPressed: () {
-		       loginHandler.logout();
+		       context.read<LoginHandler>().logout();
 		       Navigator.pop(context);
 			}),
         ],
