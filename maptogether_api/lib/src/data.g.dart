@@ -20,6 +20,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
     following: (json['following'] as List<dynamic>)
         .map((e) => SimpleUser.fromJson(e as Map<String, dynamic>))
         .toList(),
+    leaderboards: (json['leaderboards'] as List<dynamic>)
+        .map((e) => Placement.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -30,6 +33,7 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'achievements': instance.achievements,
       'followers': instance.followers,
       'following': instance.following,
+      'leaderboards': instance.leaderboards,
     };
 
 Achievement _$AchievementFromJson(Map<String, dynamic> json) {
@@ -89,3 +93,27 @@ Map<String, dynamic> _$LeaderboardEntryToJson(LeaderboardEntry instance) =>
       'user': instance.user,
       'score': instance.score,
     };
+
+Placement _$PlacementFromJson(Map<String, dynamic> json) {
+  return Placement(
+    path: json['path'] as String,
+    name: json['name'] as String,
+    rank: json['rank'] as int,
+    total: json['total'] as int,
+    type: LeaderboardTypeExtension.fromString(json['type'] as String),
+  );
+}
+
+Map<String, dynamic> _$PlacementToJson(Placement instance) => <String, dynamic>{
+      'path': instance.path,
+      'name': instance.name,
+      'rank': instance.rank,
+      'total': instance.total,
+      'type': _$LeaderboardTypeEnumMap[instance.type],
+    };
+
+const _$LeaderboardTypeEnumMap = {
+  LeaderboardType.weekly: 'weekly',
+  LeaderboardType.monthly: 'monthly',
+  LeaderboardType.all_time: 'all_time',
+};

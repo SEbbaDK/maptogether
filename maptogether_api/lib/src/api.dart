@@ -2,31 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'data.dart' as data;
 
-enum LeaderboardType { weekly, monthly, all_time }
-
-extension LeaderboardTypeExtension on LeaderboardType {
-  String stringify() {
-    switch (this) {
-      case LeaderboardType.weekly:
-        return "weekly";
-      case LeaderboardType.monthly:
-        return "monthly";
-      case LeaderboardType.all_time:
-        return 'all_time';
-    }
-    throw 'Leaderboard type does not exsist';
-  }
-
-  static fromString(String type) {
-    switch (type) {
-      case "weekly": return LeaderboardType.weekly;
-      case "monthly": return LeaderboardType.monthly;
-      case "all_time": return LeaderboardType.all_time;
-      default: return LeaderboardType.all_time;
-    }
-  }
-}
-
 class InvalidRegionException implements Exception {
   final String _message;
   InvalidRegionException(
@@ -74,23 +49,23 @@ class Api {
   Future<data.User> user(int id) =>
       _get('user/$id').then(_checkRequest('getting user')).then(_decodeUser);
 
-  Future<data.Leaderboard> leaderboard(String base, LeaderboardType type) =>
-      _get('leaderboard/$base/${type.stringify()}')
+  Future<data.Leaderboard> leaderboard(data.LeaderboardType type, String base) =>
+      _get('leaderboard/${type.stringify()}/$base')
           .then(_checkRequest('getting leaderboard'))
           .then(_decodeLeaderboard);
 
-  Future<data.Leaderboard> personalLeaderboard(LeaderboardType type) =>
-      leaderboard('personal', type);
+  Future<data.Leaderboard> personalLeaderboard(data.LeaderboardType type, int id) =>
+      leaderboard(type, 'personal/${id}');
 
-  Future<data.Leaderboard> globalLeaderboard(LeaderboardType type) =>
-      leaderboard('global', type);
+  Future<data.Leaderboard> globalLeaderboard(data.LeaderboardType type) =>
+      leaderboard(type,'global');
 
   Future<data.Leaderboard> regionalLeaderboard(
-      String region, LeaderboardType type) {
+      String region, data.LeaderboardType type) {
     if (region == 'personal' || region == 'global')
       throw InvalidRegionException();
     else
-      return leaderboard(region, type);
+      return leaderboard(type, region);
   }
 
   // Push Endpoints
