@@ -253,8 +253,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
                       color: Colors.lightGreen,
                       shape: BoxShape.circle,
                     ),
-                    child:
-                        Icon(Icons.not_listed_location_rounded),
+                    child: Icon(Icons.not_listed_location_rounded),
                   ),
                 ),
                 Flexible(

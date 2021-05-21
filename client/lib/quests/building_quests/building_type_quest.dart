@@ -32,7 +32,7 @@ class BuildingTypeQuest extends SimpleTagQuest {
         'Residential': 'residential',
         'Semidetached house': 'semidetached_house',
         'Static caravan': 'static_caravan',
-        'Terrace' : 'terrace',
+        'Terrace': 'terrace',
         // Commercial
         'Commercial': 'commercial',
         'Industrial': 'industrial',

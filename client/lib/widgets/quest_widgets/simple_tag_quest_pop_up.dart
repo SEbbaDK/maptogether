@@ -21,7 +21,9 @@ class SimpleTagQuestPopUp extends StatelessWidget {
             _quest
                 .solve(context.read<LoginHandler>().osmApi(), tag)
                 .then((value) {
-              context.read<QuestHandler>().removeQuest(_quest); // Remove the solved quest
+              context
+                  .read<QuestHandler>()
+                  .removeQuest(_quest); // Remove the solved quest
               Navigator.pop(context); // Close pop up
             });
           },
