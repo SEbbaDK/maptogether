@@ -14,9 +14,21 @@ module Queries
 		WHERE userID = $1 limit 1
 	"
 
-	TOTAL_SCORE_FROM_ID =
-		"SELECT COALESCE(SUM(score),0) AS score
+	TOTAL_SCORE_FROM_ID = "
+		SELECT COALESCE(SUM(score),0) AS score
 		FROM contributions
+		WHERE userID = $1
+	"
+
+	MONTHLY_SCORE_FROM_ID = "
+		SELECT score
+		FROM leaderboardMonthly
+		WHERE userID = $1
+	"
+
+	WEEKLY_SCORE_FROM_ID = "
+		SELECT score
+		FROM leaderboardWeekly
 		WHERE userID = $1
 	"
 

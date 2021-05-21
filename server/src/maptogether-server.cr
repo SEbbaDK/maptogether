@@ -84,7 +84,9 @@ module MapTogether::Server
 
 			try_open_connection do |db|
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
-				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
+				user.score_all_time = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
+				user.score_monthly = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
+				user.score_weekly = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
 
 				achievements = [] of Achievement
 				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
