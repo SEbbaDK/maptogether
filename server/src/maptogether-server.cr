@@ -49,17 +49,26 @@ module MapTogether::Server
 			atype, key, secret, ckey, csecret = vals
 			http_raise 400, "Authentication type needs to be 'Basic'" if atype != "Basic"
 
-			client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
-			OAuth.authenticate client, key, secret, ckey, csecret
+			# TODO: It is important that we add this check back in, but oauth seems to be broken
+			# with osm, so it is disabled for now
 
-			response = client.get("/api/0.6/user/details.json")
-			http_raise 401, "Authentication failed for OSM" if response.status_code == 401
-			http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
-			json = JSON.parse(response.body)
-			osm_id = json["user"]["id"].as_i64
-			name = json["user"]["display_name"]
+			# client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
+			# OAuth.authenticate client, key, secret, ckey, csecret
 
-			http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
+			# response = client.get("/api/0.6/user/details.json")
+			# puts vals if response.status_code != 200
+			# puts "Body: #{response.body}" if response.status_code != 200
+			# http_raise 401, "Authentication failed for OSM" if response.status_code == 401
+			# http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
+			# json = JSON.parse(response.body)
+			# osm_id = json["user"]["id"].as_i64
+			# name = json["user"]["display_name"]
+
+			# TEMP
+			name = "User #{id}"
+			# TEMP
+
+			# http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
 
 			try_open_connection do |db|
 				db.exec Queries::USER_UPSERT, id, name, key
@@ -77,27 +86,29 @@ module MapTogether::Server
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
 				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
 
-				user.achievements = [] of Achievement
+				achievements = [] of Achievement
 				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
 					rows.each do
-						user.achievements << Achievement.new(rows.read(String), rows.read(String))
+						achievements << Achievement.new(rows.read(String), rows.read(String))
 					end
 				end
+				user.achievements = achievements
 
-				user.followers = [] of User
+				followers = [] of User
 				db.query Queries::FOLLOWERS_FROM_ID, id do |rows|
 					rows.each do
-						user.followers << User.new(user_id: rows.read(Int64), name: rows.read(String))
+						followers << User.new(user_id: rows.read(Int64), name: rows.read(String))
+					end
+				end
+				user.followers = followers
+
+				following = [] of User
+				db.query Queries::FOLLOWING_FROM_ID, id do |rows|
+					rows.each do
+						following << User.new(user_id: rows.read(Int64), name: rows.read(String))
 					end
 				end
 
-				user.following = [] of User
-				db.query Queries::FOLLOWING_FROM_ID, id do |rows|
-					rows.each do
-						user.following << User.new(user_id: rows.read(Int64), name: rows.read(String))
-					end
-				end
-				
 				user.leaderboards = [
 					Placement.new(
 						"/leaderboard/all_time/global",
@@ -140,7 +151,7 @@ module MapTogether::Server
 						Leaderboard_Type::Weekly,
 						db.query_one(Queries::PERSONAL_WEEKLY_RANK, id, as: Int64),
 						db.query_one(Queries::PERSONAL_WEEKLY_COUNT, id, as: Int64)
-					)
+					),
 				]
 			end
 
@@ -173,10 +184,9 @@ module MapTogether::Server
 			end
 		end
 
-		
 		get "/leaderboard/all_time/personal/:id" do |env|
 			id = env.params.url["id"]
-			
+
 			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::PERSONAL_ALL_TIME, id do |rows|
@@ -184,14 +194,14 @@ module MapTogether::Server
 					end
 				end
 			end
-			
+
 			env.response.content_type = "application/json"
 			string
 		end
-		
+
 		get "/leaderboard/weekly/personal/:id" do |env|
 			id = env.params.url["id"]
-			
+
 			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::PERSONAL_WEEKLY, id do |rows|
@@ -199,14 +209,14 @@ module MapTogether::Server
 					end
 				end
 			end
-			
+
 			env.response.content_type = "application/json"
 			string
 		end
-		
+
 		get "/leaderboard/monthly/personal/:id" do |env|
 			id = env.params.url["id"]
-			
+
 			string = JSON.build do |json|
 				try_open_connection do |db|
 					db.query Queries::PERSONAL_MONTHLY, id do |rows|
@@ -214,11 +224,11 @@ module MapTogether::Server
 					end
 				end
 			end
-			
+
 			env.response.content_type = "application/json"
 			string
 		end
-		
+
 		# Retrieve all users' id, name and score
 		get "/leaderboard/all_time/global" do |env|
 			string = JSON.build do |json|
@@ -232,7 +242,7 @@ module MapTogether::Server
 			env.response.content_type = "application/json"
 			string
 		end
-		
+
 		get "/leaderboard/monthly/global" do |env|
 			string = JSON.build do |json|
 				try_open_connection do |db|
@@ -241,7 +251,7 @@ module MapTogether::Server
 					end
 				end
 			end
-			
+
 			env.response.content_type = "application/json"
 			string
 		end

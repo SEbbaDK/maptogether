@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:client/database.dart';
 import 'package:client/widgets/app_bar.dart';
-import 'package:client/widgets/social_menu_widgets/friends.dart';
-import 'package:client/widgets/social_menu_widgets/groups.dart';
-import 'package:client/widgets/social_menu_widgets/history.dart';
-import 'package:client/widgets/social_menu_widgets/overview.dart';
-import 'package:client/widgets/social_menu_widgets/user_overview.dart';
-import 'package:client/screens/login_screen.dart';
+import 'package:client/widgets/social/friends.dart';
+import 'package:client/widgets/social/groups.dart';
+import 'package:client/widgets/social/history.dart';
+import 'package:client/widgets/social/overview.dart';
+import 'package:client/widgets/social/user_overview.dart';
+import 'package:client/login_flow.dart';
 import 'package:client/login_handler.dart';
+import 'package:maptogether_api/maptogether_api.dart';
 
 class SocialScreen extends StatefulWidget {
   @override
@@ -19,23 +19,28 @@ class SocialScreen extends StatefulWidget {
 class _SocialScreenState extends State<SocialScreen> {
   int menuIndex = 0;
 
-  List<Widget> menuItems = [
-    Overview(),
-    Friends(),
-    Groups(),
-    History(),
-  ];
+  Future<User> user = null;
+  List<Widget> menuItems = null;
 
   @override
   Widget build(BuildContext context) {
-    final loginHandler = context.watch<LoginHandler>();
+
+    if (user == null) {
+        user = context.read<LoginHandler>().user();
+        menuItems = [
+            Overview(user),
+            Friends(user),
+            Groups(),
+            History(),
+      ];
+    }
 
     return Scaffold(
       appBar: MapTogetherAppBar(
-        title: 'Social menu',
+        title: 'Social',
         actions: [
 			TextButton(child: Text("Log out", style: TextStyle(color: Colors.white)), onPressed: () {
-		       loginHandler.logout();
+		       context.read<LoginHandler>().logout();
 		       Navigator.pop(context);
 			}),
         ],

@@ -5,19 +5,19 @@ class User
 	property user_id : Nil | Int64
 	property name : Nil | String
 	property score : Nil | Int64
-	property achievements : Array(Achievement)
-	property followers : Array(User)
-	property following : Array(User)
-	property leaderboards : Array(Placement)
+	property achievements : Nil | Array(Achievement)
+	property followers : Nil | Array(User)
+	property following : Nil | Array(User)
+	property leaderboards : Nil | Array(Placement)
 
 	def initialize(
 		@user_id = nil,
 		@name = nil,
 		@score = nil,
-		@achievements = [] of Achievement,
-		@followers = [] of User,
-		@following = [] of User,
-		@leaderboards = [] of Placement
+		@achievements = nil,
+		@followers = nil,
+		@following = nil,
+		@leaderboards = nil
 	)
 	end
 
@@ -29,35 +29,27 @@ class User
 
 			json.field "achievements" do
 				json.array do
-					@achievements.each do |achievement|
-						achievement.to_json(json)
-					end
+					@achievements.try &.each &.to_json(json)
 				end
-			end unless @achievements.size == 0
+			end unless @achievements.nil?
 
 			json.field "followers" do
 				json.array do
-					@followers.each do |follower|
-						follower.to_json(json)
-					end
+					@followers.try &.each &.to_json(json)
 				end
-			end unless @followers.size == 0
+			end unless @followers.nil?
 
 			json.field "following" do
 				json.array do
-					@following.each do |followee|
-						followee.to_json(json)
-					end
+					@following.try &.each &.to_json(json)
 				end
-			end unless @following.size == 0
+			end unless @following.nil?
 
 			json.field "leaderboards" do
 				json.array do
-					@leaderboards.each do |placement|
-						placement.to_json(json)
-					end
+					@leaderboards.try &.each &.to_json(json)
 				end
-			end unless @leaderboards.size == 0
+			end unless @leaderboards.nil?
 		end
 	end
 end

@@ -14,8 +14,8 @@ module Queries
 		WHERE userID = $1 limit 1
 	"
 
-	TOTAL_SCORE_FROM_ID = "
-		SELECT SUM (score) AS score
+	TOTAL_SCORE_FROM_ID =
+		"SELECT COALESCE(SUM(score),0) AS score
 		FROM contributions
 		WHERE userID = $1
 	"
@@ -81,7 +81,7 @@ module Queries
 				EXISTS (
 				SELECT 1
 				FROM follows
-        		WHERE userID = $1 OR (follower = $1 AND followee = userID)
+						WHERE userID = $1 OR (follower = $1 AND followee = userID)
 			)
 			AND
 			(score != 0 OR userID = $1)) AS l
@@ -97,7 +97,7 @@ module Queries
 				EXISTS (
 				SELECT 1
 				FROM follows
-        		WHERE userID = $1 OR (follower = $1 AND followee = userID)
+						WHERE userID = $1 OR (follower = $1 AND followee = userID)
 			)
 			AND
 			(score != 0 OR userID = $1)) AS l
@@ -113,7 +113,7 @@ module Queries
 				EXISTS (
 				SELECT 1
 				FROM follows
-        		WHERE userID = $1 OR (follower = $1 AND followee = userID)
+						WHERE userID = $1 OR (follower = $1 AND followee = userID)
 			)
 			AND
 			(score != 0 OR userID = $1)) AS l
