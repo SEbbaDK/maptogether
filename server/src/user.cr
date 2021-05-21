@@ -29,9 +29,9 @@ class User
 		json.object do
 			json.field "id", @user_id
 			json.field "name", @name
-			json.field "score_all_time", @score unless @score.nil?
-			json.field "score_monthly", @score unless @score.nil?
-			json.field "score_weekly", @score unless @score.nil?
+			json.field "score_all_time", @score_all_time unless @score_all_time.nil?
+			json.field "score_monthly", @score_monthly unless @score_monthly.nil?
+			json.field "score_weekly", @score_weekly unless @score_weekly.nil?
 
 			json.field "achievements" do
 				json.array do
