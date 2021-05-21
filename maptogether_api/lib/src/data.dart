@@ -5,7 +5,13 @@ part 'data.g.dart';
 
 @JsonSerializable()
 class User {
-  final int id, score;
+  final int id;
+  @JsonKey(name: "score_all_time")
+  final int scoreAllTime;
+  @JsonKey(name: "score_monthly")
+  final int scoreMonthly;
+  @JsonKey(name: "score_weekly")
+  final int scoreWeekly;
   final String name;
 
   @JsonKey(defaultValue: null)
@@ -19,7 +25,9 @@ class User {
 
   User(
       {required this.id,
-      required this.score,
+      required this.scoreAllTime,
+      required this.scoreMonthly,
+      required this.scoreWeekly,
       required this.name,
       required this.achievements,
       required this.followers,
