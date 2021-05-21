@@ -36,25 +36,6 @@ Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'leaderboards': instance.leaderboards,
     };
 
-LeaderboardSummary _$LeaderboardSummaryFromJson(Map<String, dynamic> json) {
-  return LeaderboardSummary(
-    path: json['path'] as String,
-    name: json['name'] as String,
-    type: json['type'] as String,
-    rank: json['rank'] as int,
-    total: json['total'] as int,
-  );
-}
-
-Map<String, dynamic> _$LeaderboardSummaryToJson(LeaderboardSummary instance) =>
-    <String, dynamic>{
-      'path': instance.path,
-      'name': instance.name,
-      'type': instance.type,
-      'rank': instance.rank,
-      'total': instance.total,
-    };
-
 Achievement _$AchievementFromJson(Map<String, dynamic> json) {
   return Achievement(
     name: json['name'] as String,
@@ -112,3 +93,28 @@ Map<String, dynamic> _$LeaderboardEntryToJson(LeaderboardEntry instance) =>
       'user': instance.user,
       'score': instance.score,
     };
+
+LeaderboardSummary _$LeaderboardSummaryFromJson(Map<String, dynamic> json) {
+  return LeaderboardSummary(
+    path: json['path'] as String,
+    name: json['name'] as String,
+    rank: json['rank'] as int,
+    total: json['total'] as int,
+    type: LeaderboardTypeExtension.fromString(json['type'] as String),
+  );
+}
+
+Map<String, dynamic> _$LeaderboardSummaryToJson(LeaderboardSummary instance) =>
+    <String, dynamic>{
+      'path': instance.path,
+      'name': instance.name,
+      'rank': instance.rank,
+      'total': instance.total,
+      'type': _$LeaderboardTypeEnumMap[instance.type],
+    };
+
+const _$LeaderboardTypeEnumMap = {
+  LeaderboardType.weekly: 'weekly',
+  LeaderboardType.monthly: 'monthly',
+  LeaderboardType.all_time: 'all_time',
+};

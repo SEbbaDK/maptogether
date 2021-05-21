@@ -15,6 +15,13 @@ void main() {
       )
     ], following: [
       data.SimpleUser(id: 2, name: 'Med')
+    ], leaderboards: [
+      data.Placement(
+          path: "/leaderboard/all_time/global",
+          name: "Global",
+          rank: 1,
+          total: 20,
+          type: data.LeaderboardType.all_time)
     ]);
 
     test('have', () => expect(user.followers.length, 1));

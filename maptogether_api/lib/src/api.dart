@@ -2,19 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'data.dart' as data;
 
-enum LeaderboardType { weekly, monthly, all_time }
-String stringify(LeaderboardType type) {
-  switch (type) {
-    case LeaderboardType.weekly:
-      return "weekly";
-    case LeaderboardType.monthly:
-      return "monthly";
-    case LeaderboardType.all_time:
-      return 'all_time';
-  }
-  throw 'Leaderboard type does not exsist';
-}
-
 class InvalidRegionException implements Exception {
   final String _message;
   InvalidRegionException(
@@ -62,27 +49,22 @@ class Api {
   Future<data.User> user(int id) =>
       _get('user/$id').then(_checkRequest('getting user')).then(_decodeUser);
 
-  Future<data.Leaderboard> leaderboard(LeaderboardType type, String name) =>
-      _get('leaderboard/${stringify(type) / $name}')
+  Future<data.Leaderboard> leaderboard(
+          data.LeaderboardType type, String name) =>
+      _get('leaderboard/${type.stringify()}/$name')
           .then(_checkRequest('getting leaderboard'))
           .then(_decodeLeaderboard);
 
-  Future<data.Leaderboard> leaderboard(String name, Leaderboard type) =>
-  	  throw Exception('leaderboard(string, type) is deprecated. Use leaderboard(type, string).');
+  @Deprecated('Replaced by leaderboard(type, string)')
+  Future<data.Leaderboard> leaderboard(String name, data.Leaderboard type) =>
+  	leaderboard(type, name);
 
-  Future<data.Leaderboard> personalLeaderboard(LeaderboardType type) =>
-      leaderboard(type, 'personal');
+  Future<data.Leaderboard> personalLeaderboard(
+          data.LeaderboardType type, int id) =>
+      leaderboard(type, 'personal/${id}');
 
-  Future<data.Leaderboard> globalLeaderboard(LeaderboardType type) =>
+  Future<data.Leaderboard> globalLeaderboard(data.LeaderboardType type) =>
       leaderboard(type, 'global');
-
-  // Future<data.Leaderboard> regionalLeaderboard(
-  //     String region, LeaderboardType type) {
-  //   if (region == 'personal' || region == 'global')
-  //     throw InvalidRegionException();
-  //   else
-  //     return leaderboard(region, type);
-  // }
 
   // Push Endpoints
 
