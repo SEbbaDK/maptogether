@@ -85,8 +85,8 @@ module MapTogether::Server
 			try_open_connection do |db|
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
 				user.score_all_time = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
-				user.score_monthly = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
-				user.score_weekly = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
+				user.score_monthly = db.query_one Queries::MONTHLY_SCORE_FROM_ID, id, as: {Int64}
+				user.score_weekly = db.query_one Queries::WEEKLY_SCORE_FROM_ID, id, as: {Int64}
 
 				achievements = [] of Achievement
 				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
@@ -116,21 +116,21 @@ module MapTogether::Server
 						"/leaderboard/all_time/global",
 						"Global",
 						Leaderboard_Type::All_Time,
-						db.query_one(Queries::GLOBAL_ALL_TIME_RANK, as: Int64),
+						db.query_one(Queries::GLOBAL_ALL_TIME_RANK, id, as: Int64),
 						db.query_one(Queries::GLOBAL_ALL_TIME_COUNT, as: Int64)
 					),
 					Placement.new(
 						"/leaderboard/monthly/global",
 						"Global",
 						Leaderboard_Type::Monthly,
-						db.query_one(Queries::GLOBAL_MONTHLY_RANK, as: Int64),
+						db.query_one(Queries::GLOBAL_MONTHLY_RANK, id, as: Int64),
 						db.query_one(Queries::GLOBAL_MONTHLY_COUNT, as: Int64)
 					),
 					Placement.new(
 						"/leaderboard/weekly/global",
 						"Global",
 						Leaderboard_Type::Weekly,
-						db.query_one(Queries::GLOBAL_WEEKLY_RANK, as: Int64),
+						db.query_one(Queries::GLOBAL_WEEKLY_RANK, id, as: Int64),
 						db.query_one(Queries::GLOBAL_WEEKLY_COUNT, as: Int64)
 					),
 					Placement.new(
