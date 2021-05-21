@@ -3,16 +3,28 @@ import 'package:http/http.dart' as http;
 import 'data.dart' as data;
 
 enum LeaderboardType { weekly, monthly, all_time }
-String stringify(LeaderboardType type) {
-  switch (type) {
-    case LeaderboardType.weekly:
-      return "weekly";
-    case LeaderboardType.monthly:
-      return "monthly";
-    case LeaderboardType.all_time:
-      return 'all_time';
+
+extension LeaderboardTypeExtension on LeaderboardType {
+  String stringify() {
+    switch (this) {
+      case LeaderboardType.weekly:
+        return "weekly";
+      case LeaderboardType.monthly:
+        return "monthly";
+      case LeaderboardType.all_time:
+        return 'all_time';
+    }
+    throw 'Leaderboard type does not exsist';
   }
-  throw 'Leaderboard type does not exsist';
+
+  static fromString(String type) {
+    switch (type) {
+      case "weekly": return LeaderboardType.weekly;
+      case "monthly": return LeaderboardType.monthly;
+      case "all_time": return LeaderboardType.all_time;
+      default: return LeaderboardType.all_time;
+    }
+  }
 }
 
 class InvalidRegionException implements Exception {
@@ -63,7 +75,7 @@ class Api {
       _get('user/$id').then(_checkRequest('getting user')).then(_decodeUser);
 
   Future<data.Leaderboard> leaderboard(String base, LeaderboardType type) =>
-      _get('leaderboard/$base/${stringify(type)}')
+      _get('leaderboard/$base/${type.stringify()}')
           .then(_checkRequest('getting leaderboard'))
           .then(_decodeLeaderboard);
 
