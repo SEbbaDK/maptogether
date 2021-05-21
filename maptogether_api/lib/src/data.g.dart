@@ -9,7 +9,9 @@ part of 'data.dart';
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
     id: json['id'] as int,
-    score: json['score'] as int,
+    scoreAllTime: json['score_all_time'] as int,
+    scoreMonthly: json['score_monthly'] as int,
+    scoreWeekly: json['score_weekly'] as int,
     name: json['name'] as String,
     achievements: (json['achievements'] as List<dynamic>)
         .map((e) => Achievement.fromJson(e as Map<String, dynamic>))
@@ -28,7 +30,9 @@ User _$UserFromJson(Map<String, dynamic> json) {
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
-      'score': instance.score,
+      'score_all_time': instance.scoreAllTime,
+      'score_monthly': instance.scoreMonthly,
+      'score_weekly': instance.scoreWeekly,
       'name': instance.name,
       'achievements': instance.achievements,
       'followers': instance.followers,
