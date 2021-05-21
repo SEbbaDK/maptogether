@@ -79,7 +79,6 @@ class QuestHandler extends ChangeNotifier {
 
     List<osm.Element> buildingElements = elements
         .where((element) => _hasKeyValue(element, 'building', 'yes'))
-        //.where((element) => _hasTag(element, 'building'))
         .toList();
 
     print('Antal bygninger:' + buildingElements.length.toString());
@@ -87,8 +86,6 @@ class QuestHandler extends ChangeNotifier {
     List<Quest> buildingQuests = [];
 
     for (var buildingElement in buildingElements) {
-      print('Antal noder ${buildingElement.nodes.length}');
-
       double averageLat = 0, averageLong = 0;
 
       for (int nodeId in buildingElement.nodes) {
