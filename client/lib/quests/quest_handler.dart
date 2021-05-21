@@ -10,19 +10,21 @@ class QuestHandler extends ChangeNotifier {
 
   List<Quest> quests = [];
 
+  // Finding quests within bound
   void loadQuests(double left, double bottom, double right, double top) async {
-    // Finding quests within bound
+    api = osm.Api(
+        'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
+    List<osm.Element> elements =
+        (await api.mapByBox(left, bottom, right, top)).elements;
 
-    List<Quest> backrestBenchQuest =
-        await _getBackrestBenchQuests(left, bottom, right, top);
+    List<Quest> backrestBenchQuest = await _getBackrestBenchQuests(elements);
     backrestBenchQuest.forEach((backrestBenchQuest) {
       if (!this.quests.contains(backrestBenchQuest)) {
         this.quests.add(backrestBenchQuest);
       }
     });
 
-    List<Quest> buildingTypeQuests =
-        await _getBuildingTypeQuests(left, bottom, right, top);
+    List<Quest> buildingTypeQuests = await _getBuildingTypeQuests(elements);
     buildingTypeQuests.forEach((buildingTypeQuest) {
       if (!this.quests.contains(buildingTypeQuest)) {
         this.quests.add(buildingTypeQuest);
@@ -51,12 +53,7 @@ class QuestHandler extends ChangeNotifier {
   }
 
   Future<List<Quest>> _getBackrestBenchQuests(
-      double left, double bottom, double right, double top) async {
-    api = osm.Api(
-        'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
-    List<osm.Element> elements =
-        (await api.mapByBox(left, bottom, right, top)).elements;
-
+      List<osm.Element> elements) async {
     List<osm.Element> benchElements = elements
         .where((element) => _hasKeyValue(element, 'amenity', 'bench'))
         .where((element) => !_hasTag(element, 'backrest'))
@@ -70,13 +67,7 @@ class QuestHandler extends ChangeNotifier {
     return benchQuests;
   }
 
-  Future<List<Quest>> _getBuildingTypeQuests(
-      double left, double bottom, double right, double top) async {
-    api = osm.Api(
-        'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
-    List<osm.Element> elements =
-        (await api.mapByBox(left, bottom, right, top)).elements;
-
+  Future<List<Quest>> _getBuildingTypeQuests(List<osm.Element> elements) async {
     List<osm.Element> buildingElements = elements
         .where((element) => _hasKeyValue(element, 'building', 'yes'))
         .toList();
@@ -95,8 +86,8 @@ class QuestHandler extends ChangeNotifier {
       averageLat /= buildingElement.nodes.length;
       averageLong /= buildingElement.nodes.length;
 
-      buildingQuests
-          .add(BuildingTypeQuest(LatLng(averageLat, averageLong), buildingElement));
+      buildingQuests.add(
+          BuildingTypeQuest(LatLng(averageLat, averageLong), buildingElement));
     }
     return buildingQuests;
   }
