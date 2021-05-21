@@ -1,0 +1,3 @@
+REFRESH MATERIALIZED VIEW leaderboardAllTime;
+REFRESH MATERIALIZED VIEW leaderboardMonthly;
+REFRESH MATERIALIZED VIEW leaderboardWeekly;
