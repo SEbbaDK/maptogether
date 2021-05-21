@@ -49,16 +49,18 @@ class Api {
   Future<data.User> user(int id) =>
       _get('user/$id').then(_checkRequest('getting user')).then(_decodeUser);
 
-  Future<data.Leaderboard> leaderboard(data.LeaderboardType type, String base) =>
+  Future<data.Leaderboard> leaderboard(
+          data.LeaderboardType type, String base) =>
       _get('leaderboard/${type.stringify()}/$base')
           .then(_checkRequest('getting leaderboard'))
           .then(_decodeLeaderboard);
 
-  Future<data.Leaderboard> personalLeaderboard(data.LeaderboardType type, int id) =>
+  Future<data.Leaderboard> personalLeaderboard(
+          data.LeaderboardType type, int id) =>
       leaderboard(type, 'personal/${id}');
 
   Future<data.Leaderboard> globalLeaderboard(data.LeaderboardType type) =>
-      leaderboard(type,'global');
+      leaderboard(type, 'global');
 
   Future<data.Leaderboard> regionalLeaderboard(
       String region, data.LeaderboardType type) {

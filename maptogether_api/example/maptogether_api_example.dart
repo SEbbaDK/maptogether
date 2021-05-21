@@ -20,6 +20,4 @@ void main() {
   api.leaderboard("global", LeaderboardType.all_time).then((l) {
     print(l.entries[1].user.name);
   });
-
 }
-

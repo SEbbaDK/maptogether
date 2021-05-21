@@ -109,12 +109,12 @@ class Placement {
   @JsonKey(fromJson: LeaderboardTypeExtension.fromString)
   final LeaderboardType type;
 
-  Placement({
-    required this.path,
-    required this.name,
-    required this.rank,
-    required this.total,
-    required this.type});
+  Placement(
+      {required this.path,
+      required this.name,
+      required this.rank,
+      required this.total,
+      required this.type});
 
   factory Placement.fromJson(Map<String, dynamic> json) =>
       _$PlacementFromJson(json);
@@ -124,7 +124,6 @@ class Placement {
 enum LeaderboardType { weekly, monthly, all_time }
 
 extension LeaderboardTypeExtension on LeaderboardType {
-
   String stringify() {
     switch (this) {
       case LeaderboardType.weekly:
@@ -139,10 +138,14 @@ extension LeaderboardTypeExtension on LeaderboardType {
 
   static LeaderboardType fromString(String type) {
     switch (type) {
-      case "weekly": return LeaderboardType.weekly;
-      case "monthly": return LeaderboardType.monthly;
-      case "all_time": return LeaderboardType.all_time;
-      default: return LeaderboardType.all_time;
+      case "weekly":
+        return LeaderboardType.weekly;
+      case "monthly":
+        return LeaderboardType.monthly;
+      case "all_time":
+        return LeaderboardType.all_time;
+      default:
+        return LeaderboardType.all_time;
     }
   }
 }
