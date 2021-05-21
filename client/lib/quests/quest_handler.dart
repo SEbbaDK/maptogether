@@ -1,4 +1,5 @@
 import 'package:client/quests/bench_quests/backrest_bench_quest.dart';
+import 'package:client/quests/building_quests/building_type_quest.dart';
 import 'package:client/quests/quest.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
@@ -9,15 +10,22 @@ class QuestHandler extends ChangeNotifier {
 
   List<Quest> quests = [];
 
-  Future<List<Quest>> getQuests(
-      double left, double bottom, double right, double top) async {
+  void loadQuests(double left, double bottom, double right, double top) async {
     // Finding quests within bound
+
     List<Quest> backrestBenchQuest =
         await _getBackrestBenchQuests(left, bottom, right, top);
-
     backrestBenchQuest.forEach((backrestBenchQuest) {
       if (!this.quests.contains(backrestBenchQuest)) {
         this.quests.add(backrestBenchQuest);
+      }
+    });
+
+    List<Quest> buildingTypeQuests =
+        await _getBuildingTypeQuests(left, bottom, right, top);
+    buildingTypeQuests.forEach((buildingTypeQuest) {
+      if (!this.quests.contains(buildingTypeQuest)) {
+        this.quests.add(buildingTypeQuest);
       }
     });
 
@@ -29,13 +37,17 @@ class QuestHandler extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isBench(osm.Element element) {
-    return (element.tags.containsKey('amenity') &&
-        element.tags.containsValue('bench'));
+  bool _hasKeyValue(osm.Element element, String key, String value) {
+    for (var k in element.tags.keys) {
+      if (k == key && element.tags[k] == value) {
+        return true;
+      }
+    }
+    return false;
   }
 
-  bool _hasTagBenchBackrest(osm.Element element) {
-    return !(element.tags.containsKey('backrest'));
+  bool _hasTag(osm.Element element, String tag) {
+    return (element.tags.containsKey(tag));
   }
 
   Future<List<Quest>> _getBackrestBenchQuests(
@@ -45,16 +57,61 @@ class QuestHandler extends ChangeNotifier {
     List<osm.Element> elements =
         (await api.mapByBox(left, bottom, right, top)).elements;
 
-    List<Quest> benchQuests = [];
     List<osm.Element> benchElements = elements
-        .where((element) => _isBench(element))
-        .where((element) => _hasTagBenchBackrest(element))
+        .where((element) => _hasKeyValue(element, 'amenity', 'bench'))
+        .where((element) => !_hasTag(element, 'backrest'))
         .toList();
 
+    List<Quest> benchQuests = [];
     benchElements.forEach((element) {
       benchQuests
           .add(BackrestBenchQuest(LatLng(element.lat, element.lon), element));
     });
     return benchQuests;
+  }
+
+  Future<List<Quest>> _getBuildingTypeQuests(
+      double left, double bottom, double right, double top) async {
+    api = osm.Api(
+        'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
+    List<osm.Element> elements =
+        (await api.mapByBox(left, bottom, right, top)).elements;
+
+    List<osm.Element> buildingElements = elements
+        .where((element) => _hasKeyValue(element, 'building', 'yes'))
+        //.where((element) => _hasTag(element, 'building'))
+        .toList();
+
+    print('Antal bygninger:' + buildingElements.length.toString());
+
+    List<Quest> buildingQuests = [];
+
+    for (var buildingElement in buildingElements) {
+      print('Antal noder ${buildingElement.nodes.length}');
+
+      double alat = 0, along = 0;
+
+      for (int nodeId in buildingElement.nodes) {
+        var node = await api.node(nodeId);
+        alat += node.elements.first.lat;
+        along += node.elements.first.lon;
+      }
+
+      print('alat: ${alat}');
+      print('along: ${along}');
+
+      alat /= buildingElement.nodes.length;
+      along /= buildingElement.nodes.length;
+
+      print('alat: ${alat}');
+      print('along: ${along}');
+
+      buildingQuests
+          .add(BuildingTypeQuest(LatLng(alat, along), buildingElement));
+      print('Added !');
+    }
+
+    print('Længde: ' + buildingQuests.length.toString());
+    return buildingQuests;
   }
 }

@@ -1,6 +1,5 @@
 import 'package:client/quests/simple_tag_quest.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:latlong/latlong.dart';
 import 'package:osm_api/osm_api.dart' as osm;
 
@@ -21,7 +20,15 @@ class BuildingTypeQuest extends SimpleTagQuest {
   Map<String, String> possibilitiesToTags() => {
         'Apartments': 'apartments',
         'Bungalow': 'bungalow',
+        'Dormitory': 'dormitory',
+        'Farm': 'farm',
+        'Ger': 'ger',
+        'Hotel': 'hotel',
         'House': 'house',
+        'Houseboat': 'houseboat',
+        'Residential': 'residential',
+        'Semidetached house': 'semidetached_house',
+        'Static caravan': 'static_caravan',
       };
 
   @override
