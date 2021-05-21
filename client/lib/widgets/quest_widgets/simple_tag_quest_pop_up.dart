@@ -39,20 +39,26 @@ class SimpleTagQuestPopUp extends StatelessWidget {
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         height: 200,
-        child: Column(
-          children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    _quest.getQuestion(),
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ] +
-              createButtons(context),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Column(
+                children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          _quest.getQuestion(),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ] +
+                    createButtons(context),
+              ),
+            ],
+          ),
         ),
       );
 }
