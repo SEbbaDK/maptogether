@@ -1,5 +1,5 @@
 CREATE MATERIALIZED VIEW leaderboardAllTime AS
-	SELECT u.userID, u.name, s.score
+	SELECT u.userID, u.name, COALESCE(s.score, 0) AS score
 	FROM (
 		SELECT userID, SUM (score) AS score
 		FROM contributions
@@ -11,7 +11,7 @@ CREATE MATERIALIZED VIEW leaderboardAllTime AS
 	ORDER BY score DESC;
 
 CREATE MATERIALIZED VIEW leaderboardWeekly AS
-	SELECT u.userID, u.name, s.score
+	SELECT u.userID, u.name, COALESCE(s.score, 0) AS score
 		FROM (
 			SELECT userID, SUM (score) AS score
 			FROM contributions
@@ -24,7 +24,7 @@ CREATE MATERIALIZED VIEW leaderboardWeekly AS
 		ORDER BY score DESC;
 
 CREATE MATERIALIZED VIEW leaderboardMonthly AS
-	SELECT u.userID, u.name, s.score
+	SELECT u.userID, u.name, COALESCE(s.score, 0) AS score
 		FROM (
 			SELECT userID, SUM (score) AS score
 			FROM contributions
