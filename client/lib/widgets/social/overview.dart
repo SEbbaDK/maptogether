@@ -64,7 +64,7 @@ class Overview extends StatelessWidget {
                 builder: (context) => LeaderboardWidget(leaderboard: context
                     .watch<LoginHandler>()
                     .mtApi()
-                    .leaderboard(name, type)),
+                    .leaderboard(type, name)),
               ));
         },
       ));
