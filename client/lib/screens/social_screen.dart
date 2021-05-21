@@ -37,7 +37,7 @@ class _SocialScreenState extends State<SocialScreen> {
 
     return Scaffold(
       appBar: MapTogetherAppBar(
-        title: 'Social menu',
+        title: 'Social',
         actions: [
 			TextButton(child: Text("Log out", style: TextStyle(color: Colors.white)), onPressed: () {
 		       context.read<LoginHandler>().logout();

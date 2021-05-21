@@ -99,10 +99,10 @@ class LoginHandler extends ChangeNotifier {
 
   Future<mt.User> user() async => mtApi().user(await userId());
 
-  optIn() {
+  optIn() async {
     print('Opting in to social features');
-    prefs().setBool('socialOptIn', true);
-    userId().then((id) =>
+    await prefs().setBool('socialOptIn', true);
+    await userId().then((id) =>
  	  mtApi().createUser(id, _accessSecret(), _ckey, _csec).then((_) => 
         notifyListeners()
       )
