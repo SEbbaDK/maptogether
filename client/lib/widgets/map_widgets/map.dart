@@ -234,7 +234,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
       ),
       layers: [
         MarkerClusterLayerOptions(
-          maxClusterRadius: 15,
+          maxClusterRadius: 50,
           size: Size(50, 50),
           fitBoundsOptions: FitBoundsOptions(
             padding: EdgeInsets.all(50),

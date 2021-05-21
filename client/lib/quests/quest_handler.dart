@@ -81,8 +81,6 @@ class QuestHandler extends ChangeNotifier {
         .where((element) => _hasKeyValue(element, 'building', 'yes'))
         .toList();
 
-    print('Antal bygninger:' + buildingElements.length.toString());
-
     List<Quest> buildingQuests = [];
 
     for (var buildingElement in buildingElements) {
