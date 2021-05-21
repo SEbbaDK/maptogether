@@ -47,18 +47,27 @@ module MapTogether::Server
 			http_raise 400, "Both access and client keypairs are required" if vals.size < 5
 			atype, key, secret, ckey, csecret = vals
 			http_raise 400, "Authentication type needs to be 'Basic'" if atype != "Basic"
+			
+			# TODO: It is important that we add this check back in, but oauth seems to be broken
+			# with osm, so it is disabled for now
 
-			client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
-			OAuth.authenticate client, key, secret, ckey, csecret
+			# client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
+			# OAuth.authenticate client, key, secret, ckey, csecret
 
-			response = client.get("/api/0.6/user/details.json")
-			http_raise 401, "Authentication failed for OSM" if response.status_code == 401
-			http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
-			json = JSON.parse(response.body)
-			osm_id = json["user"]["id"].as_i64
-			name = json["user"]["display_name"]
+			# response = client.get("/api/0.6/user/details.json")
+			# puts vals if response.status_code != 200
+			# puts "Body: #{response.body}" if response.status_code != 200
+			# http_raise 401, "Authentication failed for OSM" if response.status_code == 401
+			# http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
+			# json = JSON.parse(response.body)
+			# osm_id = json["user"]["id"].as_i64
+			# name = json["user"]["display_name"]
+			
+			# TEMP
+			name = "User #{id}"
+			# TEMP
 
-			http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
+			# http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
 
 			try_open_connection do |db|
 				db.exec Queries::USER_UPSERT, id, name, key
