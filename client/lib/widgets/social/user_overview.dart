@@ -40,13 +40,27 @@ class UserOverview extends StatelessWidget {
                               fontWeight: FontWeight.bold
                           )
                       ),
-                      Text("Score : ${user.score}",
+                      Text("Score : ${user.scoreAllTime}",
                           style: TextStyle(fontFamily: 'RobotoMono',
                               fontSize: 18,
                               color: Colors.lightGreen,
                               fontWeight: FontWeight.bold
                           )
-                      )
+                      ),
+                      Text("Monthly Score : ${user.scoreMonthly}",
+                          style: TextStyle(fontFamily: 'RobotoMono',
+                              fontSize: 18,
+                              color: Colors.lightGreen,
+                              fontWeight: FontWeight.bold
+                          )
+                      ),
+                      Text("Weekly Score : ${user.scoreWeekly}",
+                          style: TextStyle(fontFamily: 'RobotoMono',
+                              fontSize: 18,
+                              color: Colors.lightGreen,
+                              fontWeight: FontWeight.bold
+                          )
+                      ),
                     ],
                   )
                 ],
