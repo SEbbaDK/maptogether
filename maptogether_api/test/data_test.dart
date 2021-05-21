@@ -16,7 +16,7 @@ void main() {
     ], following: [
       data.SimpleUser(id: 2, name: 'Med')
     ], leaderboards: [
-      data.Placement(
+      data.LeaderboardSummary(
           path: "/leaderboard/all_time/global",
           name: "Global",
           rank: 1,

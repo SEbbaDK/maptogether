@@ -49,15 +49,13 @@ class Api {
   Future<data.User> user(int id) =>
       _get('user/$id').then(_checkRequest('getting user')).then(_decodeUser);
 
+  leaderboardByPath(String path) => _get('leaderboard/$path')
+      .then(_checkRequest('getting leaderboard'))
+      .then(_decodeLeaderboard);
+
   Future<data.Leaderboard> leaderboard(
           data.LeaderboardType type, String name) =>
-      _get('leaderboard/${type.stringify()}/$name')
-          .then(_checkRequest('getting leaderboard'))
-          .then(_decodeLeaderboard);
-
-  @Deprecated('Replaced by leaderboard(type, string)')
-  Future<data.Leaderboard> leaderboard(String name, data.Leaderboard type) =>
-  	leaderboard(type, name);
+      leaderboardByPath('${type.stringify()}/$name');
 
   Future<data.Leaderboard> personalLeaderboard(
           data.LeaderboardType type, int id) =>
@@ -70,8 +68,7 @@ class Api {
 
   Future<void> createUser(
           int id, String secret, String clientToken, String clientSecret) =>
-      _put('user/$id',
-              auth: '$_access $secret $clientToken $clientSecret')
+      _put('user/$id', auth: '$_access $secret $clientToken $clientSecret')
           .then(_checkRequest('creating user'));
 
   Future<void> follow(int id, int other) =>
