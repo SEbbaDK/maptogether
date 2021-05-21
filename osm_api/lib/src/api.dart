@@ -129,28 +129,6 @@ class Api {
   Future<data.MapData> relation(int id) =>
       _get('relation/$id').then(_checkRequest).then(_decodeMapData);
 
-  String wayXmlData(int changeset, Map<String, String> tags, List<int> nodes) {
-    return '''
-        		<osm>
-        			<way changeset="$changeset">
-        				${stringifyTags(tags)}
-        				${stringifyNodes(nodes)}
-        			</way>
-        		</osm>
-    		''';
-  }
-
-  String relationXmlData(
-      int changeset, Map<String, String> tags, List<data.Member> members) {
-    return '''
-        		<osm>
-        			<relation changeset="${changeset}">
-        				${stringifyTags(tags)}
-        				${stringifyMembers(members)}
-        			</relation>
-        		</osm>
-    		''';
-  }
 
   /// Create a new node and return its id
   Future<int> createNode(int changeset, double lat, double lon, int version,
@@ -178,9 +156,14 @@ class Api {
   /// Create a new relation and return its id
   Future<int> createRelation(
           int changeset, Map<String, String> tags, List<data.Member> members) =>
-      _put('relation/create', relationXmlData(changeset, tags, members))
-          .then(_checkRequest)
-          .then(_decodeInt);
+      _put('relation/create', '''
+        		<osm>
+        			<relation changeset="${changeset}">
+        				${stringifyTags(tags)}
+        				${stringifyMembers(members)}
+        			</relation>
+        		</osm>
+    		''').then(_checkRequest).then(_decodeInt);
 
   /// Update a node
   Future<int> updateNode(int id, int changeset, double lat, double lon,
@@ -195,17 +178,27 @@ class Api {
 
   /// Update a way
   Future<int> updateWay(
-          int id, int changeset, Map<String, String> tags, List<int> nodes) =>
-      _put('way/$id', wayXmlData(changeset, tags, nodes))
-          .then(_checkRequest)
-          .then(_decodeInt);
+          int id, int changeset, Map<String, String> tags, int version, List<int> nodes) =>
+      _put('way/$id', '''
+			<osm>
+				<way changeset="$changeset" id="$id" version="$version"> 
+					${stringifyTags(tags)}
+					${stringifyNodes(nodes)}
+				</way>
+			</osm>
+    		''').then(_checkRequest).then(_decodeInt);
 
   /// Update a relation
-  Future<int> updateRelation(int id, int changeset, Map<String, String> tags,
+  Future<int> updateRelation(int id, int changeset,int version, Map<String, String> tags,
           List<data.Member> members) =>
-      _put('relation/$id', relationXmlData(changeset, tags, members))
-          .then(_checkRequest)
-          .then(_decodeInt);
+      _put('relation/$id', '''
+        		<osm>
+        			<relation changeset="${changeset}"> version="$version"
+        				${stringifyTags(tags)}
+        				${stringifyMembers(members)}
+        			</relation>
+        		</osm>
+    		''').then(_checkRequest).then(_decodeInt);
 
   String stringifyTags(Map<String, String> map) =>
       map.entries.map((e) => '<tag k="${e.key}" v="${e.value}"/>').join('\n');

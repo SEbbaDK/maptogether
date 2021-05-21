@@ -89,29 +89,20 @@ class QuestHandler extends ChangeNotifier {
     for (var buildingElement in buildingElements) {
       print('Antal noder ${buildingElement.nodes.length}');
 
-      double alat = 0, along = 0;
+      double averageLat = 0, averageLong = 0;
 
       for (int nodeId in buildingElement.nodes) {
         var node = await api.node(nodeId);
-        alat += node.elements.first.lat;
-        along += node.elements.first.lon;
+        averageLat += node.elements.first.lat;
+        averageLong += node.elements.first.lon;
       }
 
-      print('alat: ${alat}');
-      print('along: ${along}');
-
-      alat /= buildingElement.nodes.length;
-      along /= buildingElement.nodes.length;
-
-      print('alat: ${alat}');
-      print('along: ${along}');
+      averageLat /= buildingElement.nodes.length;
+      averageLong /= buildingElement.nodes.length;
 
       buildingQuests
-          .add(BuildingTypeQuest(LatLng(alat, along), buildingElement));
-      print('Added !');
+          .add(BuildingTypeQuest(LatLng(averageLat, averageLong), buildingElement));
     }
-
-    print('Længde: ' + buildingQuests.length.toString());
     return buildingQuests;
   }
 }

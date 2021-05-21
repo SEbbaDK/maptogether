@@ -32,8 +32,21 @@ class BuildingTypeQuest extends SimpleTagQuest {
       };
 
   @override
-  Future<void> solve(osm.Api api, String possibility) {
-    // TODO: implement solve
-    throw UnimplementedError();
+  Future<void> solve(osm.Api api, String possibility) async {
+    int changeSetId = await api.createChangeset(this.getChangesetComment());
+
+    // add the new tag to the tag-map
+    print(this.element.tags['building']);
+    this.element.tags['building'] = possibility;
+
+    int nodeId = await api.updateWay(
+      this.element.id,
+      changeSetId,
+      this.element.tags,
+      this.element.version,
+      this.element.nodes,
+    );
+
+    api.closeChangeset(changeSetId);
   }
 }
