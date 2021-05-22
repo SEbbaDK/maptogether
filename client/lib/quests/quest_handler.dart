@@ -11,7 +11,7 @@ class QuestHandler extends ChangeNotifier {
   List<Quest> quests = [];
 
   // Finding quests within bound
-  void loadQuests(double left, double bottom, double right, double top) async {
+  Future<void> loadQuests(double left, double bottom, double right, double top) async {
     // Fetch elements within bound
     api = osm.Api(
         'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
