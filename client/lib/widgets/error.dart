@@ -7,9 +7,15 @@ class Error extends StatelessWidget {
     
   @override
   build(BuildContext context) =>
-    Icon(
-        Icons.error_outline,
-        color: Colors.red,
-        size: 60,
+    Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+            Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 60,
+            ),
+            Text(error.toString()),
+        ]
     );
 }
