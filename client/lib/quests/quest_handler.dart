@@ -17,7 +17,7 @@ class QuestHandler extends ChangeNotifier {
     List<osm.Element> elements =
         (await api.mapByBox(left, bottom, right, top)).elements;
 
-    List<Quest> backrestBenchQuest = await _getBackrestBenchQuests(elements);
+    List<Quest> backrestBenchQuest = _getBackrestBenchQuests(elements);
     backrestBenchQuest.forEach((backrestBenchQuest) {
       if (!this.quests.contains(backrestBenchQuest)) {
         this.quests.add(backrestBenchQuest);
@@ -52,8 +52,8 @@ class QuestHandler extends ChangeNotifier {
     return (element.tags.containsKey(tag));
   }
 
-  Future<List<Quest>> _getBackrestBenchQuests(
-      List<osm.Element> elements) async {
+  List<Quest> _getBackrestBenchQuests(
+      List<osm.Element> elements) {
     List<osm.Element> benchElements = elements
         .where((element) => _hasKeyValue(element, 'amenity', 'bench'))
         .where((element) => !_hasTag(element, 'backrest'))
@@ -79,6 +79,7 @@ class QuestHandler extends ChangeNotifier {
 
       for (int nodeId in buildingElement.nodes) {
         var node = await api.node(nodeId);
+        print('Hentede node');
         averageLat += node.elements.first.lat;
         averageLong += node.elements.first.lon;
       }
