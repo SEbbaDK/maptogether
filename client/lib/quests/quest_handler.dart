@@ -51,14 +51,16 @@ class QuestHandler extends ChangeNotifier {
     LoginHandler loginHandler,
     LocationHandler locationHandler,
     QuestHandler questFinder,
-    BackrestBenchQuest quest, int possibilityNumber,
+    BackrestBenchQuest quest,
+    int possibilityNumber,
   ) async {
     var api = loginHandler.osmApi();
 
     int changeSetId = await api.createChangeset(quest.getChangesetComment());
 
     // add the new tag to the tag-map
-    quest.element.tags['backrest'] = quest.getPossibilities()[possibilityNumber].toString();
+    quest.element.tags['backrest'] =
+        quest.getPossibilities()[possibilityNumber].toString();
 
     int nodeId = await api.updateNode(
         quest.element.id,
@@ -69,7 +71,8 @@ class QuestHandler extends ChangeNotifier {
         quest.element.tags);
 
     api.closeChangeset(changeSetId);
-    print('Selected answer: ' + quest.getPossibilities()[possibilityNumber].toString());
+    print('Selected answer: ' +
+        quest.getPossibilities()[possibilityNumber].toString());
 
     questFinder.getBenchQuests(
         locationHandler.mapController.bounds.west,

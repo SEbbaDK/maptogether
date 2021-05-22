@@ -8,12 +8,9 @@ import 'package:client/widgets/app_bar.dart';
 import 'package:client/widgets/future_loader.dart';
 
 class LeaderboardWidget extends StatelessWidget {
-
   Future<Leaderboard> leaderboard;
-    
-  LeaderboardWidget(
-      {Key key, @required this.leaderboard})
-      : super(key: key);
+
+  LeaderboardWidget({Key key, @required this.leaderboard}) : super(key: key);
 
   Widget scoreWidget(int placement, String name, int score) => Card(
         child: ListTile(
@@ -42,8 +39,7 @@ class LeaderboardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => FutureLoader(
-    future: leaderboard,
-    builder: (BuildContext context, Leaderboard leaderboard) =>
-        leaderboardWidget(leaderboard)
-  );
+      future: leaderboard,
+      builder: (BuildContext context, Leaderboard leaderboard) =>
+          leaderboardWidget(leaderboard));
 }

@@ -65,10 +65,11 @@ class _InteractiveMapState extends State<InteractiveMap> {
               LocationHandler locationHandler = context.read<LocationHandler>();
 
               if (!loginHandler.loggedIntoOSM())
-                  requestLogin(context, social: false);
+                requestLogin(context, social: false);
               else
-				  questHandler
-                    .answerBenchQuest(loginHandler, locationHandler, questHandler, quest, i)
+                questHandler
+                    .answerBenchQuest(
+                        loginHandler, locationHandler, questHandler, quest, i)
                     .then((value) => Navigator.pop(context));
             },
           ),

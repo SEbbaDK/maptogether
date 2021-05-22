@@ -3,8 +3,8 @@ import 'package:latlong/latlong.dart';
 import 'package:osm_api/osm_api.dart' as osm;
 
 class BackrestBenchQuest extends Quest {
-
-  BackrestBenchQuest(LatLng position, osm.Element element) : super(position, element);
+  BackrestBenchQuest(LatLng position, osm.Element element)
+      : super(position, element);
 
   @override
   List<String> getPossibilities() {
@@ -20,5 +20,4 @@ class BackrestBenchQuest extends Quest {
   String getChangesetComment() {
     return 'Added backrest tag for bench';
   }
-
 }

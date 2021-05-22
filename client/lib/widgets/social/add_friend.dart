@@ -13,23 +13,23 @@ class AddFriend extends StatelessWidget {
           title: 'Follow New',
           actions: [],
         ),
-        body: Center(child: Column(children: <Widget>[
+        body: Center(
+            child: Column(children: <Widget>[
           Container(
             child: Column(
               children: <Widget>[
                 Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(top: 50),
-                    child: Text(
-                      'Find via Username',
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 30),
-                    ),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(top: 50),
+                  child: Text(
+                    'Find via Username',
+                    style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30),
+                  ),
                 ),
-
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextField(
@@ -40,15 +40,12 @@ class AddFriend extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 Container(
                     height: 50,
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.green
-                      ),
+                          primary: Colors.white, backgroundColor: Colors.green),
                       child: Text('Follow'),
                       onPressed: () {
                         //Add friend to backend for user here
@@ -57,12 +54,9 @@ class AddFriend extends StatelessWidget {
                         Navigator.pop(context);
                       },
                     )),
-
               ],
             ),
           ),
-        ]
-        ))
-    );
+        ])));
   }
 }

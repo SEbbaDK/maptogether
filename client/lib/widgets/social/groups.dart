@@ -7,13 +7,8 @@ class Groups extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(40.0),
       child: Column(
-
         children: <Widget>[
-          Expanded(
-            flex: 10,
-            child: Text("Groups")
-          ),
-
+          Expanded(flex: 10, child: Text("Groups")),
           Expanded(
             flex: 1,
             child: Container(
