@@ -197,7 +197,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
     List<Quest> quests = context.watch<QuestHandler>().quests;
     List<Marker> questMarkers = [];
     quests.forEach((quest) {
-      print('Created Quest Markers');
       if (_mapController.bounds.contains(quest.position)) {
         questMarkers.add(Marker(
             point: quest.position,
