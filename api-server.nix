@@ -74,15 +74,13 @@ in
     };
     requires = [ "maptogether-database-setup.service" "postgresql.service" ];
     after = [ "maptogether-database-setup.service" "postgresql.service" ];
+    wantedBy = [ "default.target" ];
   };
 
-  systemd.timers.maptogether-refresh-timer = {
+  systemd.timers.maptogether-refresh-views = {
 	description = "Timer to trigger refresh";
-	timerConfig = {
-		Unit = "maptogether-refresh-views";
-		OnCalendar = "*:*:0"; # once a minute
-	};
-	wantedBy = [ "default.target" ];
+	timerConfig.OnCalendar = "*:*:0"; # once a minute
+	wantedBy = [ "timers.target" ];
   };
 
   users.groups.maptogether.gid = 1005;
