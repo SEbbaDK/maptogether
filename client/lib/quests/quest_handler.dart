@@ -14,7 +14,7 @@ class QuestHandler extends ChangeNotifier {
   void loadQuests(double left, double bottom, double right, double top) async {
     // Fetch elements within bound
     api = osm.Api(
-        'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
+        'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.production());
     List<osm.Element> elements =
         (await api.mapByBox(left, bottom, right, top)).elements;
 
@@ -59,6 +59,7 @@ class QuestHandler extends ChangeNotifier {
     List<osm.Element> benchElements = elements
         .where((element) => _hasKeyValue(element, 'amenity', 'bench'))
         .where((element) => !_hasTag(element, 'backrest'))
+        .where((element) => element.type == osm.ElementType.node)
         .toList();
 
     List<Quest> benchQuests = [];
@@ -82,12 +83,10 @@ class QuestHandler extends ChangeNotifier {
       double averageLat = 0, averageLong = 0;
 
       for (int nodeId in buildingElement.nodes) {
-        osm.Element node;
         for (osm.Element e in elements) {
           if (e.id == nodeId && e.type == osm.ElementType.node) {
-            node = e;
-            averageLat += node.lat;
-            averageLong += node.lon;
+            averageLat += e.lat;
+            averageLong += e.lon;
           }
         }
       }
