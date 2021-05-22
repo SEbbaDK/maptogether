@@ -14,7 +14,7 @@ class QuestHandler extends ChangeNotifier {
   void loadQuests(double left, double bottom, double right, double top) async {
     // Fetch elements within bound
     api = osm.Api(
-        'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.production());
+        'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
     List<osm.Element> elements =
         (await api.mapByBox(left, bottom, right, top)).elements;
 
@@ -27,7 +27,7 @@ class QuestHandler extends ChangeNotifier {
     });
 
     // Finds buildingTypeQuests
-    List<Quest> buildingTypeQuests = await _getBuildingTypeQuests(elements);
+    List<Quest> buildingTypeQuests = _getBuildingTypeQuests(elements);
     buildingTypeQuests.forEach((buildingTypeQuest) {
       if (!this.quests.contains(buildingTypeQuest)) {
         this.quests.add(buildingTypeQuest);
