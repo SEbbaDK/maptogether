@@ -29,12 +29,10 @@ class _PopUpMenuState extends State<PopUpMenu> {
       MapScreenButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => NewActivityScreen())
-            );
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NewActivityScreen()));
             closeMenu();
           }),
-
       MapScreenButton(
           child: Icon(Icons.location_history),
           onPressed: () {
@@ -42,7 +40,6 @@ class _PopUpMenuState extends State<PopUpMenu> {
                 context, MaterialPageRoute(builder: (context) => Settings()));
             closeMenu();
           }),
-
       MapScreenButton(
           child: Icon(Icons.settings),
           onPressed: () {

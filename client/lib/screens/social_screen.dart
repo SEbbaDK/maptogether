@@ -24,14 +24,13 @@ class _SocialScreenState extends State<SocialScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     if (user == null) {
-        user = context.read<LoginHandler>().user();
-        menuItems = [
-            Overview(user),
-            Friends(user),
-            Groups(),
-            History(),
+      user = context.read<LoginHandler>().user();
+      menuItems = [
+        Overview(user),
+        Friends(user),
+        Groups(),
+        History(),
       ];
     }
 
@@ -39,10 +38,12 @@ class _SocialScreenState extends State<SocialScreen> {
       appBar: MapTogetherAppBar(
         title: 'Social',
         actions: [
-			TextButton(child: Text("Log out", style: TextStyle(color: Colors.white)), onPressed: () {
-		       context.read<LoginHandler>().logout();
-		       Navigator.pop(context);
-			}),
+          TextButton(
+              child: Text("Log out", style: TextStyle(color: Colors.white)),
+              onPressed: () {
+                context.read<LoginHandler>().logout();
+                Navigator.pop(context);
+              }),
         ],
       ),
       body: Container(

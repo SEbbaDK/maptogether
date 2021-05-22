@@ -1,26 +1,34 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:maptogether_api/src/api.dart';
 
 part 'data.g.dart';
 
 @JsonSerializable()
 class User {
-  final int id, score;
+  final int id;
+  @JsonKey(name: "score_all_time")
+  final int scoreAllTime;
+  @JsonKey(name: "score_monthly")
+  final int scoreMonthly;
+  @JsonKey(name: "score_weekly")
+  final int scoreWeekly;
   final String name;
 
-  @JsonKey(defaultValue: null)
   final List<Achievement> achievements;
-  @JsonKey(defaultValue: null)
   final List<SimpleUser> followers;
-  @JsonKey(defaultValue: null)
   final List<SimpleUser> following;
+  final List<LeaderboardSummary> leaderboards;
 
   User(
       {required this.id,
-      required this.score,
+      required this.scoreAllTime,
+      required this.scoreMonthly,
+      required this.scoreWeekly,
       required this.name,
       required this.achievements,
       required this.followers,
-      required this.following});
+      required this.following,
+      required this.leaderboards});
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
@@ -95,4 +103,53 @@ class Leaderboard {
   Leaderboard(this.entries);
   factory Leaderboard.fromJson(List<dynamic> json) => Leaderboard(
       json.map((e) => LeaderboardEntry.fromJson(e)).toList(growable: false));
+}
+
+@JsonSerializable()
+class LeaderboardSummary {
+  final String path, name;
+  final int rank, total;
+
+  @JsonKey(fromJson: LeaderboardTypeExtension.fromString)
+  final LeaderboardType type;
+
+  LeaderboardSummary(
+      {required this.path,
+      required this.name,
+      required this.rank,
+      required this.total,
+      required this.type});
+
+  factory LeaderboardSummary.fromJson(Map<String, dynamic> json) =>
+      _$LeaderboardSummaryFromJson(json);
+  Map<String, dynamic> toJson() => _$LeaderboardSummaryToJson(this);
+}
+
+enum LeaderboardType { weekly, monthly, all_time }
+
+extension LeaderboardTypeExtension on LeaderboardType {
+  String stringify() {
+    switch (this) {
+      case LeaderboardType.weekly:
+        return "weekly";
+      case LeaderboardType.monthly:
+        return "monthly";
+      case LeaderboardType.all_time:
+        return 'all_time';
+    }
+    throw 'Leaderboard type does not exsist';
+  }
+
+  static LeaderboardType fromString(String type) {
+    switch (type) {
+      case "weekly":
+        return LeaderboardType.weekly;
+      case "monthly":
+        return LeaderboardType.monthly;
+      case "all_time":
+        return LeaderboardType.all_time;
+      default:
+        return LeaderboardType.all_time;
+    }
+  }
 }

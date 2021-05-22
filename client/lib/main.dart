@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart';
 
-
 void main() => runApp(
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => LoginHandler()),

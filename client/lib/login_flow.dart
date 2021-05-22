@@ -8,7 +8,6 @@ import 'package:client/login_handler.dart';
 import 'package:client/widgets/app_bar.dart';
 import 'package:client/widgets/future_loader.dart';
 
-
 class LoginWebView extends StatelessWidget {
   final String url;
 
@@ -52,13 +51,10 @@ class LoginWebView extends StatelessWidget {
 MaterialPageRoute<bool> loginPage() => MaterialPageRoute<bool>(
     builder: (context) => FutureLoader<String>(
         future: context.watch<LoginHandler>().loginUrl(),
-        builder: (BuildContext context, String url) =>
-            LoginWebView(url)
-            )
-            );
+        builder: (BuildContext context, String url) => LoginWebView(url)));
 
-
-Future<bool> requestLogin(BuildContext context, {bool social = false}) => request(
+Future<bool> requestLogin(BuildContext context, {bool social = false}) =>
+    request(
       context,
       title: social
           ? 'You must login to access social features'
@@ -71,8 +67,7 @@ Future<bool> requestLogin(BuildContext context, {bool social = false}) => reques
     ).then((answer) async {
       if (answer == false) return false;
       final login = await Navigator.push<bool>(context, loginPage());
-      if (login && social)
-          await context.read<LoginHandler>().optIn();
+      if (login && social) await context.read<LoginHandler>().optIn();
       return login;
     });
 

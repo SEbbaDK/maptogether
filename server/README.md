@@ -16,27 +16,49 @@ Responds with json object of a user like this:
             "description": <achievement desc>
         },
         ...
-    ]
+    ],
     "followers": [
         {
             "id": <follower id>,
             "name": <follower name>
         },
         ...
-    ]
+    ],
     "following": [
         {
             "id": <followee 1 id>,
             "name": <followee 1 name>
         },
         ...
-    ]
+    ],
+    "leaderboards": [
+        {
+            "path": <path to leaderboard>,
+            "name": <leaderboard name (Global/Personal)>,
+            "type": <all_time/monthly/weekly>,
+            "rank": <rank number>,
+            "total": <number of participants>
+        },
+        ...
+    ],
 }
 ```
 
-### `/leaderboard/global/all_time` Get Global All-time Leaderboard
+### `/leaderboard/<time frame>/global` Get Global Leaderboard
+Possible time frames:
+- all_time
+- monthly
+- weekly
+Responds with a leaderboard that includes all users that (within the time frame) has a score larger than 0.
 
-Responds with a json object of all users' id, name and score sorted by score in descending order
+### `/leaderboard/<time frame>/personal/<id>` Get Personal Leaderboard of Followed Users
+Possible time frames:
+- all_time
+- monthly
+- weekly
+Responds with a leaderboard that includes all users followed by the user with userID = id (and the user itself). 
+
+All leaderboard endpoints respond with a json object of users' id, name and score sorted by score in descending order
 ```
 [
     {

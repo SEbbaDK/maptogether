@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS contributions (
 	dateTime		timestamptz
 );
 
-
 CREATE TABLE IF NOT EXISTS achievements (
 	achievementID	BIGSERIAL PRIMARY KEY,
 	name			varchar,

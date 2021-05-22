@@ -6,7 +6,6 @@ class NewActivityScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MapTogetherAppBar(title: 'New Activity'),
-
     );
   }
 }
