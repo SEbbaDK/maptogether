@@ -79,7 +79,6 @@ class QuestHandler extends ChangeNotifier {
 
       for (int nodeId in buildingElement.nodes) {
         var node = await api.node(nodeId);
-        print('Hentede node');
         averageLat += node.elements.first.lat;
         averageLong += node.elements.first.lon;
       }
