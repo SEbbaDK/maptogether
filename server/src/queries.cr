@@ -33,13 +33,15 @@ module Queries
 	ACHIEVEMENTS_FROM_ID = "
 		SELECT a.name, a.description
 		FROM
-			(SELECT *
+		(
+			SELECT *
 			FROM unlocked
-			WHERE userID = $1) AS u
-			INNER JOIN
-			achievements AS a
+			WHERE userID = $1
+		) AS u
+		INNER JOIN
+		achievements AS a
 			ON u.achievement = a.achievementID
-		"
+	"
 
 	FOLLOWERS_FROM_ID = "
 		SELECT userID, name
@@ -58,73 +60,76 @@ module Queries
 	def rank_and_count(r : RankType, l : LeaderboardType)
 		if r == RankType::Global
 			"
-					SELECT *
-					FROM
-				(
-						SELECT l.rnum as rank
-						FROM (
-							SELECT userID, score, row_number() OVER () as rnum
-							FROM #{l.to_leaderboard}
-							WHERE score != 0 OR userID = $1) AS l
-						WHERE userID = $1
-					) as r
-					CROSS JOIN
-					(
-						SELECT COUNT(*) as count
-						FROM #{l.to_leaderboard}
-						WHERE score != 0 OR userID = $1
-				) as c
-					"
-		else
-			"
-					SELECT *
-					FROM
-					(
+			SELECT *
+			FROM
+			(
 				SELECT l.rnum as rank
-				FROM (
+				FROM
+				(
 					SELECT userID, score, row_number() OVER () as rnum
 					FROM #{l.to_leaderboard}
-					WHERE
-						EXISTS (
+					WHERE score != 0 OR userID = $1
+				) AS l
+				WHERE userID = $1
+			) as r
+			CROSS JOIN
+			(
+				SELECT COUNT(*) as count
+				FROM #{l.to_leaderboard}
+				WHERE score != 0 OR userID = $1
+			) as c
+			"
+		else
+			"
+			SELECT *
+			FROM
+			(
+				SELECT l.rnum as rank
+				FROM
+				(
+					SELECT userID, score, row_number() OVER () as rnum
+					FROM #{l.to_leaderboard}
+					WHERE EXISTS
+					(
 						SELECT 1
 						FROM follows
 						WHERE userID = $1 OR (follower = $1 AND followee = userID)
-					)
-					AND
-					(score != 0 OR userID = $1)) AS l
-						WHERE userID = $1
-				) as r
-				CROSS JOIN
+					) AND (score != 0 OR userID = $1)
+				) AS l
+				WHERE userID = $1
+			) as r
+			CROSS JOIN
+			(
+				SELECT COUNT(*) as count
+				FROM #{l.to_leaderboard}
+				WHERE
+				EXISTS
 				(
-						SELECT COUNT(*) as count
-						FROM #{l.to_leaderboard}
-						WHERE
-						EXISTS (
-							SELECT 1
-							FROM follows
-							WHERE userID = $1 OR (follower = $1 AND followee = userID)
-						) AND (score != 0 OR userID = $1)
-				) as c
-						"
+					SELECT 1
+					FROM follows
+					WHERE userID = $1 OR (follower = $1 AND followee = userID)
+				) AND (score != 0 OR userID = $1)
+			) as c
+			"
 		end
 	end
 
 	def leaderboard(r : RankType, l : LeaderboardType)
 		if r == RankType::Global
 			"
-		SELECT *
-		FROM #{l.to_leaderboard}
-		WHERE score != 0
+			SELECT *
+			FROM #{l.to_leaderboard}
+			WHERE score != 0
 			"
 		else
 			"
-		SELECT *
-		FROM #{l.to_leaderboard}
-		WHERE EXISTS (
-			SELECT 1
-			FROM follows
-			WHERE userID = $1 OR (follower = $1 AND followee = userID)
-		)
+			SELECT *
+			FROM #{l.to_leaderboard}
+			WHERE EXISTS (
+				SELECT 1
+				FROM follows
+				WHERE userID = $1 OR (follower = $1 AND followee = userID)
+			)
 			"
 		end
 	end
