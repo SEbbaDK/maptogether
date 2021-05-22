@@ -19,7 +19,7 @@ class SimpleTagQuestPopUp extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             _quest
-                .solve(context.read<LoginHandler>().osmApi(), tag)
+                .solve(context.read<LoginHandler>().osmApi(), possibility)
                 .then((value) {
               context
                   .read<QuestHandler>()
