@@ -1,36 +1,29 @@
-enum Leaderboard_Type
-	Weekly
-	Monthly
-	All_Time
-
-	def to_string
-		"weekly" if self == Leaderboard_Type::Weekly
-		"monthly" if self == Leaderboard_Type::Monthly
-		"all_time" if self == Leaderboard_Type::All_Time
-	end
-end
+require "./types.cr"
 
 class Placement
 	property path : String
 	property name : String
-	property type : Leaderboard_Type
+	property type : LeaderboardType
 	property rank : Int64
 	property total : Int64
 
 	def initialize(
-		@path : String,
-		@name : String,
-		@type : Leaderboard_Type,
+		id : Int64,
+		r : RankType,
+		@type : LeaderboardType,
 		@rank : Int64,
 		@total : Int64
 	)
+		@path = "#{@type.to_s}/#{r.to_s}"
+		@path += "/#{id}" if r == RankType::Personal
+		@name = r.to_pretty
 	end
 
 	def to_json(json : JSON::Builder)
 		json.object do
 			json.field "path", @path
 			json.field "name", @name
-			json.field "type", @type.to_string
+			json.field "type", @type.to_s
 			json.field "rank", @rank
 			json.field "total", @total
 		end

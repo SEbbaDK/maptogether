@@ -1,10 +1,18 @@
+require "./types.cr"
+
 module Queries
 	extend self
 
+	ALL_TIME = "leaderboardAllTime"
+	MONTHLY	= "leaderboardMonthly"
+	WEEKLY	 = "leaderboardWeekly"
+
+	LEADERBOARDS = [ALL_TIME, MONTHLY, WEEKLY]
+
 	USER_UPSERT = "
-		INSERT INTO users
+		INSERT INTO users(userID, name, access)
 		VALUES ($1, $2, $3)
-		ON CONFLICT(userid) DO
+		ON CONFLICT(userID) DO
 			UPDATE SET name = EXCLUDED.name, access = EXCLUDED.access
 	"
 
@@ -14,23 +22,13 @@ module Queries
 		WHERE userID = $1 limit 1
 	"
 
-	TOTAL_SCORE_FROM_ID = "
-		SELECT COALESCE(SUM(score),0) AS score
-		FROM contributions
-		WHERE userID = $1
-	"
-
-	MONTHLY_SCORE_FROM_ID = "
+	def score_from_id(l : LeaderboardType)
+		"
 		SELECT score
-		FROM leaderboardMonthly
+		FROM #{l.to_leaderboard}
 		WHERE userID = $1
-	"
-
-	WEEKLY_SCORE_FROM_ID = "
-		SELECT score
-		FROM leaderboardWeekly
-		WHERE userID = $1
-	"
+			"
+	end
 
 	ACHIEVEMENTS_FROM_ID = "
 		SELECT a.name, a.description
@@ -57,186 +55,77 @@ module Queries
 		WHERE follower = $1
 	"
 
-	GLOBAL_ALL_TIME_RANK = "
-		SELECT l.rnum
-		FROM (
-			SELECT userID, score, row_number() OVER () as rnum
-			FROM leaderboardAllTime
-			WHERE score != 0 OR userID = $1) AS l
-		WHERE userID = $1
-	"
-
-	GLOBAL_MONTHLY_RANK = "
-		SELECT l.rnum
-		FROM (
-			SELECT userID, score, row_number() OVER () as rnum
-			FROM leaderboardMonthly
-			WHERE score != 0 OR userID = $1) AS l
-		WHERE userID = $1
-	"
-
-	GLOBAL_WEEKLY_RANK = "
-		SELECT l.rnum
-		FROM (
-			SELECT userID, score, row_number() OVER () as rnum
-			FROM leaderboardWeekly
-			WHERE score != 0 OR userID = $1) AS l
-		WHERE userID = $1
-	"
-
-	PERSONAL_ALL_TIME_RANK = "
-		SELECT l.rnum
-		FROM (
-			SELECT userID, score, row_number() OVER () as rnum
-			FROM leaderboardAllTime
-			WHERE
-				EXISTS (
-				SELECT 1
-				FROM follows
+	def rank_and_count(r : RankType, l : LeaderboardType)
+		if r == RankType::Global
+			"
+					SELECT *
+					FROM
+				(
+						SELECT l.rnum as rank
+						FROM (
+							SELECT userID, score, row_number() OVER () as rnum
+							FROM #{l.to_leaderboard}
+							WHERE score != 0 OR userID = $1) AS l
+						WHERE userID = $1
+					) as r
+					CROSS JOIN
+					(
+						SELECT COUNT(*) as count
+						FROM #{l.to_leaderboard}
+						WHERE score != 0 OR userID = $1
+				) as c
+					"
+		else
+			"
+					SELECT *
+					FROM
+					(
+				SELECT l.rnum as rank
+				FROM (
+					SELECT userID, score, row_number() OVER () as rnum
+					FROM #{l.to_leaderboard}
+					WHERE
+						EXISTS (
+						SELECT 1
+						FROM follows
 						WHERE userID = $1 OR (follower = $1 AND followee = userID)
-			)
-			AND
-			(score != 0 OR userID = $1)) AS l
-		WHERE userID = $1
-	"
+					)
+					AND
+					(score != 0 OR userID = $1)) AS l
+						WHERE userID = $1
+				) as r
+				CROSS JOIN
+				(
+						SELECT COUNT(*) as count
+						FROM #{l.to_leaderboard}
+						WHERE
+						EXISTS (
+							SELECT 1
+							FROM follows
+							WHERE userID = $1 OR (follower = $1 AND followee = userID)
+						) AND (score != 0 OR userID = $1)
+				) as c
+						"
+		end
+	end
 
-	PERSONAL_MONTHLY_RANK = "
-		SELECT l.rnum
-		FROM (
-			SELECT userID, score, row_number() OVER () as rnum
-			FROM leaderboardMonthly
-			WHERE
-				EXISTS (
-				SELECT 1
-				FROM follows
-						WHERE userID = $1 OR (follower = $1 AND followee = userID)
-			)
-			AND
-			(score != 0 OR userID = $1)) AS l
-		WHERE userID = $1
-	"
-
-	PERSONAL_WEEKLY_RANK = "
-		SELECT l.rnum
-		FROM (
-			SELECT userID, score, row_number() OVER () as rnum
-			FROM leaderboardWeekly
-			WHERE
-				EXISTS (
-				SELECT 1
-				FROM follows
-						WHERE userID = $1 OR (follower = $1 AND followee = userID)
-			)
-			AND
-			(score != 0 OR userID = $1)) AS l
-		WHERE userID = $1
-	"
-
-	PERSONAL_ALL_TIME_COUNT = "
-		SELECT COUNT(*)
-		FROM leaderboardAllTime
-		WHERE
-		EXISTS (
+	def leaderboard(r : RankType, l : LeaderboardType)
+		if r == RankType::Global
+			"
+		SELECT *
+		FROM #{l.to_leaderboard}
+		WHERE score != 0
+			"
+		else
+			"
+		SELECT *
+		FROM #{l.to_leaderboard}
+		WHERE EXISTS (
 			SELECT 1
 			FROM follows
 			WHERE userID = $1 OR (follower = $1 AND followee = userID)
 		)
-		AND
-			(score != 0 OR userID = $1)
-	"
-
-	PERSONAL_MONTHLY_COUNT = "
-		SELECT COUNT(*)
-		FROM leaderboardMonthly
-		WHERE
-		EXISTS (
-			SELECT 1
-			FROM follows
-			WHERE userID = $1 OR (follower = $1 AND followee = userID)
-		)
-		AND
-			(score != 0 OR userID = $1)
-	"
-
-	PERSONAL_WEEKLY_COUNT = "
-		SELECT COUNT(*)
-		FROM leaderboardWeekly
-		WHERE
-		EXISTS (
-			SELECT 1
-			FROM follows
-			WHERE userID = $1 OR (follower = $1 AND followee = userID)
-		)
-		AND
-			(score != 0 OR userID = $1)
-	"
-
-	GLOBAL_ALL_TIME_COUNT = "
-		SELECT COUNT(*)
-		FROM leaderboardAllTime
-		WHERE score != 0
-	"
-
-	GLOBAL_MONTHLY_COUNT = "
-		SELECT COUNT(*)
-		FROM leaderboardMonthly
-		WHERE score != 0
-	"
-
-	GLOBAL_WEEKLY_COUNT = "
-		SELECT COUNT(*)
-		FROM leaderboardWeekly
-		WHERE score != 0
-	"
-
-	GLOBAL_ALL_TIME = "
-		SELECT *
-		FROM leaderboardAllTime
-		WHERE score != 0
-	"
-
-	GLOBAL_MONTHLY = "
-		SELECT *
-		FROM leaderboardMonthly
-		WHERE score != 0
-	"
-
-	GLOBAL_WEEKLY = "
-		SELECT *
-		FROM leaderboardWeekly
-		WHERE score != 0
-	"
-
-	PERSONAL_ALL_TIME = "
-		SELECT *
-		FROM leaderboardAllTime
-		WHERE
-			EXISTS (
-				SELECT 1
-				FROM follows
-				WHERE userID = $1 OR (follower = $1 AND followee = userID)
-			)
-	"
-
-	PERSONAL_MONTHLY = "
-		SELECT *
-		FROM leaderboardMonthly
-		WHERE
-			EXISTS (
-				SELECT 1
-				FROM follows
-				WHERE userID = $1 OR (follower = $1 AND followee = userID)
-			)
-	"
-
-	PERSONAL_WEEKLY = "
-		SELECT *
-		FROM leaderboardWeekly
-		WHERE
-			EXISTS (
-				SELECT 1
-				FROM follows
-				WHERE userID = $1 OR (follower = $1 AND followee = userID)
-			)
-	"
+			"
+		end
+	end
 end

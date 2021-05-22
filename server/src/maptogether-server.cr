@@ -9,6 +9,7 @@ require "./queries.cr"
 require "./achievement.cr"
 require "./contribution.cr"
 require "./placement.cr"
+require "./types.cr"
 
 module MapTogether::Server
 	module Endpoints
@@ -71,7 +72,13 @@ module MapTogether::Server
 			# http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
 
 			try_open_connection do |db|
+				puts "Upserting user"
 				db.exec Queries::USER_UPSERT, id, name, key
+
+				puts "Refreshing views"
+				db.exec "REFRESH MATERIALIZED VIEW leaderboardAllTime"
+				db.exec "REFRESH MATERIALIZED VIEW leaderboardMonthly"
+				db.exec "REFRESH MATERIALIZED VIEW leaderboardWeekly"
 			end
 
 			id
@@ -80,15 +87,23 @@ module MapTogether::Server
 		# Request data about a specific user (id, name, score, achievements and followers)
 		get "/user/:id" do |env|
 			user = User.new
-			id = env.params.url["id"]
+			id = env.params.url["id"].to_i64
 
 			try_open_connection do |db|
+				puts "USER_FROM_ID"
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
-				user.score_all_time = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
-				user.score_monthly = db.query_one Queries::MONTHLY_SCORE_FROM_ID, id, as: {Int64}
-				user.score_weekly = db.query_one Queries::WEEKLY_SCORE_FROM_ID, id, as: {Int64}
+				puts "SCORE_FROM_ID"
+				user.score_all_time =
+					db.query_one Queries.score_from_id(LeaderboardType::AllTime), id, as: {Int64}
+				puts "SCORE_FROM_ID"
+				user.score_monthly =
+					db.query_one Queries.score_from_id(LeaderboardType::Monthly), id, as: {Int64}
+				puts "SCORE_FROM_ID"
+				user.score_weekly =
+					db.query_one Queries.score_from_id(LeaderboardType::Weekly), id, as: {Int64}
 
 				achievements = [] of Achievement
+				puts "ACHIEVEMENTS_FROM_ID"
 				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
 					rows.each do
 						achievements << Achievement.new(rows.read(String), rows.read(String))
@@ -97,6 +112,7 @@ module MapTogether::Server
 				user.achievements = achievements
 
 				followers = [] of User
+				puts "FOLLOWERS_FROM_ID"
 				db.query Queries::FOLLOWERS_FROM_ID, id do |rows|
 					rows.each do
 						followers << User.new(user_id: rows.read(Int64), name: rows.read(String))
@@ -105,56 +121,21 @@ module MapTogether::Server
 				user.followers = followers
 
 				following = [] of User
+				puts "FOLLOWING_FROM_ID"
 				db.query Queries::FOLLOWING_FROM_ID, id do |rows|
 					rows.each do
 						following << User.new(user_id: rows.read(Int64), name: rows.read(String))
 					end
 				end
+				user.following = following
 
-				user.leaderboards = [
-					Placement.new(
-						"/leaderboard/all_time/global",
-						"Global",
-						Leaderboard_Type::All_Time,
-						db.query_one(Queries::GLOBAL_ALL_TIME_RANK, id, as: Int64),
-						db.query_one(Queries::GLOBAL_ALL_TIME_COUNT, as: Int64)
-					),
-					Placement.new(
-						"/leaderboard/monthly/global",
-						"Global",
-						Leaderboard_Type::Monthly,
-						db.query_one(Queries::GLOBAL_MONTHLY_RANK, id, as: Int64),
-						db.query_one(Queries::GLOBAL_MONTHLY_COUNT, as: Int64)
-					),
-					Placement.new(
-						"/leaderboard/weekly/global",
-						"Global",
-						Leaderboard_Type::Weekly,
-						db.query_one(Queries::GLOBAL_WEEKLY_RANK, id, as: Int64),
-						db.query_one(Queries::GLOBAL_WEEKLY_COUNT, as: Int64)
-					),
-					Placement.new(
-						"/leaderboard/all_time/personal/#{id}",
-						"Personal",
-						Leaderboard_Type::All_Time,
-						db.query_one(Queries::PERSONAL_ALL_TIME_RANK, id, as: Int64),
-						db.query_one(Queries::PERSONAL_ALL_TIME_COUNT, id, as: Int64)
-					),
-					Placement.new(
-						"/leaderboard/monthly/personal/#{id}",
-						"Personal",
-						Leaderboard_Type::Monthly,
-						db.query_one(Queries::PERSONAL_MONTHLY_RANK, id, as: Int64),
-						db.query_one(Queries::PERSONAL_MONTHLY_COUNT, id, as: Int64)
-					),
-					Placement.new(
-						"/leaderboard/weekly/personal/#{id}",
-						"Personal",
-						Leaderboard_Type::Weekly,
-						db.query_one(Queries::PERSONAL_WEEKLY_RANK, id, as: Int64),
-						db.query_one(Queries::PERSONAL_WEEKLY_COUNT, id, as: Int64)
-					),
-				]
+				user.leaderboards = [] of Placement
+				RankType.each do |r|
+					LeaderboardType.each do |l|
+						rank, count = db.query_one Queries.rank_and_count(r, l), id, as: {Int64, Int64}
+						user.leaderboards.try &.<< Placement.new id, r, l, rank, count
+					end
+				end
 			end
 
 			env.response.content_type = "application/json"
@@ -186,42 +167,13 @@ module MapTogether::Server
 			end
 		end
 
-		get "/leaderboard/all_time/personal/:id" do |env|
+		get "/leaderboard/:time/personal/:id" do |env|
+			time = LeaderboardType.from_s env.params.url["time"]
 			id = env.params.url["id"]
 
 			string = JSON.build do |json|
 				try_open_connection do |db|
-					db.query Queries::PERSONAL_ALL_TIME, id do |rows|
-						Leaderboard.new(rows).to_json json
-					end
-				end
-			end
-
-			env.response.content_type = "application/json"
-			string
-		end
-
-		get "/leaderboard/weekly/personal/:id" do |env|
-			id = env.params.url["id"]
-
-			string = JSON.build do |json|
-				try_open_connection do |db|
-					db.query Queries::PERSONAL_WEEKLY, id do |rows|
-						Leaderboard.new(rows).to_json json
-					end
-				end
-			end
-
-			env.response.content_type = "application/json"
-			string
-		end
-
-		get "/leaderboard/monthly/personal/:id" do |env|
-			id = env.params.url["id"]
-
-			string = JSON.build do |json|
-				try_open_connection do |db|
-					db.query Queries::PERSONAL_MONTHLY, id do |rows|
+					db.query Queries.leaderboard(RankType::Personal, time), id do |rows|
 						Leaderboard.new(rows).to_json json
 					end
 				end
@@ -232,36 +184,12 @@ module MapTogether::Server
 		end
 
 		# Retrieve all users' id, name and score
-		get "/leaderboard/all_time/global" do |env|
+		get "/leaderboard/:time/global" do |env|
+			time = LeaderboardType.from_s env.params.url["time"]
+
 			string = JSON.build do |json|
 				try_open_connection do |db|
-					db.query Queries::GLOBAL_ALL_TIME do |rows|
-						Leaderboard.new(rows).to_json json
-					end
-				end
-			end
-
-			env.response.content_type = "application/json"
-			string
-		end
-
-		get "/leaderboard/monthly/global" do |env|
-			string = JSON.build do |json|
-				try_open_connection do |db|
-					db.query Queries::GLOBAL_MONTHLY do |rows|
-						Leaderboard.new(rows).to_json json
-					end
-				end
-			end
-
-			env.response.content_type = "application/json"
-			string
-		end
-
-		get "/leaderboard/weekly/global" do |env|
-			string = JSON.build do |json|
-				try_open_connection do |db|
-					db.query Queries::GLOBAL_WEEKLY do |rows|
+					db.query Queries.leaderboard(RankType::Global, time) do |rows|
 						Leaderboard.new(rows).to_json json
 					end
 				end
