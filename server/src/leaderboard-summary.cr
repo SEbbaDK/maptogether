@@ -1,6 +1,6 @@
 require "./types.cr"
 
-class Placement
+class LeaderboardSummary
 	property path : String
 	property name : String
 	property type : LeaderboardType

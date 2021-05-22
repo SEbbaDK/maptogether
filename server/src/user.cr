@@ -1,5 +1,5 @@
 require "./achievement.cr"
-require "./placement.cr"
+require "./leaderboard-summary.cr"
 
 class User
 	property user_id : Nil | Int64
@@ -10,7 +10,7 @@ class User
 	property achievements : Nil | Array(Achievement)
 	property followers : Nil | Array(User)
 	property following : Nil | Array(User)
-	property leaderboards : Nil | Array(Placement)
+	property leaderboards : Nil | Array(LeaderboardSummary)
 
 	def initialize(
 		@user_id = nil,

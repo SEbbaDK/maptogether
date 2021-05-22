@@ -8,7 +8,7 @@ require "./leaderboard.cr"
 require "./queries.cr"
 require "./achievement.cr"
 require "./contribution.cr"
-require "./placement.cr"
+require "./leaderboard-summary.cr"
 require "./types.cr"
 
 module MapTogether::Server
@@ -129,11 +129,11 @@ module MapTogether::Server
 				end
 				user.following = following
 
-				user.leaderboards = [] of Placement
+				user.leaderboards = [] of LeaderboardSummary
 				RankType.each do |r|
 					LeaderboardType.each do |l|
 						rank, count = db.query_one Queries.rank_and_count(r, l), id, as: {Int64, Int64}
-						user.leaderboards.try &.<< Placement.new id, r, l, rank, count
+						user.leaderboards.try &.<< LeaderboardSummary.new id, r, l, rank, count
 					end
 				end
 			end
