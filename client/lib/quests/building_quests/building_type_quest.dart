@@ -1,20 +1,34 @@
-import 'package:client/quests/simple_tag_quest.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:osm_api/osm_api.dart' as osm;
 
+import 'package:client/quests/simple_tag_quest.dart';
+import 'package:client/quests/quest.dart';
+import 'package:client/quests/quest_finder.dart';
+
+class BuildingTypeQuestFinder implements QuestFinder {
+  @override
+  Quest construct(osm.Element e) => BuildingTypeQuest(e);
+    
+  @override
+  bool applicable(osm.Element e) =>
+  	e.isWay &&
+  	e.tags['building'] == "yes";
+}
+
 class BuildingTypeQuest extends SimpleTagQuest {
-  BuildingTypeQuest(LatLng position, osm.Element element)
-      : super(position, element);
+  BuildingTypeQuest(osm.Element element) : super(element);
+
+  String tag() => 'building';
 
   @override
-  String getQuestion() => "What type of building is this?";
+  String question() => "What type of building is this?";
 
   @override
-  String getChangesetComment() => "Added buildingtype tag to a building";
+  String changesetComment() => "Added buildingtype tag to a building";
 
   @override
-  Widget getMarkerSymbol() => Icon(Icons.house);
+  Widget icon() => Icon(Icons.house);
 
   @override
   Map<String, String> possibilitiesToTags() => {
@@ -106,23 +120,4 @@ class BuildingTypeQuest extends SimpleTagQuest {
         'Ruins': 'ruins',
         'Tree house': 'tree_house',
       };
-
-  @override
-  Future<void> solve(osm.Api api, String possibility) async {
-    int changeSetId = await api.createChangeset(this.getChangesetComment());
-
-    // add the new tag to the tag-map
-    print(this.element.tags['building']);
-    this.element.tags['building'] = possibility;
-
-    int nodeId = await api.updateWay(
-      this.element.id,
-      changeSetId,
-      this.element.tags,
-      this.element.version,
-      this.element.nodes,
-    );
-
-    api.closeChangeset(changeSetId);
-  }
 }

@@ -1,15 +1,16 @@
+import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
+
 import 'package:client/quests/quest.dart';
 import 'package:client/widgets/quest_widgets/quest_pop_up.dart';
-import 'package:flutter/material.dart';
 
 /*
   This class should be used as the default child in Markers for quests
  */
-class QuestMarkerChild extends StatelessWidget {
-  QuestMarkerChild(this.markerLogo, this.quest);
+class QuestMarker extends StatelessWidget {
+  QuestMarker(this.position, this.quest);
 
-  final Widget markerLogo;
-
+  final LatLng position;
   final Quest quest;
 
   @override
@@ -27,7 +28,7 @@ class QuestMarkerChild extends StatelessWidget {
           color: Colors.lightGreen,
           shape: BoxShape.circle,
         ),
-        child: quest.getMarkerSymbol(),
+        child: quest.icon(),
       ),
     );
   }

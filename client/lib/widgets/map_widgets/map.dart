@@ -1,7 +1,3 @@
-import 'package:client/location_handler.dart';
-import 'package:client/quests/quest.dart';
-import 'package:client/quests/quest_handler.dart';
-import 'package:client/widgets/quest_widgets/quest_marker_child.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -9,6 +5,12 @@ import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
+import 'package:osm_api/osm_api.dart' as osm;
+
+import 'package:client/location_handler.dart';
+import 'package:client/quests/quest.dart';
+import 'package:client/quests/quest_handler.dart';
+import 'package:client/widgets/quest_widgets/quest_marker.dart';
 
 class PointOfInterest {
   // TODO: I think this should be moved to some model package
@@ -194,16 +196,43 @@ class _InteractiveMapState extends State<InteractiveMap> {
     }
 
     // Finding quests and create Markers for each of them
-    List<Quest> quests = context.watch<QuestHandler>().quests;
-    List<Marker> questMarkers = [];
-    quests.forEach((quest) {
-      if (_mapController.bounds.contains(quest.position)) {
-        questMarkers.add(Marker(
-            point: quest.position,
-            builder: (context) =>
-                QuestMarkerChild(quest.getMarkerSymbol(), quest)));
-      }
-    });
+    final nodes = Map<int, osm.Element>.fromEntries(context.watch<QuestHandler>().quests.map((q) => q.element).where((e) => e.isNode).map((e) => MapEntry<int, osm.Element>(e.id, e)));
+
+    final position = (osm.Element e) {
+		if (e.isNode)
+			return LatLng(e.lat, e.lon);
+		if (e.isWay) {
+			var c = LatLng(0,0);
+			var count = 0;
+			e.nodes.forEach((id) {
+    			final n = nodes[id];
+    			if (n != null) {
+    	            c.latitude += n.lat;
+    	            c.longitude += n.lon;
+    	            count += 1;
+        		}
+			});
+			if (count == 0)
+    			return null;
+			c.latitude /= count;
+			c.longitude /= count;
+			return c;
+        }
+        throw Exception("Only coordinate node and way");
+    };
+
+    final quests = context.watch<QuestHandler>().quests;
+    List<Marker> questMarkers = quests.map((q) {
+      final p = position(q.element);
+      if (p == null || !_mapController.bounds.contains(p))
+          return null;
+      else
+          return Marker(
+              point: p,
+              builder: (context) =>
+                QuestMarker(p, q)
+          );
+    }).where((m) => m != null).toList();
 
     return FlutterMap(
       mapController: _mapController,
