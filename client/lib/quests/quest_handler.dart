@@ -12,7 +12,6 @@ class QuestHandler extends ChangeNotifier {
 
   // Finding quests within bound
   void loadQuests(double left, double bottom, double right, double top) async {
-
     // Fetch elements within bound
     api = osm.Api(
         'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
@@ -56,8 +55,7 @@ class QuestHandler extends ChangeNotifier {
     return (element.tags.containsKey(tag));
   }
 
-  List<Quest> _getBackrestBenchQuests(
-      List<osm.Element> elements) {
+  List<Quest> _getBackrestBenchQuests(List<osm.Element> elements) {
     List<osm.Element> benchElements = elements
         .where((element) => _hasKeyValue(element, 'amenity', 'bench'))
         .where((element) => !_hasTag(element, 'backrest'))
@@ -73,7 +71,9 @@ class QuestHandler extends ChangeNotifier {
 
   List<Quest> _getBuildingTypeQuests(List<osm.Element> elements) {
     List<osm.Element> buildingElements = elements
-        .where((element) => _hasKeyValue(element, 'building', 'yes'))
+        .where((element) =>
+            _hasKeyValue(element, 'building', 'yes') &&
+            element.type == osm.ElementType.way)
         .toList();
 
     List<Quest> buildingQuests = [];
@@ -84,13 +84,13 @@ class QuestHandler extends ChangeNotifier {
       for (int nodeId in buildingElement.nodes) {
         osm.Element node;
         for (osm.Element e in elements) {
-          if (e.id == nodeId && e.type == osm.ElementType.node)
+          if (e.id == nodeId && e.type == osm.ElementType.node) {
             node = e;
+            averageLat += node.lat;
+            averageLong += node.lon;
+          }
         }
-        averageLat += node.lat;
-        averageLong += node.lon;
       }
-
       averageLat /= buildingElement.nodes.length;
       averageLong /= buildingElement.nodes.length;
 
