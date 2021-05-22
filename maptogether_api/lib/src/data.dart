@@ -14,13 +14,9 @@ class User {
   final int scoreWeekly;
   final String name;
 
-  @JsonKey(defaultValue: null)
   final List<Achievement> achievements;
-  @JsonKey(defaultValue: null)
   final List<SimpleUser> followers;
-  @JsonKey(defaultValue: null)
   final List<SimpleUser> following;
-  @JsonKey(defaultValue: null)
   final List<LeaderboardSummary> leaderboards;
 
   User(
