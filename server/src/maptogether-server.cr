@@ -31,13 +31,13 @@ module MapTogether::Server
 		macro check_auth(id, env, db)
 				%auth_head = {{env}}.request.headers["Authorization"]?
 				http_raise 400, "Authentication header is missing" if %auth_head == nil
-				
+
 				%auth = %auth_head.as(String).split(" ")
 			http_raise 400, "Authentication header needs to be 'Basic <ACCESS_KEY>'" if %auth.size != 2
-			
+
 			%atype, %key = %auth
 			http_raise 400, "Authentication type needs to be 'Basic'" if %atype != "Basic"
-			
+
 			%aid = {{db}}.query_one "SELECT userid FROM users WHERE access = $1", %key, as: Int64
 			http_raise 401, "Authenticated user does not have permission for this (#{{{id}}} != #{%aid}" if {{id}} != %aid
 		end
@@ -163,7 +163,7 @@ module MapTogether::Server
 				check_auth(id, env, db)
 				result = db.exec "DELETE FROM follows WHERE follower = $1 AND followee = $2", id, followee
 				http_raise 400, "User not following that user" if result.rows_affected == 0
-				raise "Error! deleted #{result.rows_affected} rows" if result.rows_affected >= 1
+				raise "Error! deleted #{result.rows_affected} rows" if result.rows_affected != 1
 			end
 		end
 
