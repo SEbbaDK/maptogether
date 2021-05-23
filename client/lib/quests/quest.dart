@@ -26,6 +26,6 @@ abstract class Quest {
   // Inspired by this: https://stackoverflow.com/questions/20577606/whats-a-good-recipe-for-overriding-hashcode-in-dart
   @override
   int get hashCode {
-    return hash2(element.type.hashCode, element.type.hashCode);
+    return hash3(element.type.hashCode, element.id.hashCode, question());
   }
 }
