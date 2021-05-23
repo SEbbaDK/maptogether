@@ -194,44 +194,11 @@ class _InteractiveMapState extends State<InteractiveMap> {
     }
 
     // Finding quests and create Markers for each of them
-    final nodes = Map<int, osm.Element>.fromEntries(context
-        .watch<QuestHandler>()
-        .quests
-        .map((q) => q.element)
-        .where((e) => e.isNode)
-        .map((e) => MapEntry<int, osm.Element>(e.id, e)));
-
-    final position = (osm.Element e) {
-      if (e.isNode) return LatLng(e.lat, e.lon);
-      if (e.isWay) {
-        var c = LatLng(0, 0);
-        var count = 0;
-        e.nodes.forEach((id) {
-          final n = nodes[id];
-          if (n != null) {
-            c.latitude += n.lat;
-            c.longitude += n.lon;
-            count += 1;
-          }
-        });
-        if (count == 0) return null;
-        c.latitude /= count;
-        c.longitude /= count;
-        return c;
-      }
-      throw Exception("Only coordinate node and way");
-    };
 
     final quests = context.watch<QuestHandler>().quests;
-    List<Marker> questMarkers = quests
-        .map((q) {
-          final p = position(q.element);
-          if (p == null || !_mapController.bounds.contains(p))
-            return null;
-          else
-            return Marker(point: p, builder: (context) => QuestMarker(p, q));
-        })
-        .where((m) => m != null)
+	List<Marker> questMarkers = quests
+    	.where((q) => _mapController.bounds.contains(q.position))
+        .map((q) => Marker(point: q.position, builder: (context) => QuestMarker(q)))
         .toList();
 
     return FlutterMap(

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:osm_api/osm_api.dart' as osm;
+import 'package:latlong/latlong.dart';
 import 'package:quiver/core.dart';
 
 abstract class Quest {
   osm.Element element;
+  LatLng position = LatLng(0,0);
 
   Quest(this.element);
 

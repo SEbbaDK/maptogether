@@ -8,9 +8,8 @@ import 'package:client/widgets/quest_widgets/quest_pop_up.dart';
   This class should be used as the default child in Markers for quests
  */
 class QuestMarker extends StatelessWidget {
-  QuestMarker(this.position, this.quest);
+  QuestMarker(this.quest);
 
-  final LatLng position;
   final Quest quest;
 
   @override
