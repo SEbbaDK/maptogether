@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 
 import 'package:client/quests/quest.dart';
-import 'package:client/widgets/quest_widgets/quest_pop_up.dart';
+import 'package:client/widgets/quest/pop_up.dart';
 
 /*
   This class should be used as the default child in Markers for quests

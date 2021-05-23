@@ -1,7 +1,7 @@
 import 'package:client/login_handler.dart';
 import 'package:client/quests/quest.dart';
 import 'package:client/quests/simple_tag_quest.dart';
-import 'package:client/widgets/quest_widgets/simple_tag_quest_pop_up.dart';
+import 'package:client/widgets/quest/simple_tag_pop_up.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
