@@ -13,7 +13,10 @@ import 'package:maptogether_api/maptogether_api.dart';
 
 class SocialScreen extends StatefulWidget {
   @override
-  _SocialScreenState createState() => _SocialScreenState();
+  int initIndex;
+  _SocialScreenState createState() => _SocialScreenState(initIndex);
+
+  SocialScreen(this.initIndex);
 }
 
 class _SocialScreenState extends State<SocialScreen> {
@@ -21,6 +24,8 @@ class _SocialScreenState extends State<SocialScreen> {
 
   Future<User> user = null;
   List<Widget> menuItems = null;
+
+  _SocialScreenState(this.menuIndex);
 
   @override
   Widget build(BuildContext context) {

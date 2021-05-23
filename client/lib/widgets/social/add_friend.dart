@@ -3,6 +3,7 @@ import 'package:client/widgets/app_bar.dart';
 import 'friends.dart';
 import 'package:provider/provider.dart';
 import 'package:client/login_handler.dart';
+import 'package:client/screens/social_screen.dart';
 
 class AddFriend extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
@@ -59,6 +60,8 @@ class AddFriend extends StatelessWidget {
                         print("FOLLOW SOMEONE");
                         print(int.parse(nameController.text));
                         Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen(1)));
                       },
                     )),
               ],

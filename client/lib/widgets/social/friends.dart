@@ -6,6 +6,7 @@ import 'package:maptogether_api/maptogether_api.dart' as mt;
 import 'package:client/widgets/social/leaderboard.dart';
 import 'package:client/widgets/social/add_friend.dart';
 import 'package:client/widgets/future_loader.dart';
+import 'package:client/screens/social_screen.dart';
 
 //TODO: move friends list to a seperate file or server
 class Friends extends StatelessWidget {
@@ -18,7 +19,7 @@ class Friends extends StatelessWidget {
       future: user,
       builder: (BuildContext context, mt.User user) => ListTile(
         onLongPress: () {
-          LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: true);
+          LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: false);
           showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
@@ -34,6 +35,8 @@ class Friends extends StatelessWidget {
                         loginHandler.mtApi().unfollow(user.id, otherUser.id);
                         print("NAME IS: " + otherUser.name);
                         Navigator.pop(context);
+                        Navigator.pop(context);
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen(1)));
                       },
                     ),
                   ),
