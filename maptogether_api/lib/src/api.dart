@@ -71,8 +71,8 @@ class Api {
       _put('user/$id', auth: '$_access $secret $clientToken $clientSecret')
           .then(_checkRequest('creating user'));
 
-  Future<void> follow(int id, int other) =>
-      _put('user/$id/following/$other').then(_checkRequest('following a user'));
+  Future<void> follow(int id, int otherId) =>
+      _put('user/$id/following/$otherId').then(_checkRequest('following a user'));
 
   Future<void> unfollow(int id, int other) => _del('user/$id/following/$other')
       .then(_checkRequest('unfollowing a user'));

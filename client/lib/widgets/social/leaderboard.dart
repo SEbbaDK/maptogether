@@ -9,26 +9,26 @@ import 'package:client/widgets/future_loader.dart';
 
 class LeaderboardWidget extends StatelessWidget {
   Future<Leaderboard> leaderboard;
+  String name;
 
-  LeaderboardWidget({Key key, @required this.leaderboard}) : super(key: key);
+  LeaderboardWidget({Key key, @required this.leaderboard, @required this.name}) : super(key: key);
 
-  Widget scoreWidget(int placement, String name, int score) => Card(
-        child: ListTile(
+  Widget scoreWidget(int placement, String name, int score) => ListTile(
           title: Text("#$placement $name : $score"),
           leading: CircleAvatar(
             backgroundImage: AssetImage('assets/business.png'),
           ),
-        ),
       );
 
   Widget leaderboardWidget(Leaderboard leaderboard) => Scaffold(
       appBar: MapTogetherAppBar(
-        title: "Leaderboard for <LEADERBOARDNAME>",
+        title: name,
         actions: [],
       ),
       body: Column(children: <Widget>[
         Expanded(
-          child: ListView.builder(
+          child: ListView.separated(
+              separatorBuilder: (BuildContext context, int index) => const Divider(thickness: 0.5),
               itemCount: leaderboard.entries.length,
               itemBuilder: (context, index) => scoreWidget(
                   index + 1,

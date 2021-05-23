@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:client/widgets/app_bar.dart';
 import 'friends.dart';
 import 'package:provider/provider.dart';
+import 'package:client/login_handler.dart';
 
 class AddFriend extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
 
+  int curUserId;
+
+  AddFriend(this.curUserId);
+
   @override
   Widget build(BuildContext context) {
+    LoginHandler loginHandler = Provider.of<LoginHandler>(context);
     return Scaffold(
         appBar: MapTogetherAppBar(
           title: 'Follow New',
@@ -48,9 +54,10 @@ class AddFriend extends StatelessWidget {
                           primary: Colors.white, backgroundColor: Colors.green),
                       child: Text('Follow'),
                       onPressed: () {
+                        loginHandler.mtApi().follow(curUserId, int.parse(nameController.text));
                         //Add friend to backend for user here
                         print("FOLLOW SOMEONE");
-                        print(nameController.text);
+                        print(int.parse(nameController.text));
                         Navigator.pop(context);
                       },
                     )),

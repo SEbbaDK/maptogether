@@ -1,3 +1,4 @@
+import 'package:client/login_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart' as mt;
@@ -13,8 +14,11 @@ class Friends extends StatelessWidget {
 
   static const Widget seperator = const Divider(thickness: 2, height: 2);
 
-  Widget friendItem(BuildContext context, mt.SimpleUser user) => ListTile(
+  Widget friendItem(BuildContext context, mt.SimpleUser otherUser) => FutureLoader<mt.User>(
+      future: user,
+      builder: (BuildContext context, mt.User user) => ListTile(
         onLongPress: () {
+          LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: true);
           showModalBottomSheet<void>(
               context: context,
               builder: (BuildContext context) {
@@ -27,7 +31,8 @@ class Friends extends StatelessWidget {
                       style: TextButton.styleFrom(
                           primary: Colors.white, backgroundColor: Colors.red),
                       onPressed: () {
-                        print("UNFOLLOW SOMEONE");
+                        loginHandler.mtApi().unfollow(user.id, otherUser.id);
+                        print("NAME IS: " + otherUser.name);
                         Navigator.pop(context);
                       },
                     ),
@@ -35,11 +40,12 @@ class Friends extends StatelessWidget {
                 );
               });
         },
-        title: Text(user.name),
+        title: Text(otherUser.name),
         leading: CircleAvatar(
           backgroundImage: AssetImage('assets/business.png'),
         ),
-      );
+      )
+  );
 
   @override
   Widget build(BuildContext context) => Container(
@@ -48,7 +54,7 @@ class Friends extends StatelessWidget {
           builder: (BuildContext context, mt.User user) => Column(
                 children: <Widget>[
                   Expanded(
-                      flex: 14,
+                      flex: 13,
                       child: ListView.separated(
                         separatorBuilder: (_, __) => seperator,
                         itemCount: user.following.length,
@@ -57,17 +63,21 @@ class Friends extends StatelessWidget {
                       )),
                   Expanded(
                     flex: 2,
-                    child: TextButton(
-                      child: Text(
-                        'Follow New',
-                        style: TextStyle(fontSize: 20.0, color: Colors.white),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => AddFriend()));
+                    child: Container(
+                      margin: EdgeInsets.all(20),
+                      color: Colors.lightGreen,
+                      child: TextButton(
+                        child: Text(
+                          'Follow New',
+                          style: TextStyle(fontSize: 20.0, color: Colors.white),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddFriend(user.id)));
                       },
+                    ),
                     ),
                   ),
                 ],
