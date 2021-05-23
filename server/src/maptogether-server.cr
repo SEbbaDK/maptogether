@@ -29,6 +29,7 @@ module MapTogether::Server
 		end
 
 		macro check_auth(id, env, db)
+			%id = {{id}}.to_i64
 			%auth_head = {{env}}.request.headers["Authorization"]?
 			http_raise 400, "Authentication header is missing" if %auth_head == nil
 			
@@ -39,8 +40,8 @@ module MapTogether::Server
 			http_raise 400, "Authentication type needs to be 'Basic'" if %atype != "Basic"
 			
 			%aid = {{db}}.query_one? "SELECT userid FROM users WHERE access = $1", %key, as: Int64
-			http_raise 401, "User #{{{id}}} does not have the given access token" if %aid.nil?
-			http_raise 401, "Authenticated user does not have permission for this (#{{{id}}} != #{%aid}" if {{id}} != %aid
+			http_raise 401, "User #{%id} does not have the given access token" if %aid.nil?
+			http_raise 401, "Authenticated user does not have permission for this (#{%id} != #{%aid}" if %id != %aid
 		end
 
 		put "/user/:id" do |env|
