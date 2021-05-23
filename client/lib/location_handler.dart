@@ -5,7 +5,6 @@ import 'package:latlong/latlong.dart';
 import 'package:location/location.dart';
 
 class LocationHandler extends ChangeNotifier {
-
   // From location lib
   Location _locationService = Location();
 
@@ -18,9 +17,9 @@ class LocationHandler extends ChangeNotifier {
 
   LocationHandler() {
     mapController = MapController();
-	rotationStream = mapController.mapEventStream
-      .map((_) => mapController.rotation)
-      .map((d) => (d / 360.0) * (2.0 * math.pi));
+    rotationStream = mapController.mapEventStream
+        .map((_) => mapController.rotation)
+        .map((d) => (d / 360.0) * (2.0 * math.pi));
     initLocationService();
   }
 

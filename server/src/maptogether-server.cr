@@ -8,6 +8,8 @@ require "./leaderboard.cr"
 require "./queries.cr"
 require "./achievement.cr"
 require "./contribution.cr"
+require "./leaderboard-summary.cr"
+require "./types.cr"
 
 module MapTogether::Server
 	module Endpoints
@@ -48,20 +50,35 @@ module MapTogether::Server
 			atype, key, secret, ckey, csecret = vals
 			http_raise 400, "Authentication type needs to be 'Basic'" if atype != "Basic"
 
-			client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
-			OAuth.authenticate client, key, secret, ckey, csecret
+			# TODO: It is important that we add this check back in, but oauth seems to be broken
+			# with osm, so it is disabled for now
 
-			response = client.get("/api/0.6/user/details.json")
-			http_raise 401, "Authentication failed for OSM" if response.status_code == 401
-			http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
-			json = JSON.parse(response.body)
-			osm_id = json["user"]["id"].as_i64
-			name = json["user"]["display_name"]
+			# client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
+			# OAuth.authenticate client, key, secret, ckey, csecret
 
-			http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
+			# response = client.get("/api/0.6/user/details.json")
+			# puts vals if response.status_code != 200
+			# puts "Body: #{response.body}" if response.status_code != 200
+			# http_raise 401, "Authentication failed for OSM" if response.status_code == 401
+			# http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
+			# json = JSON.parse(response.body)
+			# osm_id = json["user"]["id"].as_i64
+			# name = json["user"]["display_name"]
+
+			# TEMP
+			name = "User #{id}"
+			# TEMP
+
+			# http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
 
 			try_open_connection do |db|
+				puts "Upserting user"
 				db.exec Queries::USER_UPSERT, id, name, key
+
+				puts "Refreshing views"
+				db.exec "REFRESH MATERIALIZED VIEW leaderboardAllTime"
+				db.exec "REFRESH MATERIALIZED VIEW leaderboardMonthly"
+				db.exec "REFRESH MATERIALIZED VIEW leaderboardWeekly"
 			end
 
 			id
@@ -70,30 +87,53 @@ module MapTogether::Server
 		# Request data about a specific user (id, name, score, achievements and followers)
 		get "/user/:id" do |env|
 			user = User.new
-			id = env.params.url["id"]
+			id = env.params.url["id"].to_i64
 
 			try_open_connection do |db|
+				puts "USER_FROM_ID"
 				user.user_id, user.name = db.query_one Queries::USER_FROM_ID, id, as: {Int64, String}
-				user.score = db.query_one Queries::TOTAL_SCORE_FROM_ID, id, as: {Int64}
+				puts "SCORE_FROM_ID"
+				user.score_all_time =
+					db.query_one Queries.score_from_id(LeaderboardType::AllTime), id, as: {Int64}
+				puts "SCORE_FROM_ID"
+				user.score_monthly =
+					db.query_one Queries.score_from_id(LeaderboardType::Monthly), id, as: {Int64}
+				puts "SCORE_FROM_ID"
+				user.score_weekly =
+					db.query_one Queries.score_from_id(LeaderboardType::Weekly), id, as: {Int64}
 
-				user.achievements = [] of Achievement
+				achievements = [] of Achievement
+				puts "ACHIEVEMENTS_FROM_ID"
 				db.query Queries::ACHIEVEMENTS_FROM_ID, id do |rows|
 					rows.each do
-						user.achievements << Achievement.new(rows.read(String), rows.read(String))
+						achievements << Achievement.new(rows.read(String), rows.read(String))
 					end
 				end
+				user.achievements = achievements
 
-				user.followers = [] of User
+				followers = [] of User
+				puts "FOLLOWERS_FROM_ID"
 				db.query Queries::FOLLOWERS_FROM_ID, id do |rows|
 					rows.each do
-						user.followers << User.new(user_id: rows.read(Int64), name: rows.read(String))
+						followers << User.new(user_id: rows.read(Int64), name: rows.read(String))
 					end
 				end
+				user.followers = followers
 
-				user.following = [] of User
+				following = [] of User
+				puts "FOLLOWING_FROM_ID"
 				db.query Queries::FOLLOWING_FROM_ID, id do |rows|
 					rows.each do
-						user.following << User.new(user_id: rows.read(Int64), name: rows.read(String))
+						following << User.new(user_id: rows.read(Int64), name: rows.read(String))
+					end
+				end
+				user.following = following
+
+				user.leaderboards = [] of LeaderboardSummary
+				RankType.each do |r|
+					LeaderboardType.each do |l|
+						rank, count = db.query_one Queries.rank_and_count(r, l), id, as: {Int64, Int64}
+						user.leaderboards.try &.<< LeaderboardSummary.new id, r, l, rank, count
 					end
 				end
 			end
@@ -127,37 +167,29 @@ module MapTogether::Server
 			end
 		end
 
+		get "/leaderboard/:time/personal/:id" do |env|
+			time = LeaderboardType.from_s env.params.url["time"]
+			id = env.params.url["id"]
+
+			string = JSON.build do |json|
+				try_open_connection do |db|
+					db.query Queries.leaderboard(RankType::Personal, time), id do |rows|
+						Leaderboard.new(rows).to_json json
+					end
+				end
+			end
+
+			env.response.content_type = "application/json"
+			string
+		end
+
 		# Retrieve all users' id, name and score
-		get "/leaderboard/global/all_time" do |env|
+		get "/leaderboard/:time/global" do |env|
+			time = LeaderboardType.from_s env.params.url["time"]
+
 			string = JSON.build do |json|
 				try_open_connection do |db|
-					db.query Queries::GLOBAL_ALL_TIME do |rows|
-						Leaderboard.new(rows).to_json json
-					end
-				end
-			end
-
-			env.response.content_type = "application/json"
-			string
-		end
-
-		get "/leaderboard/global/monthly" do |env|
-			string = JSON.build do |json|
-				try_open_connection do |db|
-					db.query Queries::GLOBAL_INTERVAL, Time.utc.at_beginning_of_month, Time.utc.at_end_of_month do |rows|
-						Leaderboard.new(rows).to_json json
-					end
-				end
-			end
-
-			env.response.content_type = "application/json"
-			string
-		end
-
-		get "/leaderboard/global/weekly" do |env|
-			string = JSON.build do |json|
-				try_open_connection do |db|
-					db.query Queries::GLOBAL_INTERVAL, Time.utc.at_beginning_of_week, Time.utc.at_end_of_week do |rows|
+					db.query Queries.leaderboard(RankType::Global, time) do |rows|
 						Leaderboard.new(rows).to_json json
 					end
 				end

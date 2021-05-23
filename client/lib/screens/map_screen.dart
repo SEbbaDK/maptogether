@@ -1,15 +1,16 @@
-import 'package:client/location_handler.dart';
-import 'package:client/login_handler.dart';
-import 'package:client/quests/quest_handler.dart';
-import 'package:client/screens/login_screen.dart';
-import 'package:client/screens/social_screen.dart';
-import 'package:client/widgets/map_widgets/map.dart';
-import 'package:client/widgets/map_widgets/map_screen_button_widgets/button_row.dart';
-import 'package:client/widgets/map_widgets/map_screen_button_widgets/map_screen_button.dart';
-import 'package:client/widgets/map_widgets/map_screen_button_widgets/pup_up_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
 import 'package:provider/provider.dart';
+
+import 'package:client/location_handler.dart';
+import 'package:client/login_flow.dart';
+import 'package:client/login_handler.dart';
+import 'package:client/quests/quest_handler.dart';
+import 'package:client/screens/social_screen.dart';
+import 'package:client/widgets/map/buttons/button_row.dart';
+import 'package:client/widgets/map/buttons/map_screen_button.dart';
+import 'package:client/widgets/map/buttons/pup_up_menu.dart';
+import 'package:client/widgets/map/map.dart';
 
 launchSocial(BuildContext context) => Navigator.of(context)
     .push(MaterialPageRoute(builder: (context) => SocialScreen()));

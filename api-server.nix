@@ -13,6 +13,7 @@ let
   databaseSetup = ./server/database/create-role-and-database.sql;
   tableSetup = pkgs.writeText "setup.sql" ''
     ${builtins.readFile ./server/database/create-tables.sql}
+    ${builtins.readFile ./server/database/create-materialized-views.sql}
     ${mockData}
   '';
 in
@@ -61,6 +62,25 @@ in
     requires = [ "maptogether-database-setup.service" "maptogether-table-setup.service" "postgresql.service" ];
     after = [ "maptogether-database-setup.service" "maptogether-table-setup.service" "postgresql.service" ];
     wantedBy = [ "default.target" ];
+  };
+
+  systemd.services.maptogether-refresh-views = {
+    description = "Refresh the MapTogether views";
+    serviceConfig = {
+      Type = "oneshot";
+      User = "maptogether";
+      Group = "maptogether";
+      ExecStart = "${pkgs.postgresql}/bin/psql -d maptogether -f ${./server/database/refresh-materialized-views.sql}";
+    };
+    requires = [ "maptogether-database-setup.service" "postgresql.service" ];
+    after = [ "maptogether-database-setup.service" "postgresql.service" ];
+    wantedBy = [ "default.target" ];
+  };
+
+  systemd.timers.maptogether-refresh-views = {
+	description = "Timer to trigger refresh";
+	timerConfig.OnCalendar = "*:*:0"; # once a minute
+	wantedBy = [ "timers.target" ];
   };
 
   users.groups.maptogether.gid = 1005;

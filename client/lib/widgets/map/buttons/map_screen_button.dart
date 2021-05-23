@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class MapScreenButton extends StatelessWidget {
   MapScreenButton(
       {Key key,
-        @required this.child,
-        @required this.onPressed,
-        this.height,
-        this.width})
+      @required this.child,
+      @required this.onPressed,
+      this.height,
+      this.width})
       : super(key: key);
 
   final Widget child;

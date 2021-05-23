@@ -2,19 +2,6 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'data.dart' as data;
 
-enum LeaderboardType { weekly, montly, all_time }
-String stringify(LeaderboardType type) {
-  switch (type) {
-    case LeaderboardType.weekly:
-      return 'weekly';
-    case LeaderboardType.montly:
-      return 'montly';
-    case LeaderboardType.all_time:
-      return 'all_time';
-  }
-  throw 'Leaderboard type does not exsist';
-}
-
 class InvalidRegionException implements Exception {
   final String _message;
   InvalidRegionException(
@@ -62,31 +49,26 @@ class Api {
   Future<data.User> user(int id) =>
       _get('user/$id').then(_checkRequest('getting user')).then(_decodeUser);
 
-  Future<data.Leaderboard> leaderboard(String base, LeaderboardType type) =>
-      _get('leaderboard/$base/${stringify(type)}')
-          .then(_checkRequest('getting leaderboard'))
-          .then(_decodeLeaderboard);
+  leaderboardByPath(String path) => _get('leaderboard/$path')
+      .then(_checkRequest('getting leaderboard'))
+      .then(_decodeLeaderboard);
 
-  Future<data.Leaderboard> personalLeaderboard(LeaderboardType type) =>
-      leaderboard('personal', type);
+  Future<data.Leaderboard> leaderboard(
+          data.LeaderboardType type, String name) =>
+      leaderboardByPath('${type.stringify()}/$name');
 
-  Future<data.Leaderboard> globalLeaderboard(LeaderboardType type) =>
-      leaderboard('global', type);
+  Future<data.Leaderboard> personalLeaderboard(
+          data.LeaderboardType type, int id) =>
+      leaderboard(type, 'personal/${id}');
 
-  Future<data.Leaderboard> regionalLeaderboard(
-      String region, LeaderboardType type) {
-    if (region == 'personal' || region == 'global')
-      throw InvalidRegionException();
-    else
-      return leaderboard(region, type);
-  }
+  Future<data.Leaderboard> globalLeaderboard(data.LeaderboardType type) =>
+      leaderboard(type, 'global');
 
   // Push Endpoints
 
   Future<void> createUser(
           int id, String secret, String clientToken, String clientSecret) =>
-      _put('user/$id',
-              auth: 'Basic $_access $secret $clientToken $clientSecret')
+      _put('user/$id', auth: '$_access $secret $clientToken $clientSecret')
           .then(_checkRequest('creating user'));
 
   Future<void> follow(int id, int other) =>

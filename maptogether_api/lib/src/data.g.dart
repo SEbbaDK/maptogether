@@ -9,7 +9,9 @@ part of 'data.dart';
 User _$UserFromJson(Map<String, dynamic> json) {
   return User(
     id: json['id'] as int,
-    score: json['score'] as int,
+    scoreAllTime: json['score_all_time'] as int,
+    scoreMonthly: json['score_monthly'] as int,
+    scoreWeekly: json['score_weekly'] as int,
     name: json['name'] as String,
     achievements: (json['achievements'] as List<dynamic>)
         .map((e) => Achievement.fromJson(e as Map<String, dynamic>))
@@ -20,16 +22,22 @@ User _$UserFromJson(Map<String, dynamic> json) {
     following: (json['following'] as List<dynamic>)
         .map((e) => SimpleUser.fromJson(e as Map<String, dynamic>))
         .toList(),
+    leaderboards: (json['leaderboards'] as List<dynamic>)
+        .map((e) => LeaderboardSummary.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
 Map<String, dynamic> _$UserToJson(User instance) => <String, dynamic>{
       'id': instance.id,
-      'score': instance.score,
+      'score_all_time': instance.scoreAllTime,
+      'score_monthly': instance.scoreMonthly,
+      'score_weekly': instance.scoreWeekly,
       'name': instance.name,
       'achievements': instance.achievements,
       'followers': instance.followers,
       'following': instance.following,
+      'leaderboards': instance.leaderboards,
     };
 
 Achievement _$AchievementFromJson(Map<String, dynamic> json) {
@@ -89,3 +97,28 @@ Map<String, dynamic> _$LeaderboardEntryToJson(LeaderboardEntry instance) =>
       'user': instance.user,
       'score': instance.score,
     };
+
+LeaderboardSummary _$LeaderboardSummaryFromJson(Map<String, dynamic> json) {
+  return LeaderboardSummary(
+    path: json['path'] as String,
+    name: json['name'] as String,
+    rank: json['rank'] as int,
+    total: json['total'] as int,
+    type: LeaderboardTypeExtension.fromString(json['type'] as String),
+  );
+}
+
+Map<String, dynamic> _$LeaderboardSummaryToJson(LeaderboardSummary instance) =>
+    <String, dynamic>{
+      'path': instance.path,
+      'name': instance.name,
+      'rank': instance.rank,
+      'total': instance.total,
+      'type': _$LeaderboardTypeEnumMap[instance.type],
+    };
+
+const _$LeaderboardTypeEnumMap = {
+  LeaderboardType.weekly: 'weekly',
+  LeaderboardType.monthly: 'monthly',
+  LeaderboardType.all_time: 'all_time',
+};

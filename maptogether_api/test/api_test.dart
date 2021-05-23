@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:maptogether_api/src/api.dart' as mt;
+import 'package:maptogether_api/maptogether_api.dart' as mt;
 
 void main() {
   group('Maptogether reads', () {

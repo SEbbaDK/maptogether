@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MapTogetherAppBar extends StatelessWidget implements PreferredSizeWidget {
-  MapTogetherAppBar(
-      {Key key,
-      @required this.title,
-      this.actions})
+  MapTogetherAppBar({Key key, @required this.title, this.actions})
       : super(key: key);
 
   String title;

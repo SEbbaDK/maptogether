@@ -30,5 +30,6 @@ in
   containers.api = {
     config = import ./api-server.nix { port = apiPort; inherit pkgs; };
     autoStart = true;
+    ephemeral = true;
   };
 }

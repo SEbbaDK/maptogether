@@ -1,6 +1,6 @@
 import 'package:client/screens/new_activity_screen.dart';
-import 'package:client/screens/settings.dart';
-import 'package:client/screens/login_screen.dart';
+import 'package:client/screens/settings_screen.dart';
+import 'package:client/login_flow.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,12 +29,10 @@ class _PopUpMenuState extends State<PopUpMenu> {
       MapScreenButton(
           child: Icon(Icons.add),
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => NewActivityScreen())
-            );
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => NewActivityScreen()));
             closeMenu();
           }),
-
       MapScreenButton(
           child: Icon(Icons.location_history),
           onPressed: () {
@@ -42,7 +40,6 @@ class _PopUpMenuState extends State<PopUpMenu> {
                 context, MaterialPageRoute(builder: (context) => Settings()));
             closeMenu();
           }),
-
       MapScreenButton(
           child: Icon(Icons.settings),
           onPressed: () {

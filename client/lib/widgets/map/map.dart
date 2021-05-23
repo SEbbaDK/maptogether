@@ -1,6 +1,3 @@
-import 'package:client/location_handler.dart';
-import 'package:client/quests/quest_handler.dart';
-import 'package:client/widgets/quest/marker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -9,6 +6,13 @@ import 'package:latlong/latlong.dart';
 import 'package:osm_api/osm_api.dart' as osm;
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
+
+import 'package:client/location_handler.dart';
+import 'package:client/login_flow.dart';
+import 'package:client/login_handler.dart';
+import 'package:client/quests/quest.dart';
+import 'package:client/quests/quest_handler.dart';
+import 'package:client/widgets/quest/marker.dart';
 
 class PointOfInterest {
   // TODO: I think this should be moved to some model package

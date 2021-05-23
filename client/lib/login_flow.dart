@@ -1,13 +1,15 @@
 import 'dart:async';
 
-import 'package:client/login_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import 'package:client/login_handler.dart';
+import 'package:client/widgets/app_bar.dart';
+import 'package:client/widgets/future_loader.dart';
+
 class LoginWebView extends StatelessWidget {
   final String url;
-  void Function(BuildContext) onVerified;
 
   LoginWebView(this.url);
 
@@ -34,9 +36,8 @@ class LoginWebView extends StatelessWidget {
                   final verifier = u.split('verifier=')[1];
                   print('Verifier: $verifier');
                   loginHandler.authorize(verifier).then((_) {
-                    onVerified(context);
+                    Navigator.of(context).pop(true);
                   });
-                  Navigator.of(context).pop(true);
                 }
               },
             ),
@@ -48,17 +49,12 @@ class LoginWebView extends StatelessWidget {
 }
 
 MaterialPageRoute<bool> loginPage() => MaterialPageRoute<bool>(
-    builder: (context) => FutureBuilder<String>(
+    builder: (context) => FutureLoader<String>(
         future: context.watch<LoginHandler>().loginUrl(),
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) =>
-            (snapshot.hasData)
-                ? LoginWebView(snapshot.data)
-                : (snapshot.hasError)
-                    ? Text('Error: ${snapshot.error}')
-                    : CircularProgressIndicator(
-                        semanticsLabel: 'Getting auth url')));
+        builder: (BuildContext context, String url) => LoginWebView(url)));
 
-Future<bool> requestLogin(BuildContext context, {bool social}) => request(
+Future<bool> requestLogin(BuildContext context, {bool social = false}) =>
+    request(
       context,
       title: social
           ? 'You must login to access social features'
@@ -70,8 +66,9 @@ Future<bool> requestLogin(BuildContext context, {bool social}) => request(
       no: 'No Thanks',
     ).then((answer) async {
       if (answer == false) return false;
-
-      return await Navigator.push<bool>(context, loginPage());
+      final login = await Navigator.push<bool>(context, loginPage());
+      if (login && social) await context.read<LoginHandler>().optIn();
+      return login;
     });
 
 Future<bool> request(BuildContext context,

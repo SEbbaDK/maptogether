@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:client/widgets/app_bar.dart';
 import 'friends.dart';
-import 'package:client/database.dart';
 import 'package:provider/provider.dart';
 
-class NewFriend extends StatelessWidget {
+class AddFriend extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
 
   @override
@@ -14,23 +13,23 @@ class NewFriend extends StatelessWidget {
           title: 'Follow New',
           actions: [],
         ),
-        body: Center(child: Column(children: <Widget>[
+        body: Center(
+            child: Column(children: <Widget>[
           Container(
             child: Column(
               children: <Widget>[
                 Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(10),
-                    margin: const EdgeInsets.only(top: 50),
-                    child: Text(
-                      'Find via Username',
-                      style: TextStyle(
-                          color: Colors.green,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 30),
-                    ),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(top: 50),
+                  child: Text(
+                    'Find via Username',
+                    style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30),
+                  ),
                 ),
-
                 Container(
                   padding: EdgeInsets.all(10),
                   child: TextField(
@@ -41,29 +40,23 @@ class NewFriend extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 Container(
                     height: 50,
                     padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
                       style: TextButton.styleFrom(
-                        primary: Colors.white,
-                        backgroundColor: Colors.green
-                      ),
+                          primary: Colors.white, backgroundColor: Colors.green),
                       child: Text('Follow'),
                       onPressed: () {
                         //Add friend to backend for user here
-                        context.read<DummyDatabase>().followNew(nameController.text);
+                        print("FOLLOW SOMEONE");
                         print(nameController.text);
                         Navigator.pop(context);
                       },
                     )),
-
               ],
             ),
           ),
-        ]
-        ))
-    );
+        ])));
   }
 }
