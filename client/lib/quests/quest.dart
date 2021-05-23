@@ -1,16 +1,33 @@
-import 'package:latlong/latlong.dart';
+import 'package:flutter/material.dart';
 import 'package:osm_api/osm_api.dart' as osm;
+import 'package:latlong/latlong.dart';
+import 'package:quiver/core.dart';
 
 abstract class Quest {
-  LatLng position;
-
   osm.Element element;
+  LatLng position = LatLng(0,0);
 
-  Quest(this.position, this.element);
+  Quest(this.element);
 
-  String getChangesetComment();
+  Widget icon();
 
-  String getQuestion();
+  String changesetComment();
 
-  List<String> getPossibilities();
+  String question();
+
+  Future<void> solve(osm.Api api, String possibility);
+
+  @override
+  bool operator ==(Object that) {
+    return that is Quest &&
+        this.element.type == that.element.type &&
+        this.element.id == that.element.id &&
+        this.question() == that.question();
+  }
+
+  // Inspired by this: https://stackoverflow.com/questions/20577606/whats-a-good-recipe-for-overriding-hashcode-in-dart
+  @override
+  int get hashCode {
+    return hash3(element.type.hashCode, element.id.hashCode, question());
+  }
 }

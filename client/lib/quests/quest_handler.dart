@@ -1,83 +1,70 @@
-import 'package:client/location_handler.dart';
-import 'package:client/login_handler.dart';
-import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
-import 'package:client/quests/quest.dart';
-import 'package:flutter/material.dart';
 import 'package:latlong/latlong.dart';
+import 'package:flutter/material.dart';
 import 'package:osm_api/osm_api.dart' as osm;
+
+import 'package:client/quests/bench_quests/backrest_bench_quest.dart';
+import 'package:client/quests/building_quests/building_type_quest.dart';
+import 'package:client/quests/quest.dart';
 
 class QuestHandler extends ChangeNotifier {
   osm.Api api;
 
-  List<Quest> quests = [];
+  Set<Quest> quests = Set();
 
-  bool _isBench(osm.Element element) {
-    return (element.tags.containsKey('amenity') &&
-        element.tags.containsValue('bench'));
+  final finders = [
+    BackrestBenchQuestFinder(),
+    BuildingTypeQuestFinder(),
+  ];
+
+  Map<int, osm.Element> _nodes = Map();
+
+  LatLng _position(osm.Element e) {
+      if (e.isNode)
+      	return LatLng(e.lat, e.lon);
+      if (e.isWay) {
+        double latitude = 0, longitude = 0;
+        e.nodes.forEach((id) {
+          final n = _nodes[id];
+            latitude += n.lat;
+            longitude += n.lon;
+        });
+        var count = e.nodes.length;
+        latitude /= count;
+        longitude /= count;
+
+        print("Calculated pos: ${latitude}:${longitude}");
+        return LatLng(latitude, longitude);
+      }
+      throw Exception("Only coordinate node and way");
   }
 
-  bool _hasTagBenchBackrest(osm.Element element) {
-    return !(element.tags.containsKey('backrest'));
-  }
-
-  void getBenchQuests(
+  // Finding quests within bound
+  Future<void> loadQuests(
       double left, double bottom, double right, double top) async {
     api = osm.Api(
         'id', osm.Auth.getUnauthorizedClient(), osm.ApiEnv.dev('master'));
+
+    // Fetch elements within bound
     List<osm.Element> elements =
         (await api.mapByBox(left, bottom, right, top)).elements;
 
-    List<Quest> benchQuests = [];
-    List<osm.Element> benchElements = elements
-        .where((element) => _isBench(element))
-        .where((element) => _hasTagBenchBackrest(element))
-        .toList();
+    elements.forEach((e) { if (e.isNode) _nodes[e.id] = e; });
 
-    benchElements.forEach((element) {
-      benchQuests
-          .add(BackrestBenchQuest(LatLng(element.lat, element.lon), element));
-    });
-
-    print(benchElements);
-    quests.removeWhere((element) => benchQuests.contains(element));
-    quests.addAll(benchQuests);
-
-    quests = benchQuests;
+    elements.forEach((e) => finders.forEach((f) {
+          if (f.applicable(e)) {
+              final q = f.construct(e);
+              if (!quests.contains(q)) {
+                q.position = _position(e);
+				quests.add(q);
+              }
+          }
+        }));
 
     notifyListeners();
   }
 
-  Future<void> answerBenchQuest(
-    LoginHandler loginHandler,
-    LocationHandler locationHandler,
-    QuestHandler questFinder,
-    BackrestBenchQuest quest,
-    int possibilityNumber,
-  ) async {
-    var api = loginHandler.osmApi();
-
-    int changeSetId = await api.createChangeset(quest.getChangesetComment());
-
-    // add the new tag to the tag-map
-    quest.element.tags['backrest'] =
-        quest.getPossibilities()[possibilityNumber].toString();
-
-    int nodeId = await api.updateNode(
-        quest.element.id,
-        changeSetId,
-        quest.position.latitude,
-        quest.position.longitude,
-        quest.element.version,
-        quest.element.tags);
-
-    api.closeChangeset(changeSetId);
-    print('Selected answer: ' +
-        quest.getPossibilities()[possibilityNumber].toString());
-
-    questFinder.getBenchQuests(
-        locationHandler.mapController.bounds.west,
-        locationHandler.mapController.bounds.south,
-        locationHandler.mapController.bounds.east,
-        locationHandler.mapController.bounds.north);
+  void removeQuest(Quest quest) {
+    this.quests.remove(quest);
+    notifyListeners();
   }
 }

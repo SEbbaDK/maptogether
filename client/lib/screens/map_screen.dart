@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:latlong/latlong.dart';
+import 'package:provider/provider.dart';
 
 import 'package:client/location_handler.dart';
-import 'package:client/login_handler.dart';
-
-import 'package:client/quests/bench_quest/backrest_bench_quest.dart';
-import 'package:client/quests/quest_handler.dart';
-
-import 'package:client/screens/social_screen.dart';
 import 'package:client/login_flow.dart';
-
-import 'package:client/widgets/map/map.dart';
+import 'package:client/login_handler.dart';
+import 'package:client/quests/quest_handler.dart';
+import 'package:client/screens/social_screen.dart';
 import 'package:client/widgets/map/buttons/button_row.dart';
 import 'package:client/widgets/map/buttons/map_screen_button.dart';
 import 'package:client/widgets/map/buttons/pup_up_menu.dart';
+import 'package:client/widgets/map/map.dart';
 
 launchSocial(BuildContext context) => Navigator.of(context)
     .push(MaterialPageRoute(builder: (context) => SocialScreen()));
@@ -78,7 +74,7 @@ class MapScreen extends StatelessWidget {
                       child: Icon(Icons.wifi_protected_setup),
                       onPressed: () {
                         var questFinder = context.read<QuestHandler>();
-                        questFinder.getBenchQuests(
+                        questFinder.loadQuests(
                             locationHandler.mapController.bounds.west,
                             locationHandler.mapController.bounds.south,
                             locationHandler.mapController.bounds.east,

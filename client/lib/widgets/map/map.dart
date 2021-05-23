@@ -1,15 +1,18 @@
-import 'package:client/location_handler.dart';
-import 'package:client/login_handler.dart';
-import 'package:client/quests/quest.dart';
-import 'package:client/quests/quest_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:latlong/latlong.dart';
+import 'package:osm_api/osm_api.dart' as osm;
 import 'package:provider/provider.dart';
 import 'package:time_range_picker/time_range_picker.dart';
+
+import 'package:client/location_handler.dart';
 import 'package:client/login_flow.dart';
+import 'package:client/login_handler.dart';
+import 'package:client/quests/quest.dart';
+import 'package:client/quests/quest_handler.dart';
+import 'package:client/widgets/quest/marker.dart';
 
 class PointOfInterest {
   // TODO: I think this should be moved to some model package
@@ -49,76 +52,6 @@ class _InteractiveMapState extends State<InteractiveMap> {
   @override
   Widget build(BuildContext context) {
     _mapController = context.watch<LocationHandler>().mapController;
-
-    List<Quest> quests = context.watch<QuestHandler>().quests;
-
-    List<Marker> backrestQuestMarkers = quests.map((quest) {
-      List<Widget> textButtons = [];
-      for (int i = 0; i < quest.getPossibilities().length; i++) {
-        textButtons.add(Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ElevatedButton(
-            child: Text(quest.getPossibilities()[i]),
-            onPressed: () async {
-              LoginHandler loginHandler = context.read<LoginHandler>();
-              QuestHandler questHandler = context.read<QuestHandler>();
-              LocationHandler locationHandler = context.read<LocationHandler>();
-
-              if (!loginHandler.loggedIntoOSM())
-                requestLogin(context, social: false);
-              else
-                questHandler
-                    .answerBenchQuest(
-                        loginHandler, locationHandler, questHandler, quest, i)
-                    .then((value) => Navigator.pop(context));
-            },
-          ),
-        ));
-      }
-
-      return Marker(
-          width: 60,
-          height: 60,
-          point: quest.position,
-          builder: (context) => FittedBox(
-                child: TextButton(
-                  child: Icon(
-                    Icons.airline_seat_recline_normal_sharp,
-                    color: Colors.black,
-                  ),
-                  onPressed: () {
-                    showModalBottomSheet(
-                        backgroundColor: Colors.transparent,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            decoration: BoxDecoration(
-                                color: Colors.lightGreen,
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(20),
-                                    topRight: Radius.circular(20))),
-                            height: 200,
-                            child: Column(
-                              children: <Widget>[
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        quest.getQuestion(),
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ] +
-                                  textButtons,
-                            ),
-                          );
-                        });
-                  },
-                ),
-              ));
-    }).toList();
 
     Marker currentPositionMarker = Marker(
       point: context.watch<LocationHandler>().getLocation(),
@@ -229,31 +162,33 @@ class _InteractiveMapState extends State<InteractiveMap> {
       ),
     );
 
+    // The hold down on map pop up marker
     Marker popUpMarker = Marker(
-        height: 250,
-        width: 1000,
-        point: popUpPositionOnMap,
-        builder: (context) => Visibility(
-              visible: showPopUp,
-              child: FittedBox(
-                child: Stack(
-                  children: [
-                    Container(
-                      child: Center(
-                        child: Image(
-                          image: AssetImage('assets/MapTogether_popUp.png'),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 105,
-                      right: -40,
-                      child: SizedBox(height: 50, width: 200, child: selector),
-                    ),
-                  ],
+      height: 250,
+      width: 1000,
+      point: popUpPositionOnMap,
+      builder: (context) => Visibility(
+        visible: showPopUp,
+        child: FittedBox(
+          child: Stack(
+            children: [
+              Container(
+                child: Center(
+                  child: Image(
+                    image: AssetImage('assets/MapTogether_popUp.png'),
+                  ),
                 ),
               ),
-            ));
+              Positioned(
+                bottom: 105,
+                right: -40,
+                child: SizedBox(height: 50, width: 200, child: selector),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
 
     void _handleLongPress(LatLng latLng) {
       setState(() {
@@ -261,6 +196,14 @@ class _InteractiveMapState extends State<InteractiveMap> {
         showPopUp = true;
       });
     }
+
+    // Finding quests and create Markers for each of them
+
+    final quests = context.watch<QuestHandler>().quests;
+	List<Marker> questMarkers = quests
+    	.where((q) => _mapController.bounds.contains(q.position))
+        .map((q) => Marker(point: q.position, builder: (context) => QuestMarker(q)))
+        .toList();
 
     return FlutterMap(
       mapController: _mapController,
@@ -287,29 +230,39 @@ class _InteractiveMapState extends State<InteractiveMap> {
             showPopUp = false;
           });
         },
-        // Aalborg
-        //center: LatLng(57.04, 9.92),
         center: context.watch<LocationHandler>().getLocation(),
         zoom: 12.0,
         maxZoom: 22.0,
       ),
       layers: [
         MarkerClusterLayerOptions(
-          maxClusterRadius: 100,
-          size: Size(40, 40),
+          maxClusterRadius: 75,
+          size: Size(50, 50),
           fitBoundsOptions: FitBoundsOptions(
             padding: EdgeInsets.all(50),
           ),
-          markers: backrestQuestMarkers,
+          markers: questMarkers,
           polygonOptions: PolygonOptions(
-              borderColor: Colors.blueAccent,
+              borderColor: Colors.lightGreen,
               color: Colors.black12,
               borderStrokeWidth: 3),
           builder: (context, markers) {
             return Row(
               children: [
-                Icon(Icons.airline_seat_recline_normal_sharp),
-                Text(markers.length.toString()),
+                Flexible(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.lightGreen,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(Icons.not_listed_location_rounded),
+                  ),
+                ),
+                Flexible(
+                    child: Text(
+                  markers.length.toString(),
+                  overflow: TextOverflow.ellipsis,
+                )),
               ],
             );
           },
@@ -322,7 +275,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
           ),
           markers: taskMarkers,
           polygonOptions: PolygonOptions(
-              borderColor: Colors.blueAccent,
+              borderColor: Colors.lightGreen,
               color: Colors.black12,
               borderStrokeWidth: 3),
           builder: (context, markers) {
