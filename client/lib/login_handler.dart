@@ -113,6 +113,8 @@ class LoginHandler extends ChangeNotifier {
 
   logout() {
     _userId = null;
+    _osmApi = null;
+    _mtApi = null;
     prefs().setString('accessToken', '');
     prefs().setString('accessSecret', '');
     notifyListeners();
