@@ -1,4 +1,5 @@
 import 'package:client/login_handler.dart';
+import 'package:client/widgets/social/user_overview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart' as mt;
@@ -7,6 +8,7 @@ import 'package:client/widgets/social/leaderboard.dart';
 import 'package:client/widgets/social/add_friend.dart';
 import 'package:client/widgets/future_loader.dart';
 import 'package:client/screens/social_screen.dart';
+import 'expandedFriend.dart';
 
 //TODO: move friends list to a seperate file or server
 class Friends extends StatelessWidget {
@@ -18,6 +20,13 @@ class Friends extends StatelessWidget {
   Widget friendItem(BuildContext context, mt.SimpleUser otherUser) => FutureLoader<mt.User>(
       future: user,
       builder: (BuildContext context, mt.User user) => ListTile(
+        onTap: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ExpandedFriend(
+            user: context.read<LoginHandler>().mtApi().user(otherUser.id),
+            currentUserId: otherUser.id,
+            friendId: otherUser.id,
+            friendName: otherUser.name,)));
+        },
         onLongPress: () {
           LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: false);
           showModalBottomSheet<void>(
