@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:maptogether_api/maptogether_api.dart';
 import 'package:provider/provider.dart';
+import 'expandedFriend.dart';
+import 'package:client/login_handler.dart';
 
 import 'package:client/widgets/app_bar.dart';
 import 'package:client/widgets/future_loader.dart';
@@ -13,10 +15,16 @@ class LeaderboardWidget extends StatelessWidget {
 
   LeaderboardWidget({Key key, @required this.leaderboard, @required this.name}) : super(key: key);
 
-  Widget scoreWidget(int placement, String name, int score) => ListTile(
+  Widget scoreWidget(context, int placement, String name, int score, SimpleUser otherUser) => ListTile(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => ExpandedFriendNoFollow(
+                user: context.read<LoginHandler>().mtApi().user(otherUser.id),
+                friend: otherUser)));
+          },
           title: Text("#$placement $name : $score"),
           leading: CircleAvatar(
             backgroundImage: AssetImage('assets/business.png'),
+
           ),
       );
 
@@ -31,9 +39,12 @@ class LeaderboardWidget extends StatelessWidget {
               separatorBuilder: (BuildContext context, int index) => const Divider(thickness: 0.5),
               itemCount: leaderboard.entries.length,
               itemBuilder: (context, index) => scoreWidget(
+                  context,
                   index + 1,
                   leaderboard.entries[index].user.name,
-                  leaderboard.entries[index].score)),
+                  leaderboard.entries[index].score,
+                  SimpleUser(id: leaderboard.entries[index].user.id, name: leaderboard.entries[index].user.name),
+              )),
         ),
       ]));
 

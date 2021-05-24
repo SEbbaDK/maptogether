@@ -6,26 +6,28 @@ import '../app_bar.dart';
 import 'user_overview.dart';
 import 'package:client/login_handler.dart';
 import 'overview.dart';
+import 'package:client/screens/social_screen.dart';
 
 import 'package:client/widgets/future_loader.dart';
 
 class ExpandedFriend extends StatelessWidget {
   Future<User> user;
-  int currentUserId, friendId;
-  String friendName;
+  int currentUserId;
+  SimpleUser friend;
+
 
   ExpandedFriend(
-      {@required this.user, @required this.currentUserId, @required this.friendId, @required this.friendName});
+      {@required this.user, @required this.currentUserId, @required this.friend});
 
   @override
   Widget build(BuildContext context) {
+    LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: false);
     return Scaffold(
         appBar: MapTogetherAppBar(
-          title: 'Follow New',
+          title: friend.name + "'s profile",
           actions: [],
         ),
         body: Container(
-            color: Colors.white,
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -38,11 +40,42 @@ class ExpandedFriend extends StatelessWidget {
                         style: TextButton.styleFrom(
                             primary: Colors.white, backgroundColor: Colors.red),
                         onPressed: () {
-
+                          loginHandler.mtApi().unfollow(currentUserId, friend.id);
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen(1)));
                         },
                       ),
                     ),
                   ),
+                ]
+            )
+        )
+    );
+  }
+}
+
+class ExpandedFriendNoFollow extends StatelessWidget {
+  Future<User> user;
+  SimpleUser friend;
+
+
+  ExpandedFriendNoFollow(
+      {@required this.user, @required this.friend});
+
+  @override
+  Widget build(BuildContext context) {
+    LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: false);
+    return Scaffold(
+        appBar: MapTogetherAppBar(
+          title: friend.name + "'s profile",
+          actions: [],
+        ),
+        body: Container(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(flex: 7, child: Overview(user)),
                 ]
             )
         )

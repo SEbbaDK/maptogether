@@ -23,9 +23,8 @@ class Friends extends StatelessWidget {
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => ExpandedFriend(
             user: context.read<LoginHandler>().mtApi().user(otherUser.id),
-            currentUserId: otherUser.id,
-            friendId: otherUser.id,
-            friendName: otherUser.name,)));
+            currentUserId: user.id,
+            friend: otherUser)));
         },
         onLongPress: () {
           LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: false);

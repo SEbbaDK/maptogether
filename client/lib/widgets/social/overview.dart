@@ -70,8 +70,9 @@ class Overview extends StatelessWidget {
                     .watch<LoginHandler>()
                     .mtApi()
                     .leaderboardByPath(summary.path),
-                  name: (summary.name + " " + summary.type.stringify())),
-              ));
+                  name: (summary.name + " " + summary.type.stringify()),
+              )
+            ));
             },
           )
   );
