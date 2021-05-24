@@ -11,6 +11,9 @@ class SimpleTagQuestPopUp extends StatelessWidget {
   final osm.Api _api;
   final SimpleTagQuest _quest;
 
+  int userId;
+  int changeset;
+
   List<Widget> createButtons(BuildContext context) {
     List<Widget> buttons = [];
 
@@ -23,7 +26,7 @@ class SimpleTagQuestPopUp extends StatelessWidget {
                 .then((value) {
               context
                   .read<QuestHandler>()
-                  .removeQuest(_quest); // Remove the solved quest
+                  .removeQuest(_quest, value, context.read<LoginHandler>().mtApi()); // Remove the solved quest
               Navigator.pop(context); // Close pop up
             });
           },

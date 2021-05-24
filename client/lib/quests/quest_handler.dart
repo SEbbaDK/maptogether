@@ -1,10 +1,12 @@
 import 'package:latlong/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:osm_api/osm_api.dart' as osm;
+import 'package:maptogether_api/maptogether_api.dart' as mt;
 
 import 'package:client/quests/bench_quests/backrest_bench_quest.dart';
 import 'package:client/quests/building_quests/building_type_quest.dart';
 import 'package:client/quests/quest.dart';
+import 'package:client/login_handler.dart';
 
 class QuestHandler extends ChangeNotifier {
   osm.Api api;
@@ -63,7 +65,13 @@ class QuestHandler extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeQuest(Quest quest) {
+  void removeQuest(Quest quest, int changeSet, mt.Api mtapi) async {
+    int userId = await api.userId();
+
+    mt.Contribution contribution = mt.Contribution(user_id: userId, type: 1, changeset: changeSet, score: 1, date_time: DateTime.now());
+
+    mtapi.makeContribution(contribution);
+
     this.quests.remove(quest);
     notifyListeners();
   }

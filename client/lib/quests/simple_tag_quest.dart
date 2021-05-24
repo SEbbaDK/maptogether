@@ -13,7 +13,7 @@ abstract class SimpleTagQuest extends Quest {
   Map<String, String> possibilitiesToTags();
 
   @override
-  Future<void> solve(osm.Api api, String possibility) async {
+  Future<int> solve(osm.Api api, String possibility) async {
     int changeSetId = await api.createChangeset(this.changesetComment());
 
     // add the new tag to the tag-map
@@ -41,5 +41,6 @@ abstract class SimpleTagQuest extends Quest {
       throw Exception("Only node and way solving works");
 
     await api.closeChangeset(changeSetId);
+    return changeSetId;
   }
 }
