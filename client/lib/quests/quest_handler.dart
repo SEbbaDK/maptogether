@@ -21,23 +21,22 @@ class QuestHandler extends ChangeNotifier {
   Map<int, osm.Element> _nodes = Map();
 
   LatLng _position(osm.Element e) {
-      if (e.isNode)
-      	return LatLng(e.lat, e.lon);
-      if (e.isWay) {
-        double latitude = 0, longitude = 0;
-        e.nodes.forEach((id) {
-          final n = _nodes[id];
-            latitude += n.lat;
-            longitude += n.lon;
-        });
-        var count = e.nodes.length;
-        latitude /= count;
-        longitude /= count;
+    if (e.isNode) return LatLng(e.lat, e.lon);
+    if (e.isWay) {
+      double latitude = 0, longitude = 0;
+      e.nodes.forEach((id) {
+        final n = _nodes[id];
+        latitude += n.lat;
+        longitude += n.lon;
+      });
+      var count = e.nodes.length;
+      latitude /= count;
+      longitude /= count;
 
-        print("Calculated pos: ${latitude}:${longitude}");
-        return LatLng(latitude, longitude);
-      }
-      throw Exception("Only coordinate node and way");
+      print("Calculated pos: ${latitude}:${longitude}");
+      return LatLng(latitude, longitude);
+    }
+    throw Exception("Only coordinate node and way");
   }
 
   // Finding quests within bound
@@ -50,15 +49,17 @@ class QuestHandler extends ChangeNotifier {
     List<osm.Element> elements =
         (await api.mapByBox(left, bottom, right, top)).elements;
 
-    elements.forEach((e) { if (e.isNode) _nodes[e.id] = e; });
+    elements.forEach((e) {
+      if (e.isNode) _nodes[e.id] = e;
+    });
 
     elements.forEach((e) => finders.forEach((f) {
           if (f.applicable(e)) {
-              final q = f.construct(e);
-              if (!quests.contains(q)) {
-                q.position = _position(e);
-				quests.add(q);
-              }
+            final q = f.construct(e);
+            if (!quests.contains(q)) {
+              q.position = _position(e);
+              quests.add(q);
+            }
           }
         }));
 

@@ -200,9 +200,10 @@ class _InteractiveMapState extends State<InteractiveMap> {
     // Finding quests and create Markers for each of them
 
     final quests = context.watch<QuestHandler>().quests;
-	List<Marker> questMarkers = quests
-    	.where((q) => _mapController.bounds.contains(q.position))
-        .map((q) => Marker(point: q.position, builder: (context) => QuestMarker(q)))
+    List<Marker> questMarkers = quests
+        .where((q) => _mapController.bounds.contains(q.position))
+        .map((q) =>
+            Marker(point: q.position, builder: (context) => QuestMarker(q)))
         .toList();
 
     return FlutterMap(

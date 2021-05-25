@@ -12,13 +12,15 @@ class ExpandedUser extends StatelessWidget {
   int currentUserId;
   SimpleUser friend;
 
-
   ExpandedUser(
-      {@required this.user, @required this.currentUserId, @required this.friend});
+      {@required this.user,
+      @required this.currentUserId,
+      @required this.friend});
 
   @override
   Widget build(BuildContext context) {
-    LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: false);
+    LoginHandler loginHandler =
+        Provider.of<LoginHandler>(context, listen: false);
     return Scaffold(
         appBar: MapTogetherAppBar(
           title: friend.name + "'s profile",
@@ -28,27 +30,25 @@ class ExpandedUser extends StatelessWidget {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(flex: 7, child: Overview(user)),
-                  Expanded(
-                    flex: 2,
-                    child: Center(
-                      child: TextButton(
-                        child: Text("Unfollow"),
-                        style: TextButton.styleFrom(
-                            primary: Colors.white, backgroundColor: Colors.red),
-                        onPressed: () {
-                          loginHandler.mtApi().unfollow(currentUserId, friend.id);
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen(1)));
-                        },
-                      ),
-                    ),
+              Expanded(flex: 7, child: Overview(user)),
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: TextButton(
+                    child: Text("Unfollow"),
+                    style: TextButton.styleFrom(
+                        primary: Colors.white, backgroundColor: Colors.red),
+                    onPressed: () {
+                      loginHandler.mtApi().unfollow(currentUserId, friend.id);
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (context) => SocialScreen(1)));
+                    },
                   ),
-                ]
-            )
-        )
-    );
+                ),
+              ),
+            ])));
   }
 }
 
@@ -56,13 +56,12 @@ class ExpandedFriendNoFollow extends StatelessWidget {
   Future<User> user;
   SimpleUser friend;
 
-
-  ExpandedFriendNoFollow(
-      {@required this.user, @required this.friend});
+  ExpandedFriendNoFollow({@required this.user, @required this.friend});
 
   @override
   Widget build(BuildContext context) {
-    LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: false);
+    LoginHandler loginHandler =
+        Provider.of<LoginHandler>(context, listen: false);
     return Scaffold(
         appBar: MapTogetherAppBar(
           title: friend.name + "'s profile",
@@ -72,10 +71,7 @@ class ExpandedFriendNoFollow extends StatelessWidget {
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(flex: 7, child: Overview(user)),
-                ]
-            )
-        )
-    );
+              Expanded(flex: 7, child: Overview(user)),
+            ])));
   }
 }

@@ -9,11 +9,9 @@ import 'package:client/quests/quest_finder.dart';
 class BuildingTypeQuestFinder implements QuestFinder {
   @override
   Quest construct(osm.Element e) => BuildingTypeQuest(e);
-    
+
   @override
-  bool applicable(osm.Element e) =>
-  	e.isWay &&
-  	e.tags['building'] == "yes";
+  bool applicable(osm.Element e) => e.isWay && e.tags['building'] == "yes";
 }
 
 class BuildingTypeQuest extends SimpleTagQuest {

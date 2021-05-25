@@ -9,12 +9,12 @@ import 'package:client/quests/quest.dart';
 class BackrestBenchQuestFinder implements QuestFinder {
   @override
   Quest construct(osm.Element e) => BackrestBenchQuest(e);
-    
+
   @override
   bool applicable(osm.Element e) =>
-    e.isNode &&
-    e.tags['amenity'] == 'bench' &&
-    !e.tags.containsKey('backrest');
+      e.isNode &&
+      e.tags['amenity'] == 'bench' &&
+      !e.tags.containsKey('backrest');
 }
 
 class BackrestBenchQuest extends SimpleTagQuest {

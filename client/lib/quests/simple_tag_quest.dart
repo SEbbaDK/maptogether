@@ -15,7 +15,8 @@ abstract class SimpleTagQuest extends Quest {
   Map<String, String> possibilitiesToTags();
 
   @override
-  Future<void> solve(osm.Api api, String possibility, {mt.Api mtapi = null}) async {
+  Future<void> solve(osm.Api api, String possibility,
+      {mt.Api mtapi = null}) async {
     int changeSetId = await api.createChangeset(this.changesetComment());
 
     // add the new tag to the tag-map
@@ -24,13 +25,8 @@ abstract class SimpleTagQuest extends Quest {
     this.element.tags[tag()] = possibilitiesToTags()[possibility];
 
     if (element.isNode)
-      int nodeId = await api.updateNode(
-          this.element.id,
-          changeSetId,
-          element.lat,
-          element.lon,
-          this.element.version,
-          this.element.tags);
+      int nodeId = await api.updateNode(this.element.id, changeSetId,
+          element.lat, element.lon, this.element.version, this.element.tags);
     else if (element.isWay)
       int nodeId = await api.updateWay(
         this.element.id,
@@ -44,15 +40,15 @@ abstract class SimpleTagQuest extends Quest {
 
     await api.closeChangeset(changeSetId);
 
-    if(mtapi != null) {
+    if (mtapi != null) {
       int userId = await api.userId();
-      mt.Contribution contribution = mt.Contribution(user_id: userId,
+      mt.Contribution contribution = mt.Contribution(
+          user_id: userId,
           type: 1,
           changeset: changeSetId,
           score: 5,
           date_time: DateTime.now().toUtc());
       mtapi.makeContribution(contribution);
     }
-
   }
 }

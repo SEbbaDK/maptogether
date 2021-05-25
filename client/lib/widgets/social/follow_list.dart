@@ -15,46 +15,55 @@ class FollowList extends StatelessWidget {
 
   static const Widget seperator = const Divider(thickness: 2, height: 2);
 
-  Widget friendItem(BuildContext context, mt.SimpleUser otherUser) => FutureLoader<mt.User>(
-      future: user,
-      builder: (BuildContext context, mt.User user) => ListTile(
-        onTap: () {
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => ExpandedUser(
-            user: context.read<LoginHandler>().mtApi().user(otherUser.id),
-            currentUserId: user.id,
-            friend: otherUser)));
-        },
-        onLongPress: () {
-          LoginHandler loginHandler = Provider.of<LoginHandler>(context, listen: false);
-          showModalBottomSheet<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return Container(
-                  height: 100,
-                  color: Colors.orange,
-                  child: Center(
-                    child: TextButton(
-                      child: Text("Unfollow"),
-                      style: TextButton.styleFrom(
-                          primary: Colors.white, backgroundColor: Colors.red),
-                      onPressed: () {
-                        loginHandler.mtApi().unfollow(user.id, otherUser.id);
-                        print("NAME IS: " + otherUser.name);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen(1)));
-                      },
-                    ),
-                  ),
-                );
-              });
-        },
-        title: Text(otherUser.name),
-        leading: CircleAvatar(
-          backgroundImage: AssetImage('assets/business.png'),
-        ),
-      )
-  );
+  Widget friendItem(BuildContext context, mt.SimpleUser otherUser) =>
+      FutureLoader<mt.User>(
+          future: user,
+          builder: (BuildContext context, mt.User user) => ListTile(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ExpandedUser(
+                          user: context
+                              .read<LoginHandler>()
+                              .mtApi()
+                              .user(otherUser.id),
+                          currentUserId: user.id,
+                          friend: otherUser)));
+                },
+                onLongPress: () {
+                  LoginHandler loginHandler =
+                      Provider.of<LoginHandler>(context, listen: false);
+                  showModalBottomSheet<void>(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: 100,
+                          color: Colors.orange,
+                          child: Center(
+                            child: TextButton(
+                              child: Text("Unfollow"),
+                              style: TextButton.styleFrom(
+                                  primary: Colors.white,
+                                  backgroundColor: Colors.red),
+                              onPressed: () {
+                                loginHandler
+                                    .mtApi()
+                                    .unfollow(user.id, otherUser.id);
+                                print("NAME IS: " + otherUser.name);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => SocialScreen(1)));
+                              },
+                            ),
+                          ),
+                        );
+                      });
+                },
+                title: Text(otherUser.name),
+                leading: CircleAvatar(
+                  backgroundImage: AssetImage('assets/business.png'),
+                ),
+              ));
 
   @override
   Widget build(BuildContext context) => Container(
@@ -85,8 +94,8 @@ class FollowList extends StatelessWidget {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => FollowNew(user.id)));
-                      },
-                    ),
+                        },
+                      ),
                     ),
                   ),
                 ],

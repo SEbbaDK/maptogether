@@ -45,35 +45,34 @@ class Overview extends StatelessWidget {
       );
 
   //TODO: make future builder dependent
-  Widget leaderBoardWidget(LeaderboardType type) =>  FutureLoader<User>(
-      future: user,
-      builder: (BuildContext context, User user) => ListView(
-        children: [
-          for(LeaderboardSummary lb in user.leaderboards)
-            if(lb.type == type)
-              leaderboardItem(context, type, lb)
-        ],
-      ),
-    );
+  Widget leaderBoardWidget(LeaderboardType type) => FutureLoader<User>(
+        future: user,
+        builder: (BuildContext context, User user) => ListView(
+          children: [
+            for (LeaderboardSummary lb in user.leaderboards)
+              if (lb.type == type) leaderboardItem(context, type, lb, user)
+          ],
+        ),
+      );
 
-  Widget leaderboardItem(
-    BuildContext context, LeaderboardType type, LeaderboardSummary summary) =>
-        Card(
+  Widget leaderboardItem(BuildContext context, LeaderboardType type,
+          LeaderboardSummary summary, User user) =>
+      Card(
           child: ListTile(
-          leading: Text("${summary.name} #${summary.rank.toString()}/${summary.total.toString()}"),
-          onTap: () {
-            Navigator.push(
+        leading: Text(
+            "${summary.name} #${summary.rank.toString()}/${summary.total.toString()}"),
+        onTap: () {
+          Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LeaderboardWidget(
-                  leaderboard: context
-                    .watch<LoginHandler>()
-                    .mtApi()
-                    .leaderboardByPath(summary.path),
-                  name: ("${summary.name} ${summary.type.stringify()}"),
-              )
-            ));
-            },
-          )
-  );
+                  builder: (context) => LeaderboardWidget(
+                        leaderboard: context
+                            .watch<LoginHandler>()
+                            .mtApi()
+                            .leaderboardByPath(summary.path),
+                        name: ("${summary.name} ${summary.type.stringify()}"),
+                        currentUserId: user.id,
+                      )));
+        },
+      ));
 }

@@ -55,13 +55,16 @@ class FollowNew extends StatelessWidget {
                           primary: Colors.white, backgroundColor: Colors.green),
                       child: Text('Follow'),
                       onPressed: () {
-                        loginHandler.mtApi().follow(curUserId, int.parse(nameController.text));
+                        loginHandler
+                            .mtApi()
+                            .follow(curUserId, int.parse(nameController.text));
                         //Add friend to backend for user here
                         print("FOLLOW SOMEONE");
                         print(int.parse(nameController.text));
                         Navigator.pop(context);
                         Navigator.pop(context);
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => SocialScreen(1)));
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => SocialScreen(1)));
                       },
                     )),
               ],

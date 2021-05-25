@@ -21,26 +21,23 @@ class SimpleTagQuestPopUp extends StatelessWidget {
       buttons.add(
         ElevatedButton(
           onPressed: () {
-            if(context.read<LoginHandler>().loggedIntoSocial()) {
+            if (context.read<LoginHandler>().loggedIntoSocial()) {
               _quest
                   .solve(context.read<LoginHandler>().osmApi(), possibility,
-                  mtapi: context.read<LoginHandler>().mtApi())
+                      mtapi: context.read<LoginHandler>().mtApi())
                   .then((value) {
                 context
                     .read<QuestHandler>()
                     .removeQuest(_quest); // Remove the solved quest
               });
-            }
-
-            else {
+            } else {
               _quest
                   .solve(context.read<LoginHandler>().osmApi(), possibility)
                   .then((value) {
                 context
                     .read<QuestHandler>()
                     .removeQuest(_quest); // Remove the solved quest
-              }
-              );
+              });
             }
 
             Navigator.pop(context); //pop the info window for the quest
