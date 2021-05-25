@@ -13,7 +13,7 @@ import 'package:client/widgets/map/buttons/pup_up_menu.dart';
 import 'package:client/widgets/map/map.dart';
 
 launchSocial(BuildContext context) => Navigator.of(context)
-    .push(MaterialPageRoute(builder: (context) => SocialScreen()));
+    .push(MaterialPageRoute(builder: (context) => SocialScreen(0)));
 
 class MapScreen extends StatelessWidget {
   @override

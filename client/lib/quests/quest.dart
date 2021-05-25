@@ -5,7 +5,7 @@ import 'package:quiver/core.dart';
 
 abstract class Quest {
   osm.Element element;
-  LatLng position = LatLng(0,0);
+  LatLng position = LatLng(0, 0);
 
   Quest(this.element);
 

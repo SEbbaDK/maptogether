@@ -45,30 +45,34 @@ class Overview extends StatelessWidget {
       );
 
   //TODO: make future builder dependent
-  Widget leaderBoardWidget(LeaderboardType type) => FutureLoader(
-        future:
-            user, // TODO: actually use the users leaderboards instead of just the constant
-        builder: (BuildContext context, User user) => ListView.builder(
-            itemCount: 1,
-            itemBuilder: (context, index) =>
-                leaderboardItem(context, type, "global")),
+  Widget leaderBoardWidget(LeaderboardType type) => FutureLoader<User>(
+        future: user,
+        builder: (BuildContext context, User user) => ListView(
+          children: [
+            for (LeaderboardSummary lb in user.leaderboards)
+              if (lb.type == type) leaderboardItem(context, type, lb, user)
+          ],
+        ),
       );
 
-  Widget leaderboardItem(
-          BuildContext context, LeaderboardType type, String name) =>
+  Widget leaderboardItem(BuildContext context, LeaderboardType type,
+          LeaderboardSummary summary, User user) =>
       Card(
           child: ListTile(
-        leading: Text(name),
+        leading: Text(
+            "${summary.name} #${summary.rank.toString()}/${summary.total.toString()}"),
         onTap: () {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => LeaderboardWidget(
-                    leaderboard: context
-                        .watch<LoginHandler>()
-                        .mtApi()
-                        .leaderboard(type, name)),
-              ));
+                  builder: (context) => LeaderboardWidget(
+                        leaderboard: context
+                            .watch<LoginHandler>()
+                            .mtApi()
+                            .leaderboardByPath(summary.path),
+                        name: ("${summary.name} ${summary.type.stringify()}"),
+                        currentUserId: user.id,
+                      )));
         },
       ));
 }

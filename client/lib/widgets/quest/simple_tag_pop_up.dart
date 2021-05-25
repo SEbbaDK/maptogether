@@ -11,6 +11,9 @@ class SimpleTagQuestPopUp extends StatelessWidget {
   final osm.Api _api;
   final SimpleTagQuest _quest;
 
+  int userId;
+  int changeset;
+
   List<Widget> createButtons(BuildContext context) {
     List<Widget> buttons = [];
 
@@ -18,14 +21,26 @@ class SimpleTagQuestPopUp extends StatelessWidget {
       buttons.add(
         ElevatedButton(
           onPressed: () {
-            _quest
-                .solve(context.read<LoginHandler>().osmApi(), possibility)
-                .then((value) {
-              context
-                  .read<QuestHandler>()
-                  .removeQuest(_quest); // Remove the solved quest
-              Navigator.pop(context); // Close pop up
-            });
+            if (context.read<LoginHandler>().loggedIntoSocial()) {
+              _quest
+                  .solve(context.read<LoginHandler>().osmApi(), possibility,
+                      mtapi: context.read<LoginHandler>().mtApi())
+                  .then((value) {
+                context
+                    .read<QuestHandler>()
+                    .removeQuest(_quest); // Remove the solved quest
+              });
+            } else {
+              _quest
+                  .solve(context.read<LoginHandler>().osmApi(), possibility)
+                  .then((value) {
+                context
+                    .read<QuestHandler>()
+                    .removeQuest(_quest); // Remove the solved quest
+              });
+            }
+
+            Navigator.pop(context); //pop the info window for the quest
           },
           child: Text(possibility),
         ),

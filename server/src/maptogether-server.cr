@@ -35,7 +35,7 @@ module MapTogether::Server
 			
 			%auth = %auth_head.as(String).split(" ")
 			http_raise 400, "Authentication header needs to be 'Basic <ACCESS_KEY>'" if %auth.size != 2
-			
+
 			%atype, %key = %auth
 			http_raise 400, "Authentication type needs to be 'Basic'" if %atype != "Basic"
 			
@@ -165,7 +165,7 @@ module MapTogether::Server
 				check_auth(id, env, db)
 				result = db.exec "DELETE FROM follows WHERE follower = $1 AND followee = $2", id, followee
 				http_raise 400, "User not following that user" if result.rows_affected == 0
-				raise "Error! deleted #{result.rows_affected} rows" if result.rows_affected >= 1
+				raise "Error! deleted #{result.rows_affected} rows" if result.rows_affected != 1
 			end
 		end
 
