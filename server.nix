@@ -25,6 +25,10 @@ in
         '';
       };
     };
+
+    eventsConfig = ''
+		worker_connections 50000;
+    '';
   };
 
   containers.api = {

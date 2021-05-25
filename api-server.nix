@@ -23,6 +23,10 @@ in
 
   services.postgresql = {
     enable = true;
+    settings = {
+		max_connections = 1000;
+		shared_buffers = "512MB";
+    };
     # ensureUsers = [{
     #   name = "maptogether";
     #   ensurePermissions = { "DATABASE maptogether" = "ALL PRIVILEGES"; };
