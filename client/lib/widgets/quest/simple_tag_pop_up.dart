@@ -52,7 +52,7 @@ class SimpleTagQuestPopUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-            color: Colors.lightGreen,
+            color: Colors.grey,
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(20), topRight: Radius.circular(20))),
         height: 200,

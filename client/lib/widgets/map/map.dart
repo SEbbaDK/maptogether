@@ -106,7 +106,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
                             builder: (BuildContext context) {
                               return Container(
                                   height: 300,
-                                  color: Colors.green,
+                                  color: Colors.grey,
                                   child: Center(
                                       child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
