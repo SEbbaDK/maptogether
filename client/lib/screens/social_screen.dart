@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:client/widgets/app_bar.dart';
-import 'package:client/widgets/social/friends.dart';
+import 'package:client/widgets/social/follow_list.dart';
 import 'package:client/widgets/social/groups.dart';
 import 'package:client/widgets/social/history.dart';
 import 'package:client/widgets/social/overview.dart';
@@ -33,7 +33,7 @@ class _SocialScreenState extends State<SocialScreen> {
       user = context.read<LoginHandler>().user();
       menuItems = [
         Overview(user),
-        Friends(user),
+        FollowList(user),
         Groups(),
         History(),
       ];

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:client/widgets/app_bar.dart';
-import 'friends.dart';
+import 'follow_list.dart';
 import 'package:provider/provider.dart';
 import 'package:client/login_handler.dart';
 import 'package:client/screens/social_screen.dart';
 
-class AddFriend extends StatelessWidget {
+class FollowNew extends StatelessWidget {
   TextEditingController nameController = TextEditingController();
 
   int curUserId;
 
-  AddFriend(this.curUserId);
+  FollowNew(this.curUserId);
 
   @override
   Widget build(BuildContext context) {

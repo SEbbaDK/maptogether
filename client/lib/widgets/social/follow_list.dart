@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart' as mt;
 
-import 'package:client/widgets/social/add_friend.dart';
+import 'package:client/widgets/social/follow_new.dart';
 import 'package:client/widgets/future_loader.dart';
 import 'package:client/screens/social_screen.dart';
 import 'package:client/widgets/social/expandedUser.dart';
 
 //TODO: move friends list to a seperate file or server
-class Friends extends StatelessWidget {
+class FollowList extends StatelessWidget {
   Future<mt.User> user;
-  Friends(this.user);
+  FollowList(this.user);
 
   static const Widget seperator = const Divider(thickness: 2, height: 2);
 
@@ -84,7 +84,7 @@ class Friends extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AddFriend(user.id)));
+                                  builder: (context) => FollowNew(user.id)));
                       },
                     ),
                     ),
