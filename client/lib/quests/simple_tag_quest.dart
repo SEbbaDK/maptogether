@@ -46,7 +46,7 @@ abstract class SimpleTagQuest extends Quest {
 
     int userId = await api.userId();
 
-    mt.Contribution contribution = mt.Contribution(user_id: userId, type: 1, changeset: changeSetId, score: 1, date_time: DateTime.now());
+    mt.Contribution contribution = mt.Contribution(user_id: userId, type: 1, changeset: changeSetId, score: 5, date_time: DateTime.now().toUtc());
 
     mtapi.makeContribution(contribution);
 

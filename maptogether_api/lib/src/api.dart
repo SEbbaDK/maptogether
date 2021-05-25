@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'data.dart' as data;
 
@@ -29,8 +30,8 @@ class Api {
   Future<http.Response> _del(String path, {String? auth}) =>
       http.delete(Uri.parse(_url + path), headers: _authHeader(auth));
 
-  Future<http.Response> _post(String path, String body, {String? auth}) =>
-      http.post(Uri.parse(_url + path), body: body, headers: _authHeader(auth));
+  Future<http.Response> _post(String path, String body, {String? auth, Map<String, String> header = const {}}) =>
+      http.post(Uri.parse(_url + path), body: body, headers: {...header, ..._authHeader(auth)});
 
   // Stream handlers
 
@@ -71,7 +72,7 @@ class Api {
 
   Future<void> makeContribution(data.Contribution contribution) {
     print(jsonEncode(contribution.toJson()));
-    return _post('contribution', jsonEncode(contribution.toJson()))
+    return _post('contribution', jsonEncode(contribution.toJson()), header: {"Content-Type":"application/json"})
         .then(_checkRequest("upload contribution"));
   }
 
