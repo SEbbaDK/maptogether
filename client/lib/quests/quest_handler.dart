@@ -66,7 +66,7 @@ class QuestHandler extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeQuest(Quest quest) async{
+  void removeQuest(Quest quest) {
     this.quests.remove(quest);
     notifyListeners();
   }
