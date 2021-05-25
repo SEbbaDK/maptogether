@@ -15,7 +15,7 @@ CREATE MATERIALIZED VIEW leaderboardWeekly AS
 		FROM (
 			SELECT userID, SUM (score) AS score
 			FROM contributions
-			WHERE dateTime BETWEEN date_trunc('week', CURRENT_DATE) AND CURRENT_DATE
+			WHERE dateTime BETWEEN date_trunc('week', CURRENT_DATE) AND NOW()
 			GROUP BY userID
 			) AS s
 			RIGHT OUTER JOIN
@@ -28,7 +28,7 @@ CREATE MATERIALIZED VIEW leaderboardMonthly AS
 		FROM (
 			SELECT userID, SUM (score) AS score
 			FROM contributions
-			WHERE dateTime BETWEEN date_trunc('month', CURRENT_DATE) AND CURRENT_DATE
+			WHERE dateTime BETWEEN date_trunc('month', CURRENT_DATE) AND NOW()
 			GROUP BY userID
 			) AS s
 			RIGHT OUTER JOIN
