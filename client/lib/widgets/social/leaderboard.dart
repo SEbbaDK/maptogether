@@ -28,7 +28,7 @@ class LeaderboardWidget extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ExpandedUser(
                   user: context.read<LoginHandler>().mtApi().user(otherUser.id),
-                  friend: otherUser,
+                  otherUser: otherUser,
                   currentUser: currentUser)));
         },
         title: Text("#$placement $name : $score"),

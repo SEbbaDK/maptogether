@@ -10,12 +10,12 @@ import 'package:client/screens/social_screen.dart';
 class ExpandedUser extends StatelessWidget {
   Future<User> user;
   User currentUser;
-  SimpleUser friend;
+  SimpleUser otherUser;
 
   ExpandedUser(
       {@required this.user,
       @required this.currentUser,
-      @required this.friend});
+      @required this.otherUser});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ExpandedUser extends StatelessWidget {
         Provider.of<LoginHandler>(context, listen: false);
     return Scaffold(
         appBar: MapTogetherAppBar(
-          title: "${friend.name}'s profile",
+          title: "${otherUser.name}'s profile",
           actions: [],
         ),
         body: Container(
@@ -35,7 +35,18 @@ class ExpandedUser extends StatelessWidget {
                 flex: 2,
                 child: Builder(
                   builder: (BuildContext context){
-                    if(true) {
+
+                    if(otherUser.id == currentUser.id){
+                      return Center();
+                    }
+
+                    var temp = currentUser.following.firstWhere((element) => element.id == otherUser.id, orElse: () => null);
+                    bool friended = false;
+
+                    if(temp != null)
+                      friended = true;
+
+                    if(friended) {
                       return Center(
                         child: TextButton(
                           child: Text("Unfollow"),
@@ -44,33 +55,34 @@ class ExpandedUser extends StatelessWidget {
                               backgroundColor: Colors.red),
                           onPressed: () {
                             loginHandler.mtApi().unfollow(
-                                currentUser.id, friend.id);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                                currentUser.id, otherUser.id);
+                            Navigator.of(context).popUntil((route) => route.isFirst);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => SocialScreen(1)));
                           },
                         ),
                       );
                     }
-                    else{
+
+                    else if (!friended){
                       return Center(
                         child: TextButton(
-                          child: Text("Unfollow"),
+                          child: Text("Follow"),
                           style: TextButton.styleFrom(
                               primary: Colors.white,
-                              backgroundColor: Colors.red),
+                              backgroundColor: Colors.lightGreen),
                           onPressed: () {
-                            loginHandler.mtApi().unfollow(
-                                currentUser.id, friend.id);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                            loginHandler.mtApi().follow(
+                                currentUser.id, otherUser.id);
+                            Navigator.of(context).popUntil((route) => route.isFirst);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (context) => SocialScreen(1)));
                           },
                         ),
                       );
                     }
+
+                    return Center();
                 }
               ),
               )
