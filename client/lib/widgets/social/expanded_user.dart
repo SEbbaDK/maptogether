@@ -23,7 +23,7 @@ class ExpandedUser extends StatelessWidget {
         Provider.of<LoginHandler>(context, listen: false);
     return Scaffold(
         appBar: MapTogetherAppBar(
-          title: friend.name + "'s profile",
+          title: "${friend.name}'s profile",
           actions: [],
         ),
         body: Container(
