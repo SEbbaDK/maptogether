@@ -19,7 +19,7 @@ class Contribution
 	def self.from_json(json_obj)
 		# contribution_id: json_obj["contributionid"]?.as(Int64 | Nil),
 		contribution = Contribution.new(
-			user_id: json_obj["id"].as(Int64),
+			user_id: json_obj["user_id"].as(Int64),
 			type: json_obj["type"].as(Int64),
 			changeset: json_obj["changeset"].as(Int64),
 			score: json_obj["score"].as(Int64),
