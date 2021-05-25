@@ -67,7 +67,7 @@ class _SocialScreenState extends State<SocialScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'Friends',
+            label: 'Following',
             backgroundColor: Colors.lightGreen,
           ),
           BottomNavigationBarItem(
