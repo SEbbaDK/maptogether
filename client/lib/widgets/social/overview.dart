@@ -60,7 +60,7 @@ class Overview extends StatelessWidget {
     BuildContext context, LeaderboardType type, LeaderboardSummary summary) =>
         Card(
           child: ListTile(
-          leading: Text(summary.name + " #" + summary.rank.toString() + "/" + summary.total.toString()),
+          leading: Text("${summary.name} #${summary.rank.toString()}/${summary.total.toString()}"),
           onTap: () {
             Navigator.push(
               context,
@@ -70,7 +70,7 @@ class Overview extends StatelessWidget {
                     .watch<LoginHandler>()
                     .mtApi()
                     .leaderboardByPath(summary.path),
-                  name: (summary.name + " " + summary.type.stringify()),
+                  name: ("${summary.name} ${summary.type.stringify()}"),
               )
             ));
             },

@@ -44,11 +44,15 @@ abstract class SimpleTagQuest extends Quest {
 
     await api.closeChangeset(changeSetId);
 
-    int userId = await api.userId();
-
-    mt.Contribution contribution = mt.Contribution(user_id: userId, type: 1, changeset: changeSetId, score: 5, date_time: DateTime.now().toUtc());
-
-    mtapi.makeContribution(contribution);
+    if(mtapi != null) {
+      int userId = await api.userId();
+      mt.Contribution contribution = mt.Contribution(user_id: userId,
+          type: 1,
+          changeset: changeSetId,
+          score: 5,
+          date_time: DateTime.now().toUtc());
+      mtapi.makeContribution(contribution);
+    }
 
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:maptogether_api/maptogether_api.dart';
 import 'package:provider/provider.dart';
-import 'expandedFriend.dart';
+import 'expandedUser.dart';
 import 'package:client/login_handler.dart';
 
 import 'package:client/widgets/app_bar.dart';

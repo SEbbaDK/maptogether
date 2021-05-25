@@ -3,20 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:maptogether_api/maptogether_api.dart';
 import '../app_bar.dart';
-import 'user_overview.dart';
 import 'package:client/login_handler.dart';
 import 'overview.dart';
 import 'package:client/screens/social_screen.dart';
 
-import 'package:client/widgets/future_loader.dart';
-
-class ExpandedFriend extends StatelessWidget {
+class ExpandedUser extends StatelessWidget {
   Future<User> user;
   int currentUserId;
   SimpleUser friend;
 
 
-  ExpandedFriend(
+  ExpandedUser(
       {@required this.user, @required this.currentUserId, @required this.friend});
 
   @override
