@@ -12,13 +12,13 @@ import 'package:client/widgets/future_loader.dart';
 class LeaderboardWidget extends StatelessWidget {
   Future<Leaderboard> leaderboard;
   String name;
-  int currentUserId;
+  User currentUser;
 
   LeaderboardWidget(
       {Key key,
       @required this.leaderboard,
       @required this.name,
-      @required this.currentUserId})
+      @required this.currentUser})
       : super(key: key);
 
   Widget scoreWidget(context, int placement, String name, int score,
@@ -28,8 +28,8 @@ class LeaderboardWidget extends StatelessWidget {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => ExpandedUser(
                   user: context.read<LoginHandler>().mtApi().user(otherUser.id),
-                  friend: otherUser,
-                  currentUserId: currentUserId)));
+                  otherUser: otherUser,
+                  currentUser: currentUser)));
         },
         title: Text("#$placement $name : $score"),
         leading: CircleAvatar(

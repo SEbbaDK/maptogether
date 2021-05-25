@@ -26,8 +26,8 @@ class FollowList extends StatelessWidget {
                               .read<LoginHandler>()
                               .mtApi()
                               .user(otherUser.id),
-                          currentUserId: user.id,
-                          friend: otherUser)));
+                          currentUser: user,
+                          otherUser: otherUser)));
                 },
                 onLongPress: () {
                   LoginHandler loginHandler =

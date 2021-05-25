@@ -71,7 +71,7 @@ class Overview extends StatelessWidget {
                             .mtApi()
                             .leaderboardByPath(summary.path),
                         name: ("${summary.name} ${summary.type.stringify()}"),
-                        currentUserId: user.id,
+                        currentUser: user,
                       )));
         },
       ));

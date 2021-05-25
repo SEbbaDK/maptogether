@@ -9,13 +9,13 @@ import 'package:client/screens/social_screen.dart';
 
 class ExpandedUser extends StatelessWidget {
   Future<User> user;
-  int currentUserId;
-  SimpleUser friend;
+  User currentUser;
+  SimpleUser otherUser;
 
   ExpandedUser(
       {@required this.user,
-      @required this.currentUserId,
-      @required this.friend});
+      @required this.currentUser,
+      @required this.otherUser});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ExpandedUser extends StatelessWidget {
         Provider.of<LoginHandler>(context, listen: false);
     return Scaffold(
         appBar: MapTogetherAppBar(
-          title: friend.name + "'s profile",
+          title: "${otherUser.name}'s profile",
           actions: [],
         ),
         body: Container(
@@ -33,21 +33,59 @@ class ExpandedUser extends StatelessWidget {
               Expanded(flex: 7, child: Overview(user)),
               Expanded(
                 flex: 2,
-                child: Center(
-                  child: TextButton(
-                    child: Text("Unfollow"),
-                    style: TextButton.styleFrom(
-                        primary: Colors.white, backgroundColor: Colors.red),
-                    onPressed: () {
-                      loginHandler.mtApi().unfollow(currentUserId, friend.id);
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SocialScreen(1)));
-                    },
-                  ),
-                ),
+                child: Builder(
+                  builder: (BuildContext context){
+
+                    if(otherUser.id == currentUser.id){
+                      return Center();
+                    }
+
+                    var temp = currentUser.following.firstWhere((element) => element.id == otherUser.id, orElse: () => null);
+                    bool friended = false;
+
+                    if(temp != null)
+                      friended = true;
+
+                    if(friended) {
+                      return Center(
+                        child: TextButton(
+                          child: Text("Unfollow"),
+                          style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              backgroundColor: Colors.red),
+                          onPressed: () {
+                            loginHandler.mtApi().unfollow(
+                                currentUser.id, otherUser.id);
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SocialScreen(1)));
+                          },
+                        ),
+                      );
+                    }
+
+                    else if (!friended){
+                      return Center(
+                        child: TextButton(
+                          child: Text("Follow"),
+                          style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              backgroundColor: Colors.lightGreen),
+                          onPressed: () {
+                            loginHandler.mtApi().follow(
+                                currentUser.id, otherUser.id);
+                            Navigator.of(context).popUntil((route) => route.isFirst);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SocialScreen(1)));
+                          },
+                        ),
+                      );
+                    }
+
+                    return Center();
+                }
               ),
+              )
             ])));
   }
 }
