@@ -65,13 +65,7 @@ class QuestHandler extends ChangeNotifier {
     notifyListeners();
   }
 
-  void removeQuest(Quest quest, int changeSet, mt.Api mtapi) async {
-    int userId = await api.userId();
-
-    mt.Contribution contribution = mt.Contribution(user_id: userId, type: 1, changeset: changeSet, score: 1, date_time: DateTime.now());
-
-    mtapi.makeContribution(contribution);
-
+  void removeQuest(Quest quest) async {
     this.quests.remove(quest);
     notifyListeners();
   }

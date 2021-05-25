@@ -29,7 +29,7 @@ class Api {
   Future<http.Response> _del(String path, {String? auth}) =>
       http.delete(Uri.parse(_url + path), headers: _authHeader(auth));
 
-  Future<http.Response> _post(String path, Map<String, dynamic> body, {String? auth}) =>
+  Future<http.Response> _post(String path, String body, {String? auth}) =>
       http.post(Uri.parse(_url + path), body: body, headers: _authHeader(auth));
 
   // Stream handlers
@@ -70,7 +70,7 @@ class Api {
   // Push Endpoints
 
   Future<void> makeContribution(data.Contribution contribution) =>
-    _post('contribution', contribution.toJson())
+    _post('contribution', jsonEncode(contribution.toJson()))
         .then(_checkRequest("upload contribution"));
 
   Future<void> createUser(

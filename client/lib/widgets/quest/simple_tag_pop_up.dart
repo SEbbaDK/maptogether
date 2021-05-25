@@ -22,11 +22,11 @@ class SimpleTagQuestPopUp extends StatelessWidget {
         ElevatedButton(
           onPressed: () {
             _quest
-                .solve(context.read<LoginHandler>().osmApi(), possibility)
+                .solve(context.read<LoginHandler>().osmApi(), possibility, mtapi: context.read<LoginHandler>().mtApi())
                 .then((value) {
               context
                   .read<QuestHandler>()
-                  .removeQuest(_quest, value, context.read<LoginHandler>().mtApi()); // Remove the solved quest
+                  .removeQuest(_quest); // Remove the solved quest
               Navigator.pop(context); // Close pop up
             });
           },
