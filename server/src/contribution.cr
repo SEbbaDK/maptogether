@@ -23,7 +23,7 @@ class Contribution
 			type: json_obj["type"].as(Int64),
 			changeset: json_obj["changeset"].as(Int64),
 			score: json_obj["score"].as(Int64),
-			date_time: Time.parse_iso8601(json_obj.["datetime"].as(String)),
+			date_time: Time.parse_iso8601(json_obj.["date_time"].as(String)),
 		)
 	end
 end
