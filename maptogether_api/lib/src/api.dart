@@ -70,11 +70,9 @@ class Api {
 
   // Push Endpoints
 
-  Future<void> makeContribution(data.Contribution contribution) {
-    print(jsonEncode(contribution.toJson()));
-    return _post('contribution', jsonEncode(contribution.toJson()), header: {"Content-Type":"application/json"})
+  Future<void> makeContribution(data.Contribution contribution) =>
+    _post('contribution', jsonEncode(contribution.toJson()), header: {"Content-Type":"application/json"})
         .then(_checkRequest("upload contribution"));
-  }
 
   Future<void> createUser(
           int id, String secret, String clientToken, String clientSecret) =>
