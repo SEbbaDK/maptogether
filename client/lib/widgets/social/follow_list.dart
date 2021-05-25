@@ -6,7 +6,7 @@ import 'package:maptogether_api/maptogether_api.dart' as mt;
 import 'package:client/widgets/social/follow_new.dart';
 import 'package:client/widgets/future_loader.dart';
 import 'package:client/screens/social_screen.dart';
-import 'package:client/widgets/social/expandedUser.dart';
+import 'package:client/widgets/social/expanded_user.dart';
 
 //TODO: move friends list to a seperate file or server
 class FollowList extends StatelessWidget {

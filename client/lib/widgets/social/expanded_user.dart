@@ -51,27 +51,3 @@ class ExpandedUser extends StatelessWidget {
             ])));
   }
 }
-
-class ExpandedFriendNoFollow extends StatelessWidget {
-  Future<User> user;
-  SimpleUser friend;
-
-  ExpandedFriendNoFollow({@required this.user, @required this.friend});
-
-  @override
-  Widget build(BuildContext context) {
-    LoginHandler loginHandler =
-        Provider.of<LoginHandler>(context, listen: false);
-    return Scaffold(
-        appBar: MapTogetherAppBar(
-          title: friend.name + "'s profile",
-          actions: [],
-        ),
-        body: Container(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-              Expanded(flex: 7, child: Overview(user)),
-            ])));
-  }
-}
