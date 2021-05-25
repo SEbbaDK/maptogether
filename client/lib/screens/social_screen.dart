@@ -62,7 +62,7 @@ class _SocialScreenState extends State<SocialScreen> {
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.leaderboard),
-            label: 'Overview',
+            label: 'Leaderboards',
             backgroundColor: Colors.lightGreen,
           ),
           BottomNavigationBarItem(
