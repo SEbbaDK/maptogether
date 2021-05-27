@@ -45,23 +45,19 @@ module MapTogether::Server
 		# TODO: It is important that we add this check back in, but oauth seems to be broken
 		# with osm, so it is disabled for now
 
-		# client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
-		# OAuth.authenticate client, key, secret, ckey, csecret
+		client = HTTP::Client.new "master.apis.dev.openstreetmap.org", tls: true
+		OAuth.authenticate client, key, secret, ckey, csecret
 
-		# response = client.get("/api/0.6/user/details.json")
-		# puts vals if response.status_code != 200
-		# puts "Body: #{response.body}" if response.status_code != 200
-		# http_raise 401, "Authentication failed for OSM" if response.status_code == 401
-		# http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
-		# json = JSON.parse(response.body)
-		# osm_id = json["user"]["id"].as_i64
-		# name = json["user"]["display_name"]
+		response = client.get("/api/0.6/user/details.json")
+		puts vals if response.status_code != 200
+		puts "Body: #{response.body}" if response.status_code != 200
+		http_raise 401, "Authentication failed for OSM" if response.status_code == 401
+		http_raise 500, "Something went wrong with OSM login: #{response.status_code} #{response.body}" if response.status_code != 200
+		json = JSON.parse(response.body)
+		osm_id = json["user"]["id"].as_i64
+		name = json["user"]["display_name"]
 
-		# TEMP
-		name = "User #{id}"
-		# TEMP
-
-		# http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
+		http_raise 400, "Id: #{id} does not match the OSM id of #{osm_id}" if id != osm_id
 
 		POOL.using_connection do |db|
 			puts "Upserting user"
