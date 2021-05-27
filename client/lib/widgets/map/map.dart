@@ -117,7 +117,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
                                         controller: poiNameController,
                                         decoration: InputDecoration(
                                           border: OutlineInputBorder(),
-                                          labelText: 'Name of PoI',
+                                          labelText: 'Name of POI',
                                         ),
                                       ),
                                       DropDown(),
@@ -130,7 +130,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
                                           }),
                                       ElevatedButton(
                                           child:
-                                              const Text('Close BottomSheet'),
+                                              const Text('Confirm'),
                                           onPressed: () {
                                             taskPoints.add(PointOfInterest(
                                                 poiNameController.text,
@@ -288,7 +288,7 @@ class _InteractiveMapState extends State<InteractiveMap> {
         ),
         //MarkerLayerOptions(markers: markers)
         MarkerLayerOptions(
-          markers: [popUpMarker] + [currentPositionMarker],
+          markers: [currentPositionMarker] + [popUpMarker],
         ),
       ],
     );
