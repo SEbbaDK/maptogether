@@ -32,8 +32,6 @@ in
   # Disable tests until they work
   doCheck = false;
   doInstallCheck = false;
-
-  crystalBinaries.maptogether-server.src = "src/maptogether-server.cr";
 })
 # This line enables quicker builds
 .overrideAttrs (old: { buildPhase = builtins.replaceStrings [ "--release" ] [ "" ] old.buildPhase; })

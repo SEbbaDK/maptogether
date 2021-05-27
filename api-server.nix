@@ -5,15 +5,15 @@
 let
   maptogether-server = import ./server { inherit pkgs; };
   mockData = ''
-    ${builtins.readFile ./server/database/mock-users.sql}
-    ${builtins.readFile ./server/database/mock-contributions.sql}
-    ${builtins.readFile ./server/database/mock-achievements.sql}
-    ${builtins.readFile ./server/database/mock-follows.sql}
+    ${builtins.readFile ./database/mock-users.sql}
+    ${builtins.readFile ./database/mock-contributions.sql}
+    ${builtins.readFile ./database/mock-achievements.sql}
+    ${builtins.readFile ./database/mock-follows.sql}
   '';
-  databaseSetup = ./server/database/create-role-and-database.sql;
+  databaseSetup = ./database/create-role-and-database.sql;
   tableSetup = pkgs.writeText "setup.sql" ''
-    ${builtins.readFile ./server/database/create-tables.sql}
-    ${builtins.readFile ./server/database/create-materialized-views.sql}
+    ${builtins.readFile ./database/create-tables.sql}
+    ${builtins.readFile ./database/create-materialized-views.sql}
     ${mockData}
   '';
 in
@@ -31,7 +31,7 @@ in
     #   name = "maptogether";
     #   ensurePermissions = { "DATABASE maptogether" = "ALL PRIVILEGES"; };
     # }];
-    # initialScript = ./server/database/create-role-and-database.sql;
+    # initialScript = ./database/create-role-and-database.sql;
   };
 
   systemd.services.maptogether-database-setup = {
@@ -74,7 +74,7 @@ in
       Type = "oneshot";
       User = "maptogether";
       Group = "maptogether";
-      ExecStart = "${pkgs.postgresql}/bin/psql -d maptogether -f ${./server/database/refresh-materialized-views.sql}";
+      ExecStart = "${pkgs.postgresql}/bin/psql -d maptogether -f ${./database/refresh-materialized-views.sql}";
     };
     requires = [ "maptogether-database-setup.service" "postgresql.service" ];
     after = [ "maptogether-database-setup.service" "postgresql.service" ];
