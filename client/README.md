@@ -1,16 +1,5 @@
-# client
+# MapTogether Client
 
-A new Flutter project.
+The client is written in Flutter and the most obvious way to build it is via the normal flutter tooling.
+It depends on various flutter libraries, as well as the `osm_api` and `maptogether_api` from this monorepo.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.

@@ -1,5 +1,8 @@
 # MapTogether Server
 
+The server is written in Crystal to take advantages of the Ruby syntax and compiled performance.
+It uses [Kemal](https://kemalcr.com/) to have as simple definitions of the endpoints as possible.
+
 ## Endpoints
 
 ### `/user/<id>` Get user by id
